@@ -22,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
+
 import representation.CaseDescription;
 import representation.CaseSolution;
 import jcolibri.method.retrieve.selection.SelectCases;
@@ -58,9 +59,10 @@ public class CBRApplication implements StandardCBRApplication {
 	/** Configures the connector */
 	@Generated(value = { "CS-PTConector" })	
 	private void configureConnector() throws InitializingException{
-		connector = new jcolibri.connector.PlainTextConnector();
+		
+		connector = new jcolibri.connector.DataBaseConnector();
 		connector.initFromXMLfile(jcolibri.util.FileIO
-				.findFile("config/plainTextConnectorConfig.xml"));
+				.findFile("config/databaseconfig.xml"));
 	}
 
 	/** Configures the case base */

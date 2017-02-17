@@ -1,0 +1,8 @@
+<DataBaseConfiguration>
+	<HibernateConfigFile>hibernate.cfg.xml</HibernateConfigFile>
+	<DescriptionMappingFile>caseDescription.hbm.xml</DescriptionMappingFile>
+	<DescriptionClassName>CaseDescription</DescriptionClassName>
+	<SolutionMappingFile>caseSolution.hbm.xml</SolutionMappingFile>
+	<SolutionClassName>CaseSolution</SolutionClassName>
+	
+</DataBaseConfiguration>
