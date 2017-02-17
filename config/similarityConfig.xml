@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<SimilarityConfig>
+    <Mapping attribute="Description.keyWord1" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.65"/>
+    <Mapping attribute="Description" function="jcolibri.method.retrieve.NNretrieval.similarity.global.Average" weight="1.00"/>
+    <Mapping attribute="Description.keyWord3" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.65"/>
+    <Mapping attribute="Description.keyWord2" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.65"/>
+</SimilarityConfig>
