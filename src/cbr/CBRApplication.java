@@ -1,9 +1,14 @@
 package cbr;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.CBRCase;
 import jcolibri.cbrcore.CBRCaseBase;
@@ -21,11 +26,9 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-
-
 import representation.CaseDescription;
 import representation.CaseSolution;
-import jcolibri.method.retrieve.selection.SelectCases;
+import util.ResultsComparator;
 import jcolibri.cbrcore.Attribute;
 
 public class CBRApplication implements StandardCBRApplication {
@@ -80,25 +83,25 @@ public class CBRApplication implements StandardCBRApplication {
 	private NNConfig getSimilarityConfig() {
 		NNConfig simConfig = new NNConfig();
 		simConfig
-				.setDescriptionSimFunction(new jcolibri.method.retrieve.NNretrieval.similarity.global.Average());
-		Attribute attribute0 = new Attribute("keyWord1", CaseDescription.class);
+				.setDescriptionSimFunction(new jcolibri.method.retrieve.NNretrieval.similarity.global.Euclidean());
+		Attribute attribute0 = new Attribute("keyWord3", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute0,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
-		simConfig.setWeight(attribute0, 0.65);
+		simConfig.setWeight(attribute0, 1.00);
 		Attribute attribute1 = new Attribute("keyWord2", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute1,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
-		simConfig.setWeight(attribute1, 0.65);
-		Attribute attribute2 = new Attribute("keyWord3", CaseDescription.class);
+		simConfig.setWeight(attribute1, 0.75);
+		Attribute attribute2 = new Attribute("keyWord1", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute2,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
-		simConfig.setWeight(attribute2, 0.65);
+		simConfig.setWeight(attribute2, 0.60);
 		return simConfig;
 	}
 
@@ -118,8 +121,9 @@ public class CBRApplication implements StandardCBRApplication {
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		NNConfig simConfig = getSimilarityConfig();
+
 		eval= NNScoringMethod.evaluateSimilarity(casebase.getCases(), query, simConfig);
-		eval = SelectCases.selectTopKRR(eval, 3);
+		//eval = SelectCases.selectTopKRR(eval, 3);
 	}
 
 	@Generated(value = { "ColibriStudio" })
@@ -154,11 +158,16 @@ public class CBRApplication implements StandardCBRApplication {
 			//Creation of the panel to show the answer of the question
 			panel = new JTextPane();
 			panel.setEditable(false);
+			panel.setSelectedTextColor(Color.blue);
+			panel.setAutoscrolls(true);
+			Font font = new Font(Font.DIALOG, 12, 12);
+			panel.setFont(font);
+			
 			JScrollPane scrollPanel = new JScrollPane();
 			scrollPanel.setBounds(5, 5, 700, 500);
 			frame.add(scrollPanel);
 			scrollPanel.setViewportView(panel);
-			panel.setText("> Hola soy UBUassistant, ¿En qué puedo ayudarle?");
+			panel.setText("> Hola soy UBUassistant, ¿En qué puedo ayudarle?\n");
 			
 			//Creation of the field to ask the questions
 			final JTextField textoEnviar = new JTextField();
@@ -171,36 +180,61 @@ public class CBRApplication implements StandardCBRApplication {
 			btnEnviar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					panel.setText(panel.getText()+"\n"+"-  "+textoEnviar.getText());
-					cd.setKeyWord1(textoEnviar.getText());
-					cd.setKeyWord2(textoEnviar.getText());
-					cd.setKeyWord3(textoEnviar.getText());
-					query.setDescription(cd);
-					try {
-						cbrApp.cycle(query);
-					} catch (ExecutionException e1) {
-						e1.printStackTrace();
+					List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
+					
+					panel.setText(panel.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
+					String[] words = textoEnviar.getText().split("\\s+");
+					
+					for (String word : words) {
 						
+						if(word.length()>2){
+							
+							cd.setKeyWord1(word);
+							cd.setKeyWord2(word);
+							cd.setKeyWord3(word);
+							query.setDescription(cd);
+							
+							try {
+								cbrApp.cycle(query);
+							} catch (ExecutionException e1) {
+								e1.printStackTrace();
+							}
+							
+							allResults.addAll(eval);
+						}
 					}
+					Collections.sort(allResults, new ResultsComparator());
+					printRetrievalSolutions(allResults);
+					
 					textoEnviar.setText(null);
-					printRetrievalSolutions();
 				}
 
-				private void printRetrievalSolutions() {
+				private void printRetrievalSolutions(List<RetrievalResult> s) {
 					//Print answer into the panel
 					String text = "";
+					boolean flag=false;
 					
+					LinkedHashSet<String> set = new LinkedHashSet<String>();
+					for(RetrievalResult res : s){
+						
+						if(res.getEval()>0.40){
+							CBRCase _case = res.get_case();
+							CaseSolution solution = (CaseSolution) _case.getSolution();
+							
+							set.add(solution.getAnswer());
+						}
+						
+					}
 					
-					for(RetrievalResult res : eval){
-						
-						CBRCase _case = res.get_case();
-						CaseSolution solution = (CaseSolution) _case.getSolution();
-						if(res.getEval()>0.3)
-							text+="   "+solution.getAnswer().toString()+"\n";
-						
-						
+					for(String res : set){
+						flag=true;
+						text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
+
 					}	
-					panel.setText(panel.getText()+"\n"+"> Esto es lo que he encontrado al respecto:\n\n"+text);
+					if(flag==true)
+						panel.setText(panel.getText()+"\n"+"> Esto es lo que he encontrado como respuesta a tu pregunta:\n"+text);
+					else
+						panel.setText(panel.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n"+text);
 					
 					try {
 						cbrApp.postCycle();
