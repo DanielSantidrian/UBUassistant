@@ -18,5 +18,11 @@
   <property name="keyWord3">
    <column name="keyWord3"/>
   </property>
+  <property name="keyWord4">
+   <column name="keyWord4"/>
+  </property>
+  <property name="keyWord5">
+   <column name="keyWord5"/>
+  </property>
  </class>
 </hibernate-mapping>

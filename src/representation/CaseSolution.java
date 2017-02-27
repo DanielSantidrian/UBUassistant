@@ -2,6 +2,7 @@ package representation;
 
 import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CaseComponent;
+ import colibristudio.annotations.JCOLIBRIAttributeType;
 
 
 public class CaseSolution implements CaseComponent { 
@@ -17,9 +18,9 @@ public class CaseSolution implements CaseComponent {
 		{
 			return answer;
 		}
-	public void setAnswer(java.lang.String answer4)
+	public void setAnswer(java.lang.String answer6)
 		{
-			this.answer = answer4;
+			this.answer = answer6;
 		}
 
 	private java.lang.Integer Id;
@@ -29,9 +30,9 @@ public class CaseSolution implements CaseComponent {
 		{
 			return Id;
 		}
-	public void setId(java.lang.Integer Id5)
+	public void setId(java.lang.Integer Id7)
 		{
-			this.Id = Id5;
+			this.Id = Id7;
 		}
 
 

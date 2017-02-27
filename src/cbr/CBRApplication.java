@@ -1,34 +1,56 @@
 package cbr;
 
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import javax.annotation.Generated;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
 import jcolibri.cbraplications.StandardCBRApplication;
+import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CBRCase;
 import jcolibri.cbrcore.CBRCaseBase;
 import jcolibri.cbrcore.CBRQuery;
 import jcolibri.cbrcore.Connector;
 import jcolibri.exception.ExecutionException;
 import jcolibri.exception.InitializingException;
+import jcolibri.method.maintenance.CaseResult;
 import jcolibri.method.retrieve.RetrievalResult;
 import jcolibri.method.retrieve.NNretrieval.NNConfig;
 import jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
-
-import javax.annotation.Generated;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import representation.CaseDescription;
 import representation.CaseSolution;
 import util.ResultsComparator;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
+import jcolibri.cbrcore.Attribute;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
+import jcolibri.cbrcore.Attribute;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
+import jcolibri.cbrcore.Attribute;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
+import jcolibri.cbrcore.Attribute;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
+import jcolibri.cbrcore.Attribute;
+import jcolibri.method.retrieve.NNretrieval.NNConfig;
 import jcolibri.cbrcore.Attribute;
 
 public class CBRApplication implements StandardCBRApplication {
@@ -37,13 +59,25 @@ public class CBRApplication implements StandardCBRApplication {
 	Connector connector;
 	
 	@Generated(value = { "ColibriStudio" })
+	static
 	CBRCaseBase casebase;
 
 
 	private static Collection<RetrievalResult> eval;
 	private static CBRApplication cbrApp;
 	private static CBRQuery query;
-	private static JTextPane panel;
+	private static CaseDescription cd = new CaseDescription();
+	
+	private static JFrame gui;
+	private static JTextPane topTextPane;
+	private static JScrollPane scrollPane;
+	private static JTextField textoEnviar;
+	private static JPanel buttonPanel;
+	private static LinkedHashSet<CBRCase> casesToReatin;
+	
+	//private static ArrayList<CBRCase> casesToRetain = new ArrayList<CBRCase>();
+
+
 
 	//******************************************************************/
 	// Configuration
@@ -84,24 +118,37 @@ public class CBRApplication implements StandardCBRApplication {
 		NNConfig simConfig = new NNConfig();
 		simConfig
 				.setDescriptionSimFunction(new jcolibri.method.retrieve.NNretrieval.similarity.global.Euclidean());
-		Attribute attribute0 = new Attribute("keyWord3", CaseDescription.class);
+		Attribute attribute0 = new Attribute("keyWord5", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute0,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
-		simConfig.setWeight(attribute0, 1.00);
-		Attribute attribute1 = new Attribute("keyWord2", CaseDescription.class);
+		simConfig.setWeight(attribute0, 0.75);
+		Attribute attribute1 = new Attribute("keyWord4", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute1,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
 		simConfig.setWeight(attribute1, 0.75);
-		Attribute attribute2 = new Attribute("keyWord1", CaseDescription.class);
+		Attribute attribute2 = new Attribute("keyWord3", CaseDescription.class);
 		simConfig
 				.addMapping(
 						attribute2,
 						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
-		simConfig.setWeight(attribute2, 0.60);
+		simConfig.setWeight(attribute2, 0.75);
+		Attribute attribute3 = new Attribute("keyWord2", CaseDescription.class);
+		simConfig
+				.addMapping(
+						attribute3,
+						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
+		simConfig.setWeight(attribute3, 0.75);
+		
+		Attribute attribute5 = new Attribute("keyWord1", CaseDescription.class);
+		simConfig
+				.addMapping(
+						attribute5,
+						new jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString());
+		simConfig.setWeight(attribute5, 0.75);
 		return simConfig;
 	}
 
@@ -124,6 +171,7 @@ public class CBRApplication implements StandardCBRApplication {
 
 		eval= NNScoringMethod.evaluateSimilarity(casebase.getCases(), query, simConfig);
 		//eval = SelectCases.selectTopKRR(eval, 3);
+
 	}
 
 	@Generated(value = { "ColibriStudio" })
@@ -145,122 +193,314 @@ public class CBRApplication implements StandardCBRApplication {
 			cbrApp.preCycle();
 			
 			query = new CBRQuery();
-			final CaseDescription cd = new CaseDescription();
 			
+			createWindows();
 			
-			//Creation of the main window
-			final JFrame frame = new JFrame();
-			frame.setLayout(null);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setBounds(80, 80, 750, 600);
-			
-			
-			//Creation of the panel to show the answer of the question
-			panel = new JTextPane();
-			panel.setEditable(false);
-			panel.setSelectedTextColor(Color.blue);
-			panel.setAutoscrolls(true);
-			Font font = new Font(Font.DIALOG, 12, 12);
-			panel.setFont(font);
-			
-			JScrollPane scrollPanel = new JScrollPane();
-			scrollPanel.setBounds(5, 5, 700, 500);
-			frame.add(scrollPanel);
-			scrollPanel.setViewportView(panel);
-			panel.setText("> Hola soy UBUassistant, ¿En qué puedo ayudarle?\n");
-			
-			//Creation of the field to ask the questions
-			final JTextField textoEnviar = new JTextField();
-			textoEnviar.setBounds(5, 510, 500, 30);
-			textoEnviar.setVisible(true);
-			frame.add(textoEnviar);
-			
-			//Creation of the button "Enviar"
-			JButton btnEnviar = new JButton("Enviar");
-			btnEnviar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
-					
-					panel.setText(panel.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
-					String[] words = textoEnviar.getText().split("\\s+");
-					
-					for (String word : words) {
 						
-						if(word.length()>2){
-							
-							cd.setKeyWord1(word);
-							cd.setKeyWord2(word);
-							cd.setKeyWord3(word);
-							query.setDescription(cd);
-							
-							try {
-								cbrApp.cycle(query);
-							} catch (ExecutionException e1) {
-								e1.printStackTrace();
-							}
-							
-							allResults.addAll(eval);
-						}
-					}
-					Collections.sort(allResults, new ResultsComparator());
-					printRetrievalSolutions(allResults);
-					
-					textoEnviar.setText(null);
-				}
 
-				private void printRetrievalSolutions(List<RetrievalResult> s) {
-					//Print answer into the panel
-					String text = "";
-					boolean flag=false;
-					
-					LinkedHashSet<String> set = new LinkedHashSet<String>();
-					for(RetrievalResult res : s){
-						
-						if(res.getEval()>0.40){
-							CBRCase _case = res.get_case();
-							CaseSolution solution = (CaseSolution) _case.getSolution();
-							
-							set.add(solution.getAnswer());
-						}
-						
-					}
-					
-					for(String res : set){
-						flag=true;
-						text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
-
-					}	
-					if(flag==true)
-						panel.setText(panel.getText()+"\n"+"> Esto es lo que he encontrado como respuesta a tu pregunta:\n"+text);
-					else
-						panel.setText(panel.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n"+text);
-					
-					try {
-						cbrApp.postCycle();
-					} catch (ExecutionException e) {
-						e.printStackTrace();
-					}
-					
-				}
-			});
-			btnEnviar.setBounds(510, 510, 70, 30);
-			frame.add(btnEnviar);
-			
-			//Set the window visible
-			frame.setVisible(true);
-						
-			
-
-			
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
 
 	}
 	
-
+	/**
+	 * 
+	 */
+	private static void createWindows(){
 		
+		//Creation of the main window
+		gui = new JFrame();
+		gui.setLayout(null);
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.getContentPane().setBackground(new java.awt.Color(171, 38, 60));
+		gui.setBounds(80, 80, 525, 540);
+		gui.setTitle("UBUassistant v0.1");
+		
+		
+		//Creation of the panel to show the answer of the question
+		
+		topTextPane = new JTextPane();
+		topTextPane.setEditable(false);
+		topTextPane.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+		topTextPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 109, 179)));
+
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(5, 5, 500, 400);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		gui.add(scrollPane);
+		scrollPane.setViewportView(topTextPane);
+		
+		topTextPane.setText("> Hola soy UBUassistant, ¿En qué puedo ayudarle?\n");
+		
+		//Creation of a panel to make suggestions or rating answer
+		buttonPanel = new JPanel();
+		buttonPanel.setBounds(5, 410, 500, 48);
+		buttonPanel.setBackground(new java.awt.Color(171, 38, 60));
+		//buttonPanel.setLayout(new CardLayout());
+
+		//Creation of the field to ask the questions
+		textoEnviar = new JTextField();
+		textoEnviar.setBounds(5, 460, 420, 30);
+		textoEnviar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+		textoEnviar.setVisible(true);
+		gui.add(textoEnviar);
+		
+		
+		//Creation of the button "Enviar"
+		JButton btnEnviar = new JButton("Enviar");
+		btnEnviar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buttonPanel.removeAll();
+				buttonPanel.repaint();
+				gui.repaint();
+				gui.setVisible(true);
+				buttonPanel.setVisible(false);
+				
+				CBRApplication.searchAnswer();
+					
+			}
+		});
+		btnEnviar.setBounds(430, 460, 70, 30);
+		gui.add(btnEnviar);
+		gui.getRootPane().setDefaultButton(btnEnviar);
+		
+		//Set the window visible
+			gui.setVisible(true);
+		
+	}
+	
+	/**
+	 * 
+	 */
+	private static void searchAnswer(){
+		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
+		
+		topTextPane.setText(topTextPane.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
+		String[] words = textoEnviar.getText().split("\\s+");
+		
+		for (String word : words) {
+			
+			if(word.length()>2){
+				
+				cd.setKeyWord1(word);
+				cd.setKeyWord2(word);
+				cd.setKeyWord3(word);
+				cd.setKeyWord4(word);
+				cd.setKeyWord5(word);
+				query.setDescription(cd);
+				
+				try {
+					cbrApp.cycle(query);
+				} catch (ExecutionException e1) {
+					e1.printStackTrace();
+				}
+				
+				allResults.addAll(eval);
+			}
+		}
+		Collections.sort(allResults, new ResultsComparator());
+		printRetrievalSolutions(allResults);
+		
+		textoEnviar.setText(null);
+	}
+
+	/**
+	 * Method that
+	 * @param s
+	 */
+	private static void printRetrievalSolutions(final List<RetrievalResult> s) {
+		//Print answer into the panel
+		String text = "";
+		boolean flag=false;
+		
+		LinkedHashSet<String> set = new LinkedHashSet<String>();
+		casesToReatin = new LinkedHashSet<CBRCase>();
+				
+		for(RetrievalResult res : s){
+			if(res.getEval()>0.35){
+				CBRCase _case = res.get_case();
+				casesToReatin.add(_case);
+				CaseSolution solution = (CaseSolution) _case.getSolution();
+				
+				set.add(solution.getAnswer());
+			}
+			
+		}
+		
+		for(String res : set){
+			flag=true;
+			text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
+
+		}	
+		if(flag==true){
+			
+			if(set.size()>1){
+				JTextArea texto = new JTextArea();
+				texto.setText("Sé más concreto :)");
+				texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+				texto.setForeground(Color.WHITE);
+				texto.setBackground(new java.awt.Color(171, 38, 60));
+				
+				buttonPanel.add(texto);
+				
+				for(final CBRCase c : casesToReatin){
+					final JButton btn = new JButton(((CaseDescription)c.getDescription()).getKeyWord1().toString());
+					buttonPanel.add(btn);
+					btn.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btn.getText()+"\n");
+							topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)c.getSolution()).getAnswer().toString()+"\n");
+							buttonPanel.removeAll();
+							buttonPanel.repaint();
+							gui.repaint();
+							gui.setVisible(true);
+							buttonPanel.setVisible(false);
+							
+							printUtilidad();
+							
+							////////////MEJORAR RESPUESTAS//////////////////////////////
+
+							
+						}
+					});
+				}
+				
+				gui.add(buttonPanel);
+				buttonPanel.repaint();
+				gui.repaint();
+				gui.setVisible(true);
+				buttonPanel.setVisible(true);
+				
+			}else{
+				topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+text);
+				
+				printUtilidad();
+			}
+			
+			
+			
+			
+
+			
+		}else{
+			topTextPane.setText(topTextPane.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n"+text);
+			JTextArea texto = new JTextArea();
+			texto.setText("Sugerencias de busqueda");
+			texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+			texto.setForeground(Color.WHITE);
+			texto.setBackground(new java.awt.Color(171, 38, 60));
+			final JButton btnOp1 = new JButton();
+			final JButton btnOp2 = new JButton();
+			final JButton btnOp3 = new JButton();
+			btnOp1.setText(((CaseDescription)s.get(0).get_case().getDescription()).getKeyWord1());
+			btnOp1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp1.getText()+"\n");
+					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(0).get_case().getSolution()).getAnswer().toString()+"\n");
+					buttonPanel.removeAll();
+					buttonPanel.repaint();
+					gui.repaint();
+					gui.setVisible(true);
+					buttonPanel.setVisible(false);
+					
+					printUtilidad();
+
+				}
+			});
+			btnOp2.setText(((CaseDescription)s.get(1).get_case().getDescription()).getKeyWord1());
+			btnOp2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp2.getText()+"\n");
+					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(1).get_case().getSolution()).getAnswer().toString()+"\n");
+					buttonPanel.removeAll();
+					buttonPanel.repaint();
+					gui.repaint();
+					gui.setVisible(true);
+					buttonPanel.setVisible(false);
+					
+					printUtilidad();
+
+				}
+			});
+			btnOp3.setText(((CaseDescription)s.get(2).get_case().getDescription()).getKeyWord1());
+			btnOp3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp3.getText()+"\n");
+					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(2).get_case().getSolution()).getAnswer().toString()+"\n");
+					buttonPanel.removeAll();
+					buttonPanel.repaint();
+					gui.repaint();
+					gui.setVisible(true);
+					buttonPanel.setVisible(false);
+					
+					printUtilidad();
+
+				}
+			});
+			buttonPanel.removeAll();
+			buttonPanel.add(texto);
+			buttonPanel.add(btnOp1);
+			buttonPanel.add(btnOp2);
+			buttonPanel.add(btnOp3);
+			gui.add(buttonPanel);
+			buttonPanel.repaint();
+			gui.repaint();
+			buttonPanel.setVisible(true);
+			gui.setVisible(true);
+			
+		}
+		
+		try {
+			cbrApp.postCycle();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	
+	}
+	
+	private static void printUtilidad(){
+		
+		JTextArea texto = new JTextArea();
+		texto.setText("¿Le ha resultado útil esta información?");
+		texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+		texto.setForeground(Color.WHITE);
+		texto.setBackground(new java.awt.Color(171, 38, 60));
+		
+		JButton btnSi = new JButton("Si");
+		btnSi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				casebase.learnCases(casesToReatin);	
+				buttonPanel.repaint();
+				gui.repaint();
+				gui.setVisible(true);
+				buttonPanel.setVisible(false);
+			}
+		});
+		
+
+		JButton btnNo = new JButton("No");
+		btnNo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buttonPanel.removeAll();
+				buttonPanel.repaint();
+				gui.repaint();
+				gui.setVisible(true);
+				buttonPanel.setVisible(false);
+			}
+		});
+		
+		buttonPanel.removeAll();
+		buttonPanel.add(texto);
+		buttonPanel.add(btnSi);
+		buttonPanel.add(btnNo);
+		gui.add(buttonPanel);
+		buttonPanel.repaint();
+		gui.repaint();
+		gui.setVisible(true);
+		buttonPanel.setVisible(true);
+		
+	}
 		
 	
 }

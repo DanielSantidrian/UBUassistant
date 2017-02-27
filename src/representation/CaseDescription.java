@@ -58,6 +58,30 @@ public class CaseDescription implements CaseComponent {
 			this.keyWord3 = keyWord33;
 		}
 
+	private java.lang.String keyWord4;
+
+
+	public java.lang.String getKeyWord4()
+		{
+			return keyWord4;
+		}
+	public void setKeyWord4(java.lang.String keyWord44)
+		{
+			this.keyWord4 = keyWord44;
+		}
+
+	private java.lang.String keyWord5;
+
+
+	public java.lang.String getKeyWord5()
+		{
+			return keyWord5;
+		}
+	public void setKeyWord5(java.lang.String keyWord55)
+		{
+			this.keyWord5 = keyWord55;
+		}
+
 
 	@Override
 	public Attribute getIdAttribute()
@@ -66,7 +90,7 @@ public class CaseDescription implements CaseComponent {
 		} 
 
 	public String toString()		{
-			return "["+ keyWord3 + " , " + keyWord2 + " , " + keyWord1 + " , " + id +"]";
+			return "["+ keyWord4 + " , " + keyWord3 + " , " + keyWord2 + " , " + keyWord1 + " , " + keyWord5 + " , " + id +"]";
 		}
 
 }

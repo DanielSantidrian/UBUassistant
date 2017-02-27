@@ -25,6 +25,14 @@
         <name>Description</name>
         <SimpleAttribute isId="false">
             <attribType>java.lang.String</attribType>
+            <name>keyWord5</name>
+        </SimpleAttribute>
+        <SimpleAttribute isId="false">
+            <attribType>java.lang.String</attribType>
+            <name>keyWord4</name>
+        </SimpleAttribute>
+        <SimpleAttribute isId="false">
+            <attribType>java.lang.String</attribType>
             <name>keyWord3</name>
         </SimpleAttribute>
         <SimpleAttribute isId="false">
