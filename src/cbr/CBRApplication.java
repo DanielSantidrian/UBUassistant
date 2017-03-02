@@ -25,6 +25,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import gui.StarBar;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CBRCase;
@@ -205,7 +206,7 @@ public class CBRApplication implements StandardCBRApplication {
 	}
 	
 	/**
-	 * 
+	 * Method that create and display the main window
 	 */
 	private static void createWindows(){
 		
@@ -271,7 +272,7 @@ public class CBRApplication implements StandardCBRApplication {
 	}
 	
 	/**
-	 * 
+	 * Method that gets the phrase entered by the user and get the answer
 	 */
 	private static void searchAnswer(){
 		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
@@ -306,7 +307,8 @@ public class CBRApplication implements StandardCBRApplication {
 	}
 
 	/**
-	 * Method that
+	 * Method that prints the answer in the text pane and also generates some information into
+	 * the buttonPanel
 	 * @param s
 	 */
 	private static void printRetrievalSolutions(final List<RetrievalResult> s) {
@@ -358,10 +360,6 @@ public class CBRApplication implements StandardCBRApplication {
 							buttonPanel.setVisible(false);
 							
 							printUtilidad();
-							
-							////////////MEJORAR RESPUESTAS//////////////////////////////
-
-							
 						}
 					});
 				}
@@ -379,10 +377,6 @@ public class CBRApplication implements StandardCBRApplication {
 			}
 			
 			
-			
-			
-
-			
 		}else{
 			topTextPane.setText(topTextPane.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n"+text);
 			JTextArea texto = new JTextArea();
@@ -390,59 +384,32 @@ public class CBRApplication implements StandardCBRApplication {
 			texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
 			texto.setForeground(Color.WHITE);
 			texto.setBackground(new java.awt.Color(171, 38, 60));
-			final JButton btnOp1 = new JButton();
-			final JButton btnOp2 = new JButton();
-			final JButton btnOp3 = new JButton();
-			btnOp1.setText(((CaseDescription)s.get(0).get_case().getDescription()).getKeyWord1());
-			btnOp1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp1.getText()+"\n");
-					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(0).get_case().getSolution()).getAnswer().toString()+"\n");
-					buttonPanel.removeAll();
-					buttonPanel.repaint();
-					gui.repaint();
-					gui.setVisible(true);
-					buttonPanel.setVisible(false);
-					
-					printUtilidad();
-
-				}
-			});
-			btnOp2.setText(((CaseDescription)s.get(1).get_case().getDescription()).getKeyWord1());
-			btnOp2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp2.getText()+"\n");
-					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(1).get_case().getSolution()).getAnswer().toString()+"\n");
-					buttonPanel.removeAll();
-					buttonPanel.repaint();
-					gui.repaint();
-					gui.setVisible(true);
-					buttonPanel.setVisible(false);
-					
-					printUtilidad();
-
-				}
-			});
-			btnOp3.setText(((CaseDescription)s.get(2).get_case().getDescription()).getKeyWord1());
-			btnOp3.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp3.getText()+"\n");
-					topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(2).get_case().getSolution()).getAnswer().toString()+"\n");
-					buttonPanel.removeAll();
-					buttonPanel.repaint();
-					gui.repaint();
-					gui.setVisible(true);
-					buttonPanel.setVisible(false);
-					
-					printUtilidad();
-
-				}
-			});
+			
 			buttonPanel.removeAll();
 			buttonPanel.add(texto);
-			buttonPanel.add(btnOp1);
-			buttonPanel.add(btnOp2);
-			buttonPanel.add(btnOp3);
+			
+			for( int i=0; i<3;i++){
+				final int tmp = i;
+				JButton btnOp = new JButton();
+				btnOp.setText(((CaseDescription)s.get(tmp).get_case().getDescription()).getKeyWord1());
+				btnOp.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp.getText()+"\n");
+						topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"\n");
+						buttonPanel.removeAll();
+						buttonPanel.repaint();
+						gui.repaint();
+						gui.setVisible(true);
+						buttonPanel.setVisible(false);
+						
+						printUtilidad();
+
+					}
+				});
+
+				buttonPanel.add(btnOp);
+			}
+			
 			gui.add(buttonPanel);
 			buttonPanel.repaint();
 			gui.repaint();
@@ -459,6 +426,9 @@ public class CBRApplication implements StandardCBRApplication {
 	
 	}
 	
+	/**
+	 * Method that displays in the button panel the information about the utility of the answer
+	 */
 	private static void printUtilidad(){
 		
 		JTextArea texto = new JTextArea();
@@ -467,33 +437,11 @@ public class CBRApplication implements StandardCBRApplication {
 		texto.setForeground(Color.WHITE);
 		texto.setBackground(new java.awt.Color(171, 38, 60));
 		
-		JButton btnSi = new JButton("Si");
-		btnSi.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				casebase.learnCases(casesToReatin);	
-				buttonPanel.repaint();
-				gui.repaint();
-				gui.setVisible(true);
-				buttonPanel.setVisible(false);
-			}
-		});
-		
-
-		JButton btnNo = new JButton("No");
-		btnNo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buttonPanel.removeAll();
-				buttonPanel.repaint();
-				gui.repaint();
-				gui.setVisible(true);
-				buttonPanel.setVisible(false);
-			}
-		});
-		
 		buttonPanel.removeAll();
 		buttonPanel.add(texto);
-		buttonPanel.add(btnSi);
-		buttonPanel.add(btnNo);
+		
+		StarBar starBar= new StarBar(gui,buttonPanel);
+		
 		gui.add(buttonPanel);
 		buttonPanel.repaint();
 		gui.repaint();

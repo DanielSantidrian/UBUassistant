@@ -2,7 +2,6 @@ package representation;
 
 import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CaseComponent;
- import colibristudio.annotations.JCOLIBRIAttributeType;
 
 
 public class CaseSolution implements CaseComponent { 
