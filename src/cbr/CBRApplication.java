@@ -1,11 +1,8 @@
 package cbr;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +11,6 @@ import java.util.List;
 
 import javax.annotation.Generated;
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,9 +18,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import gui.StarBar;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
@@ -34,25 +27,12 @@ import jcolibri.cbrcore.CBRQuery;
 import jcolibri.cbrcore.Connector;
 import jcolibri.exception.ExecutionException;
 import jcolibri.exception.InitializingException;
-import jcolibri.method.maintenance.CaseResult;
 import jcolibri.method.retrieve.RetrievalResult;
 import jcolibri.method.retrieve.NNretrieval.NNConfig;
 import jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import representation.CaseDescription;
 import representation.CaseSolution;
 import util.ResultsComparator;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
-import jcolibri.method.retrieve.NNretrieval.NNConfig;
-import jcolibri.cbrcore.Attribute;
 
 public class CBRApplication implements StandardCBRApplication {
 
@@ -267,7 +247,7 @@ public class CBRApplication implements StandardCBRApplication {
 		gui.getRootPane().setDefaultButton(btnEnviar);
 		
 		//Set the window visible
-			gui.setVisible(true);
+		gui.setVisible(true);
 		
 	}
 	
@@ -275,35 +255,41 @@ public class CBRApplication implements StandardCBRApplication {
 	 * Method that gets the phrase entered by the user and get the answer
 	 */
 	private static void searchAnswer(){
+		
 		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
 		
-		topTextPane.setText(topTextPane.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
-		String[] words = textoEnviar.getText().split("\\s+");
-		
-		for (String word : words) {
+		if(textoEnviar.getText().length()>0){
 			
-			if(word.length()>2){
+			topTextPane.setText(topTextPane.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
+			String[] words = textoEnviar.getText().split("\\s+");
+			
+			for (String word : words) {
 				
-				cd.setKeyWord1(word);
-				cd.setKeyWord2(word);
-				cd.setKeyWord3(word);
-				cd.setKeyWord4(word);
-				cd.setKeyWord5(word);
-				query.setDescription(cd);
-				
-				try {
-					cbrApp.cycle(query);
-				} catch (ExecutionException e1) {
-					e1.printStackTrace();
+				if(word.length()>2){
+					
+					cd.setKeyWord1(word);
+					cd.setKeyWord2(word);
+					cd.setKeyWord3(word);
+					cd.setKeyWord4(word);
+					cd.setKeyWord5(word);
+					query.setDescription(cd);
+					
+					try {
+						cbrApp.cycle(query);
+					} catch (ExecutionException e1) {
+						e1.printStackTrace();
+					}
+					
+					allResults.addAll(eval);
 				}
-				
-				allResults.addAll(eval);
 			}
+			Collections.sort(allResults, new ResultsComparator());
+			printRetrievalSolutions(allResults);
+			
+			textoEnviar.setText(null);
+			
 		}
-		Collections.sort(allResults, new ResultsComparator());
-		printRetrievalSolutions(allResults);
 		
-		textoEnviar.setText(null);
 	}
 
 	/**
@@ -335,6 +321,7 @@ public class CBRApplication implements StandardCBRApplication {
 			text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
 
 		}	
+		
 		if(flag==true){
 			
 			if(set.size()>1){
@@ -440,7 +427,7 @@ public class CBRApplication implements StandardCBRApplication {
 		buttonPanel.removeAll();
 		buttonPanel.add(texto);
 		
-		StarBar starBar= new StarBar(gui,buttonPanel);
+		new StarBar(gui,buttonPanel);
 		
 		gui.add(buttonPanel);
 		buttonPanel.repaint();
