@@ -1,16 +1,23 @@
 package cbr;
 
 import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Generated;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +25,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultCaret;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+
 import gui.StarBar;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
@@ -40,7 +54,7 @@ public class CBRApplication implements StandardCBRApplication {
 	Connector connector;
 	
 	@Generated(value = { "ColibriStudio" })
-	static
+	
 	CBRCaseBase casebase;
 
 
@@ -56,6 +70,9 @@ public class CBRApplication implements StandardCBRApplication {
 	private static JPanel buttonPanel;
 	private static LinkedHashSet<CBRCase> casesToReatin;
 	
+	static HTMLDocument doc;
+    static HTMLEditorKit editorKit;
+
 	//private static ArrayList<CBRCase> casesToRetain = new ArrayList<CBRCase>();
 
 
@@ -176,8 +193,6 @@ public class CBRApplication implements StandardCBRApplication {
 			query = new CBRQuery();
 			
 			createWindows();
-			
-						
 
 		} catch (ExecutionException e) {
 			e.printStackTrace();
@@ -195,7 +210,7 @@ public class CBRApplication implements StandardCBRApplication {
 		gui.setLayout(null);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.getContentPane().setBackground(new java.awt.Color(171, 38, 60));
-		gui.setBounds(80, 80, 525, 540);
+		gui.setBounds(80, 80, 550, 550);
 		gui.setTitle("UBUassistant v0.1");
 		
 		
@@ -204,25 +219,58 @@ public class CBRApplication implements StandardCBRApplication {
 		topTextPane = new JTextPane();
 		topTextPane.setEditable(false);
 		topTextPane.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
-		topTextPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 109, 179)));
+		topTextPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(5, 5, 500, 400);
+		scrollPane.setBounds(5, 5, 525, 400);
+		scrollPane.setBorder(null);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		gui.add(scrollPane);
 		scrollPane.setViewportView(topTextPane);
 		
-		topTextPane.setText("> Hola soy UBUassistant, ¿En qué puedo ayudarle?\n");
+		DefaultCaret caret = (DefaultCaret)topTextPane.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
+		//-----------------------------------------------
+		
+	    topTextPane.setContentType( "text/html" );
+	    topTextPane.setEditable(false);
+	    doc = (HTMLDocument)topTextPane.getDocument();
+	    editorKit = (HTMLEditorKit)topTextPane.getEditorKit();
+	    
+	    topTextPane.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent event) {
+				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+	                String url = event.getURL().toString();
+	                try {
+						Desktop.getDesktop().browse(URI.create(url));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+	            }
+			}
+	    });
+	    
+	    //String text = "<a href=\"http://www.google.com/finance?q=NYSE:C\">C</a>";
+	    try {
+			editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+														+ "Hola soy UBUassistant, ¿En qué puedo ayudarle?"
+														+ "</b></p></html>", 0, 0, null);
+		} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+		
+
+        //------------------------------------------------
 		
 		//Creation of a panel to make suggestions or rating answer
 		buttonPanel = new JPanel();
-		buttonPanel.setBounds(5, 410, 500, 48);
+		buttonPanel.setBounds(5, 410, 525, 50);
 		buttonPanel.setBackground(new java.awt.Color(171, 38, 60));
-		//buttonPanel.setLayout(new CardLayout());
 
 		//Creation of the field to ask the questions
 		textoEnviar = new JTextField();
-		textoEnviar.setBounds(5, 460, 420, 30);
+		textoEnviar.setBounds(5, 475, 435, 30);
+		textoEnviar.setBorder(null);
 		textoEnviar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
 		textoEnviar.setVisible(true);
 		gui.add(textoEnviar);
@@ -242,11 +290,13 @@ public class CBRApplication implements StandardCBRApplication {
 					
 			}
 		});
-		btnEnviar.setBounds(430, 460, 70, 30);
+		btnEnviar.setBounds(445, 475, 85, 30);
+		btnEnviar.setBackground(new Color(0, 109, 179));
+		btnEnviar.setBorder(null);
+		btnEnviar.setForeground(Color.white);
 		gui.add(btnEnviar);
 		gui.getRootPane().setDefaultButton(btnEnviar);
-		
-		//Set the window visible
+
 		gui.setVisible(true);
 		
 	}
@@ -259,8 +309,13 @@ public class CBRApplication implements StandardCBRApplication {
 		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
 		
 		if(textoEnviar.getText().length()>0){
+
+			try {
+				editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:black\">"
+															+ textoEnviar.getText()
+															+ "</b></p></html>", 0, 0, null);
+			} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 			
-			topTextPane.setText(topTextPane.getText()+"\n"+"-  "+textoEnviar.getText()+"\n");
 			String[] words = textoEnviar.getText().split("\\s+");
 			
 			for (String word : words) {
@@ -302,6 +357,7 @@ public class CBRApplication implements StandardCBRApplication {
 		String text = "";
 		boolean flag=false;
 		
+		
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
 		casesToReatin = new LinkedHashSet<CBRCase>();
 				
@@ -313,14 +369,13 @@ public class CBRApplication implements StandardCBRApplication {
 				
 				set.add(solution.getAnswer());
 			}
-			
 		}
 		
 		for(String res : set){
 			flag=true;
 			text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
-
 		}	
+		
 		
 		if(flag==true){
 			
@@ -333,20 +388,67 @@ public class CBRApplication implements StandardCBRApplication {
 				
 				buttonPanel.add(texto);
 				
+				AtomicBoolean first = new AtomicBoolean(true);
+				
 				for(final CBRCase c : casesToReatin){
-					final JButton btn = new JButton(((CaseDescription)c.getDescription()).getKeyWord1().toString());
-					buttonPanel.add(btn);
-					btn.addActionListener(new ActionListener() {
+					
+					JCheckBox cbx = new JCheckBox(((CaseDescription)c.getDescription()).getKeyWord1().toString());
+					cbx.setBorder(null);
+					cbx.setBackground(null);
+					cbx.setForeground(Color.white);
+					cbx.setFont(new Font("Segoe UI Semibold", 0, 14));
+					buttonPanel.add(cbx);
+					cbx.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btn.getText()+"\n");
-							topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)c.getSolution()).getAnswer().toString()+"\n");
-							buttonPanel.removeAll();
-							buttonPanel.repaint();
-							gui.repaint();
-							gui.setVisible(true);
-							buttonPanel.setVisible(false);
 							
-							printUtilidad();
+							if(cbx.isSelected()){
+								
+								if(first.get()==true){
+									
+									first.set(false);
+									
+									if(((CaseSolution)c.getSolution()).getAnswer().toString().contains("http")){
+										
+										try {
+											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																						+ "<p>Tal vez esto te ayude:</p>"
+																						+ "<p><a href=\""+((CaseSolution)c.getSolution()).getAnswer().toString()+"\">"+((CaseSolution)c.getSolution()).getAnswer().toString()+"</a></p>" 
+																						+ "</b></html>", 0, 0, null);
+										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+										
+									}else{
+										
+										try {
+											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																						+ "<p>Tal vez esto te ayude:</p>"
+																						+ "<p>"+((CaseSolution)c.getSolution()).getAnswer().toString()+"</p>" 
+																						+ "</b></html>", 0, 0, null);
+										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+									}
+									
+								}else{
+									
+									if(((CaseSolution)c.getSolution()).getAnswer().toString().contains("http")){
+										
+										try {
+											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																						+ "<p><a href=\""+((CaseSolution)c.getSolution()).getAnswer().toString()+"\">"+((CaseSolution)c.getSolution()).getAnswer().toString()+"</a>"
+																						+ "</p></b></html>", 0, 0, null);
+										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+										
+									}else{
+										
+										try {
+											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																						+ "<p>"+((CaseSolution)c.getSolution()).getAnswer().toString()
+																						+ "</p></b></html>", 0, 0, null);
+										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+										
+									}
+								}
+									
+								//printUtilidad();
+							}
 						}
 					});
 				}
@@ -358,51 +460,102 @@ public class CBRApplication implements StandardCBRApplication {
 				buttonPanel.setVisible(true);
 				
 			}else{
-				topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+text);
+
+				if(text.contains("http")){
+					
+					try {
+						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																	+ "<p>Tal vez esto te ayude:</p><p><a href=\""+text+"\">"+text+"</a></p>"
+																	+ "</b></html>", 0, 0, null);
+					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+					
+				}else{
+					
+					try {
+						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																	+ "<p>Tal vez esto te ayude:</p><p>"+text+"</p>"
+																	+ "</b></html>", 0, 0, null);
+					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+					
+				}
+				
 				
 				printUtilidad();
 			}
 			
 			
 		}else{
-			topTextPane.setText(topTextPane.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n"+text);
+			
+			//topTextPane.setText(topTextPane.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n");
+			try {
+				editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+															+ "Lo siento, no tengo respuestas a tu pregunta :(" 
+															+ "</b></p></html>", 0, 0, null);
+			} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+			
 			JTextArea texto = new JTextArea();
-			texto.setText("Sugerencias de busqueda");
-			texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+			texto.setText("Sugerencias de búsqueda");
+			texto.setFont(new java.awt.Font("Segoe UI Semibold", Font.BOLD, 14));
 			texto.setForeground(Color.WHITE);
 			texto.setBackground(new java.awt.Color(171, 38, 60));
 			
 			buttonPanel.removeAll();
 			buttonPanel.add(texto);
 			
-			for( int i=0; i<3;i++){
-				final int tmp = i;
-				JButton btnOp = new JButton();
-				btnOp.setText(((CaseDescription)s.get(tmp).get_case().getDescription()).getKeyWord1());
-				btnOp.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						topTextPane.setText(topTextPane.getText()+"\n"+"-  "+btnOp.getText()+"\n");
-						topTextPane.setText(topTextPane.getText()+"\n"+"> Tal vez esto te ayude:\n"+"\n"+"   "+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"\n");
-						buttonPanel.removeAll();
-						buttonPanel.repaint();
-						gui.repaint();
-						gui.setVisible(true);
-						buttonPanel.setVisible(false);
-						
-						printUtilidad();
+			if(!s.isEmpty()){
+				
+				for( int i=0; i<3;i++){
+					final int tmp = i;
+					JButton btnOp = new JButton();
+					btnOp.setBackground(new Color(0, 109, 179));
+					btnOp.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+					btnOp.setForeground(Color.white);
+					btnOp.setText(((CaseDescription)s.get(tmp).get_case().getDescription()).getKeyWord1());
+					btnOp.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							
+							try {
+								editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:black\">"
+																			+ "<p>"+btnOp.getText()+"</p>" + "</b></html>", 0, 0, null);
+							} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+							
+							if(((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString().contains("http")){
+								
+								try {
+									editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																				+ "<p>"+"Tal vez esto te ayude:</p>"+"<p><a href=\""+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"\">"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</a></p>" 
+																				+ "</b></html>", 0, 0, null);
+								} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+							}else{
+								try {
+									editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																				+ "<p>"+"Tal vez esto te ayude:</p>"+"<p>"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</p>" 
+																				+ "</b></html>", 0, 0, null);
+								} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+							}
+							
+							
+							buttonPanel.removeAll();
+							buttonPanel.repaint();
+							gui.repaint();
+							gui.setVisible(true);
+							buttonPanel.setVisible(false);
+							
+							printUtilidad();
 
-					}
-				});
+						}
+					});
 
-				buttonPanel.add(btnOp);
+					buttonPanel.add(btnOp);
+				}
+				
+				gui.add(buttonPanel);
+				buttonPanel.repaint();
+				gui.repaint();
+				buttonPanel.setVisible(true);
+				gui.setVisible(true);
+				
 			}
-			
-			gui.add(buttonPanel);
-			buttonPanel.repaint();
-			gui.repaint();
-			buttonPanel.setVisible(true);
-			gui.setVisible(true);
-			
 		}
 		
 		try {
