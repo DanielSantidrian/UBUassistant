@@ -2,6 +2,7 @@ package cbr;
 
 import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Generated;
 import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -25,13 +27,19 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SizeRequirements;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
+import javax.swing.text.Element;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.InlineView;
+import javax.swing.text.html.ParagraphView;
 
+import database.DatabaseConnection;
 import gui.StarBar;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
@@ -48,13 +56,21 @@ import representation.CaseDescription;
 import representation.CaseSolution;
 import util.ResultsComparator;
 
+/**
+ * 
+ * @author Daniel Santidrian Alonso
+ *
+ */
 public class CBRApplication implements StandardCBRApplication {
-
+	
+	
+	/**
+	 * Global variables
+	 */
 	@Generated(value = { "ColibriStudio" })
 	Connector connector;
 	
 	@Generated(value = { "ColibriStudio" })
-	
 	CBRCaseBase casebase;
 
 
@@ -72,15 +88,29 @@ public class CBRApplication implements StandardCBRApplication {
 	
 	static HTMLDocument doc;
     static HTMLEditorKit editorKit;
-
-	//private static ArrayList<CBRCase> casesToRetain = new ArrayList<CBRCase>();
-
-
+    
+    static List<String> sentenceList;
+    static List<String> saluteList;
+    static List<String> saluteResponseList;
+    
+    /**
+     * Constructor of the class
+     */
+    public CBRApplication() {
+		DatabaseConnection db = new DatabaseConnection();
+		sentenceList=db.getSentenceList();
+		saluteList=db.getSaluteList();
+		saluteResponseList=db.getSaluteResponseList();
+	}
+    
 
 	//******************************************************************/
 	// Configuration
 	//******************************************************************/
-
+    
+    /**
+     * Method that calls the configuration methods
+     */
 	@Override
 	public void configure() throws ExecutionException {
 		try{
@@ -154,14 +184,22 @@ public class CBRApplication implements StandardCBRApplication {
 	// Methods
 	//******************************************************************/
 	
-
+	/**
+	 * Method preCycle that will be called to initialize and return the case base
+	 * @throws ExecutionException
+	 */
 	@Generated(value = { "ColibriStudio" })
 	@Override
 	public CBRCaseBase preCycle() throws ExecutionException {
 		casebase.init(connector);
 		return casebase;
 	}
-		
+	
+	/**
+	 * Method that save in a collection the nearest neighbors of the query
+	 * @param query 
+	 * @throws ExecutionException
+	 */
 	@Generated(value = { "ColibriStudio" })	
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
@@ -172,6 +210,10 @@ public class CBRApplication implements StandardCBRApplication {
 
 	}
 
+	/**
+	 * Method that will be called to close the connection
+	 * @throws ExecutionException
+	 */
 	@Generated(value = { "ColibriStudio" })
 	@Override
 	public void postCycle() throws ExecutionException {
@@ -207,37 +249,90 @@ public class CBRApplication implements StandardCBRApplication {
 		
 		//Creation of the main window
 		gui = new JFrame();
-		gui.setLayout(null);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.getContentPane().setBackground(new java.awt.Color(171, 38, 60));
-		gui.setBounds(80, 80, 550, 550);
+		gui.setMinimumSize(new Dimension(550,550));
+		gui.setLocation(80, 80);
 		gui.setTitle("UBUassistant v0.1");
 		
 		
 		//Creation of the panel to show the answer of the question
-		
 		topTextPane = new JTextPane();
 		topTextPane.setEditable(false);
 		topTextPane.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
-		topTextPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		topTextPane.setBorder(BorderFactory.createEmptyBorder(5, 15, 10, 10));
+		
+		//Always show the last update
+		topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(5, 5, 525, 400);
 		scrollPane.setBorder(null);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		gui.add(scrollPane);
 		scrollPane.setViewportView(topTextPane);
 		
-		DefaultCaret caret = (DefaultCaret)topTextPane.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-		
-		//-----------------------------------------------
-		
+		//Configuring the text pane to show html tags
 	    topTextPane.setContentType( "text/html" );
 	    topTextPane.setEditable(false);
+	    
+	    
+	    topTextPane.setEditorKit(new HTMLEditorKit(){ 
+	           /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override 
+	           public ViewFactory getViewFactory(){ 
+	 
+	               return new HTMLFactory(){ 
+	                   public View create(Element e){ 
+	                      View v = super.create(e); 
+	                      if(v instanceof InlineView){ 
+	                          return new InlineView(e){ 
+	                              public int getBreakWeight(int axis, float pos, float len) { 
+	                                  return GoodBreakWeight; 
+	                              } 
+	                              public View breakView(int axis, int p0, float pos, float len) { 
+	                                  if(axis == View.X_AXIS) { 
+	                                      checkPainter(); 
+	                                      int p1 = getGlyphPainter().getBoundedPosition(this, p0, pos, len); 
+	                                      if(p0 == getStartOffset() && p1 == getEndOffset()) { 
+	                                          return this; 
+	                                      } 
+	                                      return createFragment(p0, p1); 
+	                                  } 
+	                                  return this; 
+	                                } 
+	                            }; 
+	                      } 
+	                      else if (v instanceof ParagraphView) { 
+	                          return new ParagraphView(e) { 
+	                              protected SizeRequirements calculateMinorAxisRequirements(int axis, SizeRequirements r) { 
+	                                  if (r == null) { 
+	                                        r = new SizeRequirements(); 
+	                                  } 
+	                                  float pref = layoutPool.getPreferredSpan(axis); 
+	                                  float min = layoutPool.getMinimumSpan(axis); 
+	                                  // Don't include insets, Box.getXXXSpan will include them. 
+	                                    r.minimum = (int)min; 
+	                                    r.preferred = Math.max(r.minimum, (int) pref); 
+	                                    r.maximum = Integer.MAX_VALUE; 
+	                                    r.alignment = 0.5f; 
+	                                  return r; 
+	                                } 
+	 
+	                            }; 
+	                        } 
+	                      return v; 
+	                    } 
+	                }; 
+	            } 
+	        }); 
+	    
 	    doc = (HTMLDocument)topTextPane.getDocument();
 	    editorKit = (HTMLEditorKit)topTextPane.getEditorKit();
 	    
+	    //Adding a HyperlinkListener to open the browser
 	    topTextPane.addHyperlinkListener(new HyperlinkListener() {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
@@ -249,31 +344,29 @@ public class CBRApplication implements StandardCBRApplication {
 						e.printStackTrace();
 					}
 	            }
+				//Always show the last update
+				topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 			}
 	    });
 	    
-	    //String text = "<a href=\"http://www.google.com/finance?q=NYSE:C\">C</a>";
+	    //Setting the random welcome sentence
 	    try {
 			editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-														+ "Hola soy UBUassistant, ¿En qué puedo ayudarle?"
+														+ sentenceList.get((int) (Math.random()*5))
 														+ "</b></p></html>", 0, 0, null);
 		} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 		
-
-        //------------------------------------------------
 		
 		//Creation of a panel to make suggestions or rating answer
 		buttonPanel = new JPanel();
-		buttonPanel.setBounds(5, 410, 525, 50);
 		buttonPanel.setBackground(new java.awt.Color(171, 38, 60));
+		buttonPanel.setMinimumSize(new Dimension(474,60));
 
 		//Creation of the field to ask the questions
 		textoEnviar = new JTextField();
-		textoEnviar.setBounds(5, 475, 435, 30);
 		textoEnviar.setBorder(null);
 		textoEnviar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
 		textoEnviar.setVisible(true);
-		gui.add(textoEnviar);
 		
 		
 		//Creation of the button "Enviar"
@@ -282,69 +375,140 @@ public class CBRApplication implements StandardCBRApplication {
 			public void actionPerformed(ActionEvent e) {
 				buttonPanel.removeAll();
 				buttonPanel.repaint();
-				gui.repaint();
-				gui.setVisible(true);
-				buttonPanel.setVisible(false);
+				buttonPanel.revalidate();
 				
 				CBRApplication.searchAnswer();
 					
 			}
 		});
-		btnEnviar.setBounds(445, 475, 85, 30);
 		btnEnviar.setBackground(new Color(0, 109, 179));
 		btnEnviar.setBorder(null);
 		btnEnviar.setForeground(Color.white);
-		gui.add(btnEnviar);
 		gui.getRootPane().setDefaultButton(btnEnviar);
-
-		gui.setVisible(true);
 		
+		//Configure layout
+        
+        
+		GroupLayout layout = new GroupLayout(gui.getContentPane());
+        gui.getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(textoEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(scrollPane)
+                        .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
+            );
+            layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(6, 6, 6)
+                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(textoEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                        .addComponent(btnEnviar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap())
+            );
+            
+		//Setting the window visible
+        
+        gui.setVisible(true);
 	}
 	
 	/**
-	 * Method that gets the phrase entered by the user and get the answer
+	 * Method that gets the phrase entered by the user and display the answer
 	 */
 	private static void searchAnswer(){
 		
+		//List that will save all the nearest neighbors of all the words in the input sentence
 		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
 		
+		//If the user inputs at least a letter
 		if(textoEnviar.getText().length()>0){
-
+			
+			//Display the input text
 			try {
-				editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:black\">"
-															+ textoEnviar.getText()
+				editorKit.insertHTML(doc, doc.getLength(), "<html><p align=\"right\"><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:black\">"
+															+ textoEnviar.getText().substring(0, 1).toUpperCase() + textoEnviar.getText().substring(1)
 															+ "</b></p></html>", 0, 0, null);
 			} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 			
-			String[] words = textoEnviar.getText().split("\\s+");
+			//Always show the last update
+			topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 			
-			for (String word : words) {
+			//Split the hypothetical sentence in different words
+			String textTextoEnviar=textoEnviar.getText().toLowerCase();
+			String[] words = textTextoEnviar.split("\\s+");
+			
+			//If the input text is a reserved word, also checking with the first capital letter and with all capital letters
+			if(saluteList.contains(textoEnviar.getText()) 
+					|| saluteList.contains(textTextoEnviar.substring(0, 1).toUpperCase() + textTextoEnviar.substring(1))){
 				
-				if(word.length()>2){
-					
-					cd.setKeyWord1(word);
-					cd.setKeyWord2(word);
-					cd.setKeyWord3(word);
-					cd.setKeyWord4(word);
-					cd.setKeyWord5(word);
-					query.setDescription(cd);
-					
+				//Get the index of the element in the list
+				int index=saluteList.indexOf(textoEnviar.getText());
+				int index2=saluteList.indexOf(textTextoEnviar.substring(0, 1).toUpperCase() + textTextoEnviar.substring(1));
+				
+				//Display the response to the salute depending of the index
+				if(index!=-1){
 					try {
-						cbrApp.cycle(query);
-					} catch (ExecutionException e1) {
-						e1.printStackTrace();
-					}
-					
-					allResults.addAll(eval);
+						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																	+ "<p>"+saluteResponseList.get(index)+"</p>" 
+																	+ "</b></html>", 0, 0, null);
+					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+				}else{
+					try {
+						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
+																	+ "<p>"+saluteResponseList.get(index2)+"</p>" 
+																	+ "</b></html>", 0, 0, null);
+					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 				}
+				
+				//Always show the last update
+				topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+				
+			//If the input text is not a reserved word
+			}else{
+				
+				//For each word in the input text
+				for (String word : words) {
+					
+					if(word.length()>2){
+						
+						cd.setKeyWord1(word);
+						cd.setKeyWord2(word);
+						cd.setKeyWord3(word);
+						cd.setKeyWord4(word);
+						cd.setKeyWord5(word);
+						query.setDescription(cd);
+						
+						try {
+							cbrApp.cycle(query);
+						} catch (ExecutionException e1) {
+							e1.printStackTrace();
+						}
+						
+						//Adding all the nearest neighbors to allResults list
+						allResults.addAll(eval);
+					}
+				}
+				
+				//Sorting the list with the ResultsComparator. For more eval to fewer eval
+				Collections.sort(allResults, new ResultsComparator());
+				//Calling the method printRetrievalSolutions to print the solution on the textPane
+				printRetrievalSolutions(allResults);
+
 			}
-			Collections.sort(allResults, new ResultsComparator());
-			printRetrievalSolutions(allResults);
-			
+			//Setting the text field to null
 			textoEnviar.setText(null);
-			
 		}
-		
 	}
 
 	/**
@@ -353,14 +517,16 @@ public class CBRApplication implements StandardCBRApplication {
 	 * @param s
 	 */
 	private static void printRetrievalSolutions(final List<RetrievalResult> s) {
-		//Print answer into the panel
+		
 		String text = "";
 		boolean flag=false;
 		
-		
+		//Set for saving the text of the answers
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
+		//Set for saving the case of the answers
 		casesToReatin = new LinkedHashSet<CBRCase>();
-				
+			
+		//Storing all the answers which their cases are reasonably near to the input word
 		for(RetrievalResult res : s){
 			if(res.getEval()>0.35){
 				CBRCase _case = res.get_case();
@@ -371,15 +537,19 @@ public class CBRApplication implements StandardCBRApplication {
 			}
 		}
 		
+		//Creating the answer string
 		for(String res : set){
 			flag=true;
-			text+="\n   " + res /*+ " -> " + res.getEval() */+ "\n";
+			text+=res;
 		}	
 		
-		
+		//If there are any answer to the input text
 		if(flag==true){
 			
+			//If there are more than one answer
 			if(set.size()>1){
+				
+				//Displaying a text into the button panel
 				JTextArea texto = new JTextArea();
 				texto.setText("Sé más concreto :)");
 				texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
@@ -388,8 +558,10 @@ public class CBRApplication implements StandardCBRApplication {
 				
 				buttonPanel.add(texto);
 				
+				//Creating an atomic boolean to check if it is the first checkbox we select
 				AtomicBoolean first = new AtomicBoolean(true);
 				
+				//For each case in the set casesToRetain it is created a checkbox
 				for(final CBRCase c : casesToReatin){
 					
 					JCheckBox cbx = new JCheckBox(((CaseDescription)c.getDescription()).getKeyWord1().toString());
@@ -398,36 +570,52 @@ public class CBRApplication implements StandardCBRApplication {
 					cbx.setForeground(Color.white);
 					cbx.setFont(new Font("Segoe UI Semibold", 0, 14));
 					buttonPanel.add(cbx);
+					buttonPanel.repaint();
+					buttonPanel.revalidate();
+					//Adding an action listener to the checkboxes
 					cbx.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							
+							//If the checkbox is selected
 							if(cbx.isSelected()){
 								
+								//If it is the first checkbox we select
 								if(first.get()==true){
 									
+									//Setting the variable first to false
 									first.set(false);
 									
+									//If the answer is a hyperlink
 									if(((CaseSolution)c.getSolution()).getAnswer().toString().contains("http")){
 										
 										try {
 											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																						+ "<p>Tal vez esto te ayude:</p>"
+																						+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p>"
 																						+ "<p><a href=\""+((CaseSolution)c.getSolution()).getAnswer().toString()+"\">"+((CaseSolution)c.getSolution()).getAnswer().toString()+"</a></p>" 
 																						+ "</b></html>", 0, 0, null);
 										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 										
+										//Always show the last update
+										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+									
+									//If it is not a hyperlink
 									}else{
 										
 										try {
 											editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																						+ "<p>Tal vez esto te ayude:</p>"
+																						+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p>"
 																						+ "<p>"+((CaseSolution)c.getSolution()).getAnswer().toString()+"</p>" 
 																						+ "</b></html>", 0, 0, null);
 										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+										
+										//Always show the last update
+										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 									}
-									
+								
+								//If it is not the first checkbox we select
 								}else{
 									
+									//If the answer is a hyperlink
 									if(((CaseSolution)c.getSolution()).getAnswer().toString().contains("http")){
 										
 										try {
@@ -436,6 +624,10 @@ public class CBRApplication implements StandardCBRApplication {
 																						+ "</p></b></html>", 0, 0, null);
 										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 										
+										//Always show the last update
+										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+									
+									//If the answer is not a hyperlink
 									}else{
 										
 										try {
@@ -444,55 +636,66 @@ public class CBRApplication implements StandardCBRApplication {
 																						+ "</p></b></html>", 0, 0, null);
 										} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 										
+										//Always show the last update
+										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+										
 									}
 								}
-									
-								//printUtilidad();
 							}
 						}
 					});
 				}
 				
-				gui.add(buttonPanel);
-				buttonPanel.repaint();
+				//Displays the checkboxes in the button panel
 				gui.repaint();
-				gui.setVisible(true);
-				buttonPanel.setVisible(true);
-				
+				gui.revalidate();
+			
+			//If there is only one answer
 			}else{
-
+				
+				//If the answer is a hyperlink
 				if(text.contains("http")){
 					
 					try {
 						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																	+ "<p>Tal vez esto te ayude:</p><p><a href=\""+text+"\">"+text+"</a></p>"
+																	+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p><p><a href=\""+text+"\">"+text+"</a></p>"
 																	+ "</b></html>", 0, 0, null);
 					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 					
+					//Always show the last update
+					topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+				
+				//If the answer is not a hyperlink
 				}else{
 					
 					try {
 						editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																	+ "<p>Tal vez esto te ayude:</p><p>"+text+"</p>"
+																	+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p><p>"+text+"</p>"
 																	+ "</b></html>", 0, 0, null);
 					} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 					
+					//Always show the last update
+					topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+					
 				}
-				
-				
+				//Calling the method to ask the user about the utility of the answer
 				printUtilidad();
 			}
 			
-			
+		//If there is not an answer
 		}else{
 			
-			//topTextPane.setText(topTextPane.getText()+"\n"+"> Lo siento, no tengo respuestas a tu pregunta :(\n");
+			
 			try {
 				editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
 															+ "Lo siento, no tengo respuestas a tu pregunta :(" 
 															+ "</b></p></html>", 0, 0, null);
 			} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 			
+			//Always show the last update
+			topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+			
+			//Adding text to the button panel
 			JTextArea texto = new JTextArea();
 			texto.setText("Sugerencias de búsqueda");
 			texto.setFont(new java.awt.Font("Segoe UI Semibold", Font.BOLD, 14));
@@ -502,8 +705,10 @@ public class CBRApplication implements StandardCBRApplication {
 			buttonPanel.removeAll();
 			buttonPanel.add(texto);
 			
+			//If there are at least one neighbor for the input text
 			if(!s.isEmpty()){
 				
+				//Creating and displaying in the button panel three recommendations of search
 				for( int i=0; i<3;i++){
 					final int tmp = i;
 					JButton btnOp = new JButton();
@@ -511,53 +716,67 @@ public class CBRApplication implements StandardCBRApplication {
 					btnOp.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
 					btnOp.setForeground(Color.white);
 					btnOp.setText(((CaseDescription)s.get(tmp).get_case().getDescription()).getKeyWord1());
+					
+					//Adding an action listener for each button
 					btnOp.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							
+							//Printing in the text pane the word of the button
 							try {
 								editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:black\">"
-																			+ "<p>"+btnOp.getText()+"</p>" + "</b></html>", 0, 0, null);
+																			+ "<p align=\"right\">"+btnOp.getText().substring(0, 1).toUpperCase() + btnOp.getText().substring(1)+"</p>" + "</b></html>", 0, 0, null);
 							} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
 							
+							//Always show the last update
+							topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+							
+							//If the answer for the word in the button is a hyperlink
 							if(((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString().contains("http")){
 								
 								try {
 									editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																				+ "<p>"+"Tal vez esto te ayude:</p>"+"<p><a href=\""+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"\">"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</a></p>" 
+																				+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p>"+"<p><a href=\""+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"\">"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</a></p>" 
 																				+ "</b></html>", 0, 0, null);
 								} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+								
+								//Always show the last update
+								topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
+							
+							//If the answer for the word in the button is not a hyperlink
 							}else{
 								try {
 									editorKit.insertHTML(doc, doc.getLength(), "<html><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
-																				+ "<p>"+"Tal vez esto te ayude:</p>"+"<p>"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</p>" 
+																				+ "<p>"+sentenceList.get((int)(Math.random()*5+5))+"</p>"+"<p>"+((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString()+"</p>" 
 																				+ "</b></html>", 0, 0, null);
 								} catch (BadLocationException | IOException e1) {e1.printStackTrace();}
+								
+								//Always show the last update
+								topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 							}
 							
-							
+							//Repainting the button panel
 							buttonPanel.removeAll();
 							buttonPanel.repaint();
-							gui.repaint();
-							gui.setVisible(true);
-							buttonPanel.setVisible(false);
+							buttonPanel.revalidate();
 							
+							
+							//Calling the method to ask the user about the utility of the answer
 							printUtilidad();
 
 						}
 					});
-
+					//Adding the button to the button panel
 					buttonPanel.add(btnOp);
 				}
-				
-				gui.add(buttonPanel);
+				//Repainting the button panel
 				buttonPanel.repaint();
-				gui.repaint();
-				buttonPanel.setVisible(true);
-				gui.setVisible(true);
+				buttonPanel.revalidate();
+				
 				
 			}
 		}
 		
+		//Setting down the connection calling postCycle
 		try {
 			cbrApp.postCycle();
 		} catch (ExecutionException e) {
@@ -565,6 +784,7 @@ public class CBRApplication implements StandardCBRApplication {
 		}
 	
 	}
+	
 	
 	/**
 	 * Method that displays in the button panel the information about the utility of the answer
@@ -581,12 +801,9 @@ public class CBRApplication implements StandardCBRApplication {
 		buttonPanel.add(texto);
 		
 		new StarBar(gui,buttonPanel);
-		
-		gui.add(buttonPanel);
 		buttonPanel.repaint();
-		gui.repaint();
-		gui.setVisible(true);
-		buttonPanel.setVisible(true);
+		buttonPanel.revalidate();
+		
 		
 	}
 		

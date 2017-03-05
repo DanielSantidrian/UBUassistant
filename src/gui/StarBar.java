@@ -55,11 +55,8 @@ public StarBar(JFrame gui, JPanel panel) {
         		texto.setBackground(new java.awt.Color(171, 38, 60));
         		panel.removeAll();
         		panel.add(texto);
-        		gui.add(panel);
         		panel.repaint();
-        		gui.repaint();
-        		gui.setVisible(true);
-        		panel.setVisible(true);
+        		panel.revalidate();
             }
         });
     	
