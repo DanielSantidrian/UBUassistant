@@ -15,58 +15,61 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import database.DatabaseConnection;
+
 public class StarBar {
 
+	private int rating;
+	private MouseMotionListener mouseListener;
+	private static DatabaseConnection db=new DatabaseConnection();
 
 
-private int rating;
-private MouseMotionListener mouseListener;
-
-
-public StarBar(JFrame gui, JPanel panel) {
+	public StarBar(JFrame gui, JPanel panel, String palabra) {
 	
-    List<JButton> stars = new ArrayList<JButton>();
-    
-    for(int i=0; i<5;i++){
-    	
-    	stars.add(new JButton());
-    	
-    	final int tmp=i;
-
-    	stars.get(i).addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            	panel.removeMouseMotionListener(mouseListener);
-            	
-            	setRating(tmp+1);
-            	
-            	
-            	for(int j=0;j<=tmp;j++){
-            		stars.get(j).setIcon(new ImageIcon(getClass().getResource("StarRatingSelected.png")));
-            	}
-            	for(int z=tmp+1;z<5;z++){
-            		stars.get(z).setIcon(new ImageIcon(getClass().getResource("StarRatingUNselected.png")));
-            	}
-            	
-            	JTextArea texto = new JTextArea();
-        		texto.setText("Valoración guardada correctamente. Su voto ha sido "+rating);
-        		texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
-        		texto.setForeground(Color.WHITE);
-        		texto.setBackground(new java.awt.Color(171, 38, 60));
-        		panel.removeAll();
-        		panel.add(texto);
-        		panel.repaint();
-        		panel.revalidate();
-            }
-        });
-    	
-    	stars.get(i).setIcon(new ImageIcon(getClass().getResource("StarRatingUNselected.png")));
-    	stars.get(i).setBorder(BorderFactory.createEmptyBorder());
-    	stars.get(i).setBackground(null);
-    	
-        panel.add(stars.get(i));
-        panel.setVisible(true);
-        stars.get(i).setVisible(true);
+	    List<JButton> stars = new ArrayList<JButton>();
+	    
+	    for(int i=0; i<5;i++){
+	    	
+	    	stars.add(new JButton());
+	    	
+	    	final int tmp=i;
+	
+	    	stars.get(i).addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent e) {
+	
+	            	panel.removeMouseMotionListener(mouseListener);
+	            	
+	            	setRating(tmp+1);
+	            	
+	            	
+	            	for(int j=0;j<=tmp;j++){
+	            		stars.get(j).setIcon(new ImageIcon(getClass().getResource("StarRatingSelected.png")));
+	            	}
+	            	for(int z=tmp+1;z<5;z++){
+	            		stars.get(z).setIcon(new ImageIcon(getClass().getResource("StarRatingUNselected.png")));
+	            	}
+	            	
+	            	JTextArea texto = new JTextArea();
+	        		texto.setText("Valoración guardada correctamente. Su voto ha sido "+rating);
+	        		texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+	        		texto.setForeground(Color.WHITE);
+	        		texto.setBackground(new java.awt.Color(171, 38, 60));
+	        		panel.removeAll();
+	        		panel.add(texto);
+	        		panel.repaint();
+	        		panel.revalidate();
+	        		
+	        		db.saveVote(palabra, getRating());
+	            }
+	        });
+	    	
+	    	stars.get(i).setIcon(new ImageIcon(getClass().getResource("StarRatingUNselected.png")));
+	    	stars.get(i).setBorder(BorderFactory.createEmptyBorder());
+	    	stars.get(i).setBackground(null);
+	    	
+	        panel.add(stars.get(i));
+	        panel.setVisible(true);
+	        stars.get(i).setVisible(true);
     	
     }
     

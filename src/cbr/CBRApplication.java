@@ -11,8 +11,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Generated;
@@ -86,18 +88,21 @@ public class CBRApplication implements StandardCBRApplication {
 	private static JPanel buttonPanel;
 	private static LinkedHashSet<CBRCase> casesToReatin;
 	
-	static HTMLDocument doc;
-    static HTMLEditorKit editorKit;
+	private static HTMLDocument doc;
+    private static HTMLEditorKit editorKit;
     
-    static List<String> sentenceList;
-    static List<String> saluteList;
-    static List<String> saluteResponseList;
+    private static DatabaseConnection db;
+    private static List<String> sentenceList;
+    private static List<String> saluteList;
+    private static List<String> saluteResponseList;
+    
+    private static Map<String,List<RetrievalResult>> allResults;
     
     /**
      * Constructor of the class
      */
     public CBRApplication() {
-		DatabaseConnection db = new DatabaseConnection();
+		db = new DatabaseConnection();
 		sentenceList=db.getSentenceList();
 		saluteList=db.getSaluteList();
 		saluteResponseList=db.getSaluteResponseList();
@@ -207,7 +212,6 @@ public class CBRApplication implements StandardCBRApplication {
 
 		eval= NNScoringMethod.evaluateSimilarity(casebase.getCases(), query, simConfig);
 		//eval = SelectCases.selectTopKRR(eval, 3);
-
 	}
 
 	/**
@@ -239,7 +243,6 @@ public class CBRApplication implements StandardCBRApplication {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	/**
@@ -273,7 +276,6 @@ public class CBRApplication implements StandardCBRApplication {
 		//Configuring the text pane to show html tags
 	    topTextPane.setContentType( "text/html" );
 	    topTextPane.setEditable(false);
-	    
 	    
 	    topTextPane.setEditorKit(new HTMLEditorKit(){ 
 	           /**
@@ -368,7 +370,6 @@ public class CBRApplication implements StandardCBRApplication {
 		textoEnviar.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
 		textoEnviar.setVisible(true);
 		
-		
 		//Creation of the button "Enviar"
 		JButton btnEnviar = new JButton("Enviar");
 		btnEnviar.addActionListener(new ActionListener() {
@@ -387,7 +388,6 @@ public class CBRApplication implements StandardCBRApplication {
 		gui.getRootPane().setDefaultButton(btnEnviar);
 		
 		//Configure layout
-        
         
 		GroupLayout layout = new GroupLayout(gui.getContentPane());
         gui.getContentPane().setLayout(layout);
@@ -429,7 +429,7 @@ public class CBRApplication implements StandardCBRApplication {
 	private static void searchAnswer(){
 		
 		//List that will save all the nearest neighbors of all the words in the input sentence
-		List<RetrievalResult> allResults = new ArrayList<RetrievalResult>();
+		allResults = new HashMap<String,List<RetrievalResult>>();
 		
 		//If the user inputs at least a letter
 		if(textoEnviar.getText().length()>0){
@@ -495,15 +495,24 @@ public class CBRApplication implements StandardCBRApplication {
 							e1.printStackTrace();
 						}
 						
-						//Adding all the nearest neighbors to allResults list
-						allResults.addAll(eval);
+						//Adding all the nearest neighbors to allResults map with the word that generates the answer
+						allResults.put(word, new ArrayList<RetrievalResult>(eval));
 					}
 				}
 				
-				//Sorting the list with the ResultsComparator. For more eval to fewer eval
-				Collections.sort(allResults, new ResultsComparator());
+				//Sorting all the results with the ResultsComparator. For more eval value to fewer eval value
+				Collection<List<RetrievalResult>> values = allResults.values();
+				List<RetrievalResult> listOfValues = new ArrayList<RetrievalResult>();
+				for(List<RetrievalResult> list : values){
+					for(RetrievalResult r : list){
+						listOfValues.add(r);
+					}
+				}
+				
+				Collections.sort(listOfValues, new ResultsComparator());
+				
 				//Calling the method printRetrievalSolutions to print the solution on the textPane
-				printRetrievalSolutions(allResults);
+				printRetrievalSolutions(listOfValues);
 
 			}
 			//Setting the text field to null
@@ -525,14 +534,25 @@ public class CBRApplication implements StandardCBRApplication {
 		LinkedHashSet<String> set = new LinkedHashSet<String>();
 		//Set for saving the case of the answers
 		casesToReatin = new LinkedHashSet<CBRCase>();
+		//Set for saving the word of the best answer
+		LinkedHashSet<String> word = new LinkedHashSet<String>();
 			
 		//Storing all the answers which their cases are reasonably near to the input word
 		for(RetrievalResult res : s){
+			
 			if(res.getEval()>0.35){
+
+				//Saving the word that generates the best answer
+				for (String o : allResults.keySet()) {
+				      if (allResults.get(o).contains(res)) {
+				        word.add(o);
+				      }
+				}
+				
 				CBRCase _case = res.get_case();
 				casesToReatin.add(_case);
-				CaseSolution solution = (CaseSolution) _case.getSolution();
 				
+				CaseSolution solution = (CaseSolution) _case.getSolution();
 				set.add(solution.getAnswer());
 			}
 		}
@@ -579,6 +599,8 @@ public class CBRApplication implements StandardCBRApplication {
 							//If the checkbox is selected
 							if(cbx.isSelected()){
 								
+								cbx.setEnabled(false);
+								
 								//If it is the first checkbox we select
 								if(first.get()==true){
 									
@@ -611,6 +633,8 @@ public class CBRApplication implements StandardCBRApplication {
 										//Always show the last update
 										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 									}
+									
+									db.aumentarNumBusquedas(cbx.getText());
 								
 								//If it is not the first checkbox we select
 								}else{
@@ -640,6 +664,9 @@ public class CBRApplication implements StandardCBRApplication {
 										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 										
 									}
+									
+									//Increasing the number of searches of the word
+									db.aumentarNumBusquedas(cbx.getText());
 								}
 							}
 						}
@@ -676,15 +703,17 @@ public class CBRApplication implements StandardCBRApplication {
 					
 					//Always show the last update
 					topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
-					
 				}
+				
+				String palabra=word.iterator().next();
+				//Increasing the number of searches of the word
+				db.aumentarNumBusquedas(palabra);
 				//Calling the method to ask the user about the utility of the answer
-				printUtilidad();
+				printUtilidad(palabra);
 			}
 			
 		//If there is not an answer
 		}else{
-			
 			
 			try {
 				editorKit.insertHTML(doc, doc.getLength(), "<html><p><b face=\"Segoe UI Semibold\" size=\"14\" style=\"color:rgb(0, 109, 179)\">"
@@ -695,18 +724,18 @@ public class CBRApplication implements StandardCBRApplication {
 			//Always show the last update
 			topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 			
-			//Adding text to the button panel
-			JTextArea texto = new JTextArea();
-			texto.setText("Sugerencias de búsqueda");
-			texto.setFont(new java.awt.Font("Segoe UI Semibold", Font.BOLD, 14));
-			texto.setForeground(Color.WHITE);
-			texto.setBackground(new java.awt.Color(171, 38, 60));
-			
-			buttonPanel.removeAll();
-			buttonPanel.add(texto);
-			
 			//If there are at least one neighbor for the input text
 			if(!s.isEmpty()){
+				
+				//Adding text to the button panel
+				JTextArea texto = new JTextArea();
+				texto.setText("Sugerencias de búsqueda");
+				texto.setFont(new java.awt.Font("Segoe UI Semibold", Font.BOLD, 14));
+				texto.setForeground(Color.WHITE);
+				texto.setBackground(new java.awt.Color(171, 38, 60));
+				
+				buttonPanel.removeAll();
+				buttonPanel.add(texto);
 				
 				//Creating and displaying in the button panel three recommendations of search
 				for( int i=0; i<3;i++){
@@ -754,15 +783,27 @@ public class CBRApplication implements StandardCBRApplication {
 								topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 							}
 							
+
+							for (String o : allResults.keySet()) {
+								if (allResults.get(o).contains(s.get(tmp))) {
+									word.add(o);
+								}		
+							}
+							
+							//When there are no answers and the user push a suggestion button it is supposed
+							//That the text input by the user is related with the button so we store all this 
+							//information for making the system learn
+							db.learnCases(word.iterator().next(), ((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString());
+							
 							//Repainting the button panel
 							buttonPanel.removeAll();
 							buttonPanel.repaint();
 							buttonPanel.revalidate();
 							
-							
 							//Calling the method to ask the user about the utility of the answer
-							printUtilidad();
-
+							printUtilidad(btnOp.getText());
+							//Increasing the number of searches of the word
+							db.aumentarNumBusquedas(btnOp.getText());
 						}
 					});
 					//Adding the button to the button panel
@@ -771,8 +812,6 @@ public class CBRApplication implements StandardCBRApplication {
 				//Repainting the button panel
 				buttonPanel.repaint();
 				buttonPanel.revalidate();
-				
-				
 			}
 		}
 		
@@ -782,14 +821,12 @@ public class CBRApplication implements StandardCBRApplication {
 		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}
-	
 	}
-	
 	
 	/**
 	 * Method that displays in the button panel the information about the utility of the answer
 	 */
-	private static void printUtilidad(){
+	private static void printUtilidad(String palabra){
 		
 		JTextArea texto = new JTextArea();
 		texto.setText("¿Le ha resultado útil esta información?");
@@ -800,12 +837,8 @@ public class CBRApplication implements StandardCBRApplication {
 		buttonPanel.removeAll();
 		buttonPanel.add(texto);
 		
-		new StarBar(gui,buttonPanel);
+		new StarBar(gui,buttonPanel,palabra);
 		buttonPanel.repaint();
 		buttonPanel.revalidate();
-		
-		
 	}
-		
-	
 }

@@ -1,8 +1,10 @@
 package database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class DatabaseConnection {
 		ds.setPassword("1234");
 		ds.setDatabaseName("ubuassistant");
 		ds.setURL("jdbc:mysql://localhost/ubuassistant");
+		
+		/*ds.setUrl("jdbc:mysql://sql11.freesqldatabase.com:3306/sql11162792");
+		ds.setUser("sql11162792");
+		ds.setPassword("5v53hZNDmT");*/
 
 		try {
 			con = ds.getConnection();
@@ -38,9 +44,17 @@ public class DatabaseConnection {
 			System.err.println("Error al conectar con la base de datos.");
 		}
 		
+		createLists();
+	}
+	
+	/**
+	 * Method that reads the tables of the database and creates the lists 
+	 */
+	private void createLists(){
+		
 		//Creation of the list containing the sentences
 		try {
-			java.sql.Statement stmt = con.createStatement();
+			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM frases");
 			while (rs.next()) {
 				sentenceList.add(rs.getString("frase"));
@@ -51,7 +65,7 @@ public class DatabaseConnection {
 		
 		//Creation of the list containing the salutes
 		try {
-			java.sql.Statement stmt = con.createStatement();
+			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM saludos");
 			while (rs.next()) {
 				saluteList.add(rs.getString("saludo"));
@@ -61,6 +75,146 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Method that store in a table of the database the words that the users
+	 * select when there is not an answer available
+	 * @param p1 the word that gets the best similarity of the text input by the user
+	 * @param p2 the answer that will be associated to the first word
+	 */
+	public void learnCases(String p1, String p2){
+		
+		boolean flag = false;
+		String palabra2=" ";
+		
+		try {
+			
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM aprendizaje");
+			while (rs.next()) {
+				if(p1.equals(rs.getString("palabra1"))){
+					flag=true;
+					palabra2=rs.getString("palabra2");
+				}
+			}	
+			
+			if(!flag || !palabra2.equals(p2)){
+				
+				PreparedStatement pst = con.prepareStatement(
+						"INSERT INTO aprendizaje ( palabra1, palabra2) VALUES (?, ?)");
+				pst.setString(1, p1);
+				pst.setString(2, p2);
+				
+				pst.executeUpdate();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Method that increases the field numBusquedas in the database
+	 * @param palabra the word that is searched
+	 */
+	public void aumentarNumBusquedas(String palabra){
+		
+		boolean flag=false;
+		int palabraId = 0;
+		int num_busquedas=0;
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			while (rs.next()) {
+				if(palabra.equals(rs.getString("palabra"))){
+					flag=true;
+					palabraId=rs.getInt("id");
+					num_busquedas=rs.getInt("num_busquedas");
+				}
+			}	
+			
+			if(flag){
+				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_busquedas = ? WHERE id=?");
+				pst.setInt(1, (num_busquedas+=1));
+				pst.setInt(2, palabraId);
+				pst.executeUpdate();
+			}else{
+				PreparedStatement pst = 
+						con.prepareStatement("INSERT INTO estadisticas "
+												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total, valoracion_media_respuesta) "
+												+ " VALUES (?,?,?,?,?,?)");
+				pst.setString(1, palabra);
+				pst.setString(2, "CATEGORIA");
+				pst.setInt(3, 1);
+				pst.setInt(4, 0);
+				pst.setInt(5, 0);
+				pst.setFloat(6, 0);
+				pst.executeUpdate();
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * Method that saves the rating of the user to a specific answer into the database
+	 * @param palabra the word that is searched
+	 * @param vote the rating to the answer for the word
+	 */
+	public void saveVote(String palabra,int vote){
+		
+		boolean flag=false;
+		int palabraId = 0;
+		int num_votos=0;
+		int valoracion_total=0;
+		float valoracion_media_respuesta=0;
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			while (rs.next()) {
+				if(palabra.equals(rs.getString("palabra"))){
+					flag=true;
+					palabraId=rs.getInt("id");
+					num_votos=rs.getInt("num_votos");
+					valoracion_total=rs.getInt("valoracion_total");
+				}
+			}	
+			
+			if(flag){
+				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=?, valoracion_media_respuesta = ? WHERE id=?");
+				pst.setInt(1, (num_votos+=1));
+				pst.setInt(2, (valoracion_total+=vote));
+				valoracion_media_respuesta=(float)((double)valoracion_total/(double)num_votos);
+				pst.setFloat(3, valoracion_media_respuesta);
+				pst.setInt(4, palabraId);
+				pst.executeUpdate();
+				
+			}else{
+				PreparedStatement pst = 
+						con.prepareStatement("INSERT INTO estadisticas "
+												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total, valoracion_media_respuesta) "
+												+ " VALUES (?,?,?,?,?,?)");
+				pst.setString(1, palabra);
+				pst.setString(2, "CATEGORIA");
+				pst.setInt(3, 1);
+				pst.setInt(4, 1);
+				pst.setInt(5, vote);
+				pst.setFloat(6, (float)vote);
+				pst.executeUpdate();
+			}
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	
 	/**
 	 * Function that returns the sentenceList
