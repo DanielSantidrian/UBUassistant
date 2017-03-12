@@ -16,6 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `aprendizaje`
+--
+
+DROP TABLE IF EXISTS `aprendizaje`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aprendizaje` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `palabra1` varchar(1000) NOT NULL,
+  `palabra2` varchar(1000) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aprendizaje`
+--
+
+LOCK TABLES `aprendizaje` WRITE;
+/*!40000 ALTER TABLE `aprendizaje` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aprendizaje` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `casedescription`
 --
 
@@ -65,6 +89,34 @@ LOCK TABLES `casesolution` WRITE;
 /*!40000 ALTER TABLE `casesolution` DISABLE KEYS */;
 INSERT INTO `casesolution` VALUES (1,'http://wwww.ubu.es/grado-en-ingenieria-informatica'),(2,'http://wwww.ubu.es/grado-en-ingenieria-mecanica'),(3,'http://wwww.ubu.es/grado-en-ingenieria-electronica-industrial-y-automatica'),(4,'http://wwww.ubu.es/grado-en-ingenieria-de-organizacion-industrial'),(5,'http://wwww.ubu.es/grado-en-ingenieria-civil'),(6,'http://wwww.ubu.es/ayudas-y-becas'),(7,'http://wwww.ubu.es/vicerrectorado-de-politicas-academicas/ordenacion-academica/calendarios-academicos'),(8,'http://wwww.ubu.es/servicio-de-empleo-universitario-unidad-de-empleo'),(9,'https://ubuvirtual.ubu.es/'),(10,'El numero de teléfono de la universidad es 947258700'),(11,'El correo electrónico de la universidad es info@ubu.es'),(12,'http://wwww.ubu.es/noticias'),(13,'http://wwww.ubu.es/mapas'),(14,'http://wwww.ubu.es/ubuventajas'),(15,'http://wwww.ubu.es/biblioteca'),(16,'https://secretariavirtual.ubu.es/cosmos/Controlador/?apl=Uninavs&gu=a&idNav=inicio&NuevaSesionUsuario=true&NombreUsuarioAlumno=ALUMNO&responsive=S'),(17,'http://wwww.ubu.es/deportes'),(18,'La Univerisidad de Burgos está en la calle Hospital del Rey s/n 09001 Burgos España');
 /*!40000 ALTER TABLE `casesolution` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `estadisticas`
+--
+
+DROP TABLE IF EXISTS `estadisticas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `estadisticas` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `palabra` varchar(1000) NOT NULL,
+  `categoria` varchar(1000) NOT NULL,
+  `num_busquedas` int(10) NOT NULL,
+  `num_votos` int(10) DEFAULT NULL,
+  `valoracion_total` int(10) DEFAULT NULL,
+  `valoracion_media_respuesta` float DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `estadisticas`
+--
+
+LOCK TABLES `estadisticas` WRITE;
+/*!40000 ALTER TABLE `estadisticas` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estadisticas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -125,4 +177,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-05 19:59:56
+-- Dump completed on 2017-03-12 19:20:03
