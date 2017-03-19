@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `ubuassistant` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ubuassistant`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: ubuassistant
@@ -24,6 +26,7 @@ DROP TABLE IF EXISTS `aprendizaje`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `aprendizaje` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `userid` bigint(20) NOT NULL,
   `palabra1` varchar(1000) NOT NULL,
   `palabra2` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
@@ -48,13 +51,14 @@ DROP TABLE IF EXISTS `casedescription`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `casedescription` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `keyWord1` varchar(1000) NOT NULL,
-  `keyWord2` varchar(1000) NOT NULL,
-  `keyWord3` varchar(1000) NOT NULL,
-  `keyWord4` varchar(1000) NOT NULL,
-  `keyWord5` varchar(1000) NOT NULL,
+  `keyWord1` varchar(1000) DEFAULT NULL,
+  `keyWord2` varchar(1000) DEFAULT NULL,
+  `keyWord3` varchar(1000) DEFAULT NULL,
+  `keyWord4` varchar(1000) DEFAULT NULL,
+  `keyWord5` varchar(1000) DEFAULT NULL,
+  `categoria` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +67,7 @@ CREATE TABLE `casedescription` (
 
 LOCK TABLES `casedescription` WRITE;
 /*!40000 ALTER TABLE `casedescription` DISABLE KEYS */;
-INSERT INTO `casedescription` VALUES (1,'informatica','ingenieria','matriculo','grados','estudios'),(2,'mecanica','ingenieria','matriculo','grados','estudios'),(3,'electronica','ingenieria','matriculo','grados','estudios'),(4,'organizacion industrial','matriculo','organizacion industrial','grados','estudios'),(5,'civil','Ingenieria','matriculo','grados','estudios'),(6,'becas','informacion','ayudas','movilidad','colaboracion'),(7,'calendario academico','calendario','dias festivos','laborables','docencia'),(8,'practicas','empleo','empresa','externas','trabajo'),(9,'ubuvirtual','ubu virtual','portal asignaturas','portal alumnos','mis cursos'),(10,'telefono','contacto','numero','llamar','movil'),(11,'email','correo electronico','contacto','correo','mail'),(12,'noticias','novedades','actualidad','hoy','suceso'),(13,'mapas','campus','como llegar','ruta','calle'),(14,'tarjeta universitaria','ventajas','tarjeta','carne','documento'),(15,'biblioteca','libros','material','revistas','recursos'),(16,'secretaria','matricula','secretaria virtual','grupos','desmatricular'),(17,'deporte','actividades','UBUabono','senderismo','esqui'),(18,'direccion','calle','como llegar','codigo postal','localidad');
+INSERT INTO `casedescription` VALUES (1,'informatica','ingenieria','matriculo','grados','estudios','estudiantes'),(2,'mecanica','ingenieria','matriculo','grados','estudios','estudiantes'),(3,'electronica','ingenieria','matriculo','grados','estudios','estudiantes'),(4,'organizacion industrial','matriculo','organizacion industrial','grados','estudios','estudiantes'),(5,'civil','Ingenieria','matriculo','grados','estudios','estudiantes'),(6,'becas','informacion','ayudas','movilidad','colaboracion','becas'),(7,'calendario academico','calendario','dias festivos','laborables','docencia','estudiantes'),(8,'practicas','empleo','empresa','externas','trabajo','estudiantes'),(9,'ubuvirtual','ubu virtual','portal asignaturas','portal alumnos','mis cursos','estudiantes'),(10,'telefono','contacto','numero','llamar','movil','contacto'),(11,'email','correo electronico','contacto','correo','mail','contacto'),(12,'noticias','novedades','actualidad','hoy','suceso','noticias'),(13,'mapas','campus','como llegar','ruta','calle','estudiantes'),(14,'tarjeta universitaria','ventajas','tarjeta','carne','documento','estudiantes'),(15,'biblioteca','libros','material','revistas','recursos','biblioteca'),(16,'secretaria','matricula','secretaria virtual','grupos','desmatricular','estudiantes'),(17,'deporte','actividades','UBUabono','senderismo','esqui','deportes'),(18,'direccion','calle','como llegar','codigo postal','localidad','estudiantes'),(19,'direccion','calle','como llegar','codigo postal','localidad','estudiantes');
 /*!40000 ALTER TABLE `casedescription` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,7 +82,7 @@ CREATE TABLE `casesolution` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `answer` varchar(1000) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -87,7 +91,7 @@ CREATE TABLE `casesolution` (
 
 LOCK TABLES `casesolution` WRITE;
 /*!40000 ALTER TABLE `casesolution` DISABLE KEYS */;
-INSERT INTO `casesolution` VALUES (1,'http://wwww.ubu.es/grado-en-ingenieria-informatica'),(2,'http://wwww.ubu.es/grado-en-ingenieria-mecanica'),(3,'http://wwww.ubu.es/grado-en-ingenieria-electronica-industrial-y-automatica'),(4,'http://wwww.ubu.es/grado-en-ingenieria-de-organizacion-industrial'),(5,'http://wwww.ubu.es/grado-en-ingenieria-civil'),(6,'http://wwww.ubu.es/ayudas-y-becas'),(7,'http://wwww.ubu.es/vicerrectorado-de-politicas-academicas/ordenacion-academica/calendarios-academicos'),(8,'http://wwww.ubu.es/servicio-de-empleo-universitario-unidad-de-empleo'),(9,'https://ubuvirtual.ubu.es/'),(10,'El numero de teléfono de la universidad es 947258700'),(11,'El correo electrónico de la universidad es info@ubu.es'),(12,'http://wwww.ubu.es/noticias'),(13,'http://wwww.ubu.es/mapas'),(14,'http://wwww.ubu.es/ubuventajas'),(15,'http://wwww.ubu.es/biblioteca'),(16,'https://secretariavirtual.ubu.es/cosmos/Controlador/?apl=Uninavs&gu=a&idNav=inicio&NuevaSesionUsuario=true&NombreUsuarioAlumno=ALUMNO&responsive=S'),(17,'http://wwww.ubu.es/deportes'),(18,'La Univerisidad de Burgos está en la calle Hospital del Rey s/n 09001 Burgos España');
+INSERT INTO `casesolution` VALUES (1,'http://wwww.ubu.es/grado-en-ingenieria-informatica'),(2,'http://wwww.ubu.es/grado-en-ingenieria-mecanica'),(3,'http://wwww.ubu.es/grado-en-ingenieria-electronica-industrial-y-automatica'),(4,'http://wwww.ubu.es/grado-en-ingenieria-de-organizacion-industrial'),(5,'http://wwww.ubu.es/grado-en-ingenieria-civil'),(6,'http://wwww.ubu.es/ayudas-y-becas'),(7,'http://wwww.ubu.es/vicerrectorado-de-politicas-academicas/ordenacion-academica/calendarios-academicos'),(8,'http://wwww.ubu.es/servicio-de-empleo-universitario-unidad-de-empleo'),(9,'https://ubuvirtual.ubu.es/'),(10,'El numero de teléfono de la universidad es 947258700'),(11,'El correo electrónico de la universidad es info@ubu.es'),(12,'http://wwww.ubu.es/noticias'),(13,'http://wwww.ubu.es/mapas'),(14,'http://wwww.ubu.es/ubuventajas'),(15,'http://wwww.ubu.es/biblioteca'),(16,'https://secretariavirtual.ubu.es/cosmos/Controlador/?apl=Uninavs&gu=a&idNav=inicio&NuevaSesionUsuario=true&NombreUsuarioAlumno=ALUMNO&responsive=S'),(17,'http://wwww.ubu.es/deportes'),(18,'La Univerisidad de Burgos está en la calle Hospital del Rey s/n 09001 Burgos España'),(19,'AAAAAAAAAAAA');
 /*!40000 ALTER TABLE `casesolution` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,12 +104,14 @@ DROP TABLE IF EXISTS `estadisticas`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `estadisticas` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
+  `userid` bigint(20) NOT NULL,
+  `fecha` datetime NOT NULL,
   `palabra` varchar(1000) NOT NULL,
   `categoria` varchar(1000) NOT NULL,
+  `respuesta` varchar(1000) NOT NULL,
   `num_busquedas` int(10) NOT NULL,
   `num_votos` int(10) DEFAULT NULL,
   `valoracion_total` int(10) DEFAULT NULL,
-  `valoracion_media_respuesta` float DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -177,4 +183,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-12 19:20:03
+-- Dump completed on 2017-03-19 19:28:50
