@@ -21,10 +21,9 @@ public class StarBar {
 
 	private int rating;
 	private MouseMotionListener mouseListener;
-	private static DatabaseConnection db=new DatabaseConnection();
 
 
-	public StarBar(JFrame gui, JPanel panel, String palabra) {
+	public StarBar(DatabaseConnection db, JFrame gui, JPanel panel, String palabra) {
 	
 	    List<JButton> stars = new ArrayList<JButton>();
 	    
@@ -90,7 +89,6 @@ public class StarBar {
 		
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 	};

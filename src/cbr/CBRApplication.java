@@ -8,9 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -98,11 +101,17 @@ public class CBRApplication implements StandardCBRApplication {
     
     private static Map<String,List<RetrievalResult>> allResults;
     
+    private String userID;
+    
     /**
      * Constructor of the class
      */
     public CBRApplication() {
-		db = new DatabaseConnection();
+    	
+    	DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
+    	userID=formatForId.format(new Date());
+    	
+		db = new DatabaseConnection(userID);
 		sentenceList=db.getSentenceList();
 		saluteList=db.getSaluteList();
 		saluteResponseList=db.getSaluteResponseList();
@@ -115,6 +124,7 @@ public class CBRApplication implements StandardCBRApplication {
     
     /**
      * Method that calls the configuration methods
+     * @throws ExecutionException
      */
 	@Override
 	public void configure() throws ExecutionException {
@@ -126,7 +136,10 @@ public class CBRApplication implements StandardCBRApplication {
 		}
 	}
 
-	/** Configures the connector */
+	/**
+	 * Configures the connector
+	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the casebase
+	 */
 	@Generated(value = { "CS-PTConector" })	
 	private void configureConnector() throws InitializingException{
 		
@@ -135,7 +148,11 @@ public class CBRApplication implements StandardCBRApplication {
 				.findFile("config/databaseconfig.xml"));
 	}
 
-	/** Configures the case base */
+
+	/**
+	 * Configures the case base
+	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the casebase
+	 */
 	@Generated(value = { "CS-CaseManager" })	
 	private void configureCaseBase() throws InitializingException{
 		casebase = new jcolibri.casebase.LinearCaseBase();
@@ -634,7 +651,7 @@ public class CBRApplication implements StandardCBRApplication {
 										topTextPane.setCaretPosition(topTextPane.getDocument().getLength());
 									}
 									
-									db.aumentarNumBusquedas(cbx.getText());
+									db.aumentarNumBusquedas(cbx.getText(), ((CaseSolution)c.getSolution()).getAnswer().toString());
 								
 								//If it is not the first checkbox we select
 								}else{
@@ -666,7 +683,7 @@ public class CBRApplication implements StandardCBRApplication {
 									}
 									
 									//Increasing the number of searches of the word
-									db.aumentarNumBusquedas(cbx.getText());
+									db.aumentarNumBusquedas(cbx.getText(), ((CaseSolution)c.getSolution()).getAnswer().toString());
 								}
 							}
 						}
@@ -707,7 +724,7 @@ public class CBRApplication implements StandardCBRApplication {
 				
 				String palabra=word.iterator().next();
 				//Increasing the number of searches of the word
-				db.aumentarNumBusquedas(palabra);
+				db.aumentarNumBusquedas(palabra,text);
 				//Calling the method to ask the user about the utility of the answer
 				printUtilidad(palabra);
 			}
@@ -803,7 +820,7 @@ public class CBRApplication implements StandardCBRApplication {
 							//Calling the method to ask the user about the utility of the answer
 							printUtilidad(btnOp.getText());
 							//Increasing the number of searches of the word
-							db.aumentarNumBusquedas(btnOp.getText());
+							db.aumentarNumBusquedas(btnOp.getText(), ((CaseSolution)s.get(tmp).get_case().getSolution()).getAnswer().toString());
 						}
 					});
 					//Adding the button to the button panel
@@ -837,7 +854,7 @@ public class CBRApplication implements StandardCBRApplication {
 		buttonPanel.removeAll();
 		buttonPanel.add(texto);
 		
-		new StarBar(gui,buttonPanel,palabra);
+		new StarBar(db,gui,buttonPanel,palabra);
 		buttonPanel.repaint();
 		buttonPanel.revalidate();
 	}

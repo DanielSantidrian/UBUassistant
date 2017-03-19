@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
@@ -19,14 +22,19 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 public class DatabaseConnection {
 	
 	private static Connection con = null;
-    static List<String> sentenceList = new ArrayList<String>();
-    List<String> saluteList = new ArrayList<String>();
-	List<String> saluteResponseList = new ArrayList<String>();
+	private static List<String> sentenceList = new ArrayList<String>();
+	private static List<String> saluteList = new ArrayList<String>();
+	private static List<String> saluteResponseList = new ArrayList<String>();
+	private long userID;
 	
 	/**
 	 * Constructor of the class that connects the database
+	 * @param userID 
 	 */
-	public DatabaseConnection() {
+	public DatabaseConnection(String userID) {
+		
+		this.userID=Long.parseLong(userID.toString());
+		
 		MysqlDataSource ds = new MysqlDataSource();
 
 		ds.setUser("root");
@@ -101,9 +109,10 @@ public class DatabaseConnection {
 			if(!flag || !palabra2.equals(p2)){
 				
 				PreparedStatement pst = con.prepareStatement(
-						"INSERT INTO aprendizaje ( palabra1, palabra2) VALUES (?, ?)");
-				pst.setString(1, p1);
-				pst.setString(2, p2);
+						"INSERT INTO aprendizaje (userid, palabra1, palabra2) VALUES (?, ?, ?)");
+				pst.setLong(1, userID);
+				pst.setString(2, p1);
+				pst.setString(3, p2);
 				
 				pst.executeUpdate();
 			}
@@ -113,17 +122,22 @@ public class DatabaseConnection {
 		}
 	}
 	
+	
 	/**
 	 * Method that increases the field numBusquedas in the database
 	 * @param palabra the word that is searched
 	 */
-	public void aumentarNumBusquedas(String palabra){
+	public void aumentarNumBusquedas(String palabra, String respuesta){
 		
 		boolean flag=false;
 		int palabraId = 0;
 		int num_busquedas=0;
+		String categoria;
+		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		
 		try {
+					
+			categoria=getCategoria(palabra, respuesta);
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
@@ -131,6 +145,7 @@ public class DatabaseConnection {
 					flag=true;
 					palabraId=rs.getInt("id");
 					num_busquedas=rs.getInt("num_busquedas");
+					break;
 				}
 			}	
 			
@@ -142,14 +157,17 @@ public class DatabaseConnection {
 			}else{
 				PreparedStatement pst = 
 						con.prepareStatement("INSERT INTO estadisticas "
-												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total, valoracion_media_respuesta) "
-												+ " VALUES (?,?,?,?,?,?)");
+												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total,"
+												+ " fecha, respuesta, userid) "
+												+ " VALUES (?,?,?,?,?,?,?,?)");
 				pst.setString(1, palabra);
-				pst.setString(2, "CATEGORIA");
+				pst.setString(2, categoria);
 				pst.setInt(3, 1);
 				pst.setInt(4, 0);
 				pst.setInt(5, 0);
-				pst.setFloat(6, 0);
+				pst.setString(6, sdf.format(new Date()));
+				pst.setString(7, respuesta);
+				pst.setLong(8, userID);
 				pst.executeUpdate();
 			}
 			
@@ -167,51 +185,68 @@ public class DatabaseConnection {
 	 */
 	public void saveVote(String palabra,int vote){
 		
-		boolean flag=false;
 		int palabraId = 0;
 		int num_votos=0;
 		int valoracion_total=0;
-		float valoracion_media_respuesta=0;
 		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
 				if(palabra.equals(rs.getString("palabra"))){
-					flag=true;
 					palabraId=rs.getInt("id");
 					num_votos=rs.getInt("num_votos");
 					valoracion_total=rs.getInt("valoracion_total");
+					break;
 				}
 			}	
 			
-			if(flag){
-				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=?, valoracion_media_respuesta = ? WHERE id=?");
-				pst.setInt(1, (num_votos+=1));
-				pst.setInt(2, (valoracion_total+=vote));
-				valoracion_media_respuesta=(float)((double)valoracion_total/(double)num_votos);
-				pst.setFloat(3, valoracion_media_respuesta);
-				pst.setInt(4, palabraId);
-				pst.executeUpdate();
-				
-			}else{
-				PreparedStatement pst = 
-						con.prepareStatement("INSERT INTO estadisticas "
-												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total, valoracion_media_respuesta) "
-												+ " VALUES (?,?,?,?,?,?)");
-				pst.setString(1, palabra);
-				pst.setString(2, "CATEGORIA");
-				pst.setInt(3, 1);
-				pst.setInt(4, 1);
-				pst.setInt(5, vote);
-				pst.setFloat(6, (float)vote);
-				pst.executeUpdate();
-			}
+			
+			PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=? WHERE id=?");
+			pst.setInt(1, (num_votos+=1));
+			pst.setInt(2, (valoracion_total+=vote));
+			pst.setInt(3, palabraId);
+			pst.executeUpdate();
+					
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @param palabra
+	 * @param respuesta
+	 * @return
+	 */
+	private String getCategoria(String palabra, String respuesta){
+		
+		int id = 0;
+		String categoria = "";
+		
+		try{
+			PreparedStatement pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
+			pst.setString(1, respuesta);
+			ResultSet rs = pst.executeQuery();
+			while (rs.next()) {
+				id=rs.getInt("id");
+			}	
+			
+			PreparedStatement pst1 = con.prepareStatement("SELECT * FROM casedescription WHERE id=?");
+			pst1.setInt(1, id);
+			ResultSet rs1 = pst1.executeQuery();
+			while (rs1.next()) {
+				categoria=rs1.getString("categoria");
+			}	
 			
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		return categoria;
 		
 	}
 
