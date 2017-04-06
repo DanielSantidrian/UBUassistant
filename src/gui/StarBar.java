@@ -1,11 +1,13 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -23,7 +25,7 @@ public class StarBar {
 	private MouseMotionListener mouseListener;
 
 
-	public StarBar(DatabaseConnection db, JFrame gui, JPanel panel, String palabra) {
+	public StarBar(DatabaseConnection db, JFrame gui, JPanel panel, LinkedHashSet<String> palabras, Component[] components) {
 	
 	    List<JButton> stars = new ArrayList<JButton>();
 	    
@@ -48,17 +50,28 @@ public class StarBar {
 	            		stars.get(z).setIcon(new ImageIcon(getClass().getResource("StarRatingUNselected.png")));
 	            	}
 	            	
-	            	JTextArea texto = new JTextArea();
-	        		texto.setText("Valoración guardada correctamente. Su voto ha sido "+rating);
-	        		texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
-	        		texto.setForeground(Color.WHITE);
-	        		texto.setBackground(new java.awt.Color(171, 38, 60));
-	        		panel.removeAll();
-	        		panel.add(texto);
+	            	if(components==null){
+	            		
+	            		JTextArea texto = new JTextArea();
+		        		texto.setText("Valoración guardada correctamente. Su voto ha sido "+rating);
+		        		texto.setFont(new java.awt.Font("Segoe UI Semibold", 0, 14));
+		        		texto.setForeground(Color.WHITE);
+		        		texto.setBackground(new java.awt.Color(171, 38, 60));
+		        		panel.removeAll();
+		        		panel.add(texto);
+		        		
+	            	}else{
+	            		
+	            		panel.removeAll();
+	    				for(Component c : components){
+	    					panel.add(c);
+	    				}
+	            	}
+	            	
 	        		panel.repaint();
 	        		panel.revalidate();
 	        		
-	        		db.saveVote(palabra, getRating());
+	        		db.saveVote(palabras, getRating());
 	            }
 	        });
 	    	

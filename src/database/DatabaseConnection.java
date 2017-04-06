@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
@@ -125,81 +126,143 @@ public class DatabaseConnection {
 	
 	/**
 	 * Method that increases the field numBusquedas in the database
-	 * @param palabra the word that is searched
+	 * @param palabras the word that is searched
 	 */
-	public void aumentarNumBusquedas(String palabra, String respuesta){
+	
+	public void aumentarNumBusquedas(LinkedHashSet<String> palabras, String respuesta){
 		
 		boolean flag=false;
 		int palabraId = 0;
 		int num_busquedas=0;
-		String categoria;
+		String categoria=null;
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Object[] p = palabras.toArray();
 		
-		try {
-					
-			categoria=getCategoria(palabra, respuesta);
+		try{
+			
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
-				if(palabra.equals(rs.getString("palabra"))){
-					flag=true;
-					palabraId=rs.getInt("id");
-					num_busquedas=rs.getInt("num_busquedas");
-					break;
+				
+				if(p.length==1){
+					if(p[0].equals(rs.getString("keyWord1")) && rs.getString("keyWord2")==null && 
+							rs.getString("keyWord3")==null && rs.getString("keyWord4")==null &&  
+							rs.getString("keyWord5")==null && userID==rs.getLong("userid")){
+						
+						flag=true;
+						palabraId=rs.getInt("id");
+						num_busquedas=rs.getInt("num_busquedas");
+					}
+				}else{
+					
+					for(int i=0; i<p.length;i++){
+						
+						if((p[i].equals(rs.getString("keyWord1")) || p[i].equals(rs.getString("keyWord2")) || 
+							p[i].equals(rs.getString("keyWord3")) || p[i].equals(rs.getString("keyWord4")) ||  
+							p[i].equals(rs.getString("keyWord5"))) && userID==rs.getLong("userid")){
+
+							flag=true;
+							palabraId=rs.getInt("id");
+							num_busquedas=rs.getInt("num_busquedas");
+						}else{
+
+							flag=false;
+							break;
+						}
+					}
+					if(flag==true)
+						break;
 				}
+				
+				
 			}	
 			
 			if(flag){
-				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_busquedas = ? WHERE id=?");
+				
+				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_busquedas = ?, fecha=? WHERE id=?");
+
 				pst.setInt(1, (num_busquedas+=1));
-				pst.setInt(2, palabraId);
+				pst.setString(2, sdf.format(new Date()));
+				pst.setInt(3, palabraId);
 				pst.executeUpdate();
+				
 			}else{
+				
+				categoria=getCategoria(respuesta);
+				
 				PreparedStatement pst = 
 						con.prepareStatement("INSERT INTO estadisticas "
-												+ "(palabra, categoria, num_busquedas, num_votos, valoracion_total,"
+												+ "(keyWord1, keyWord2, keyWord3, keyWord4, keyWord5, categoria, num_busquedas, num_votos, valoracion_total,"
 												+ " fecha, respuesta, userid) "
-												+ " VALUES (?,?,?,?,?,?,?,?)");
-				pst.setString(1, palabra);
-				pst.setString(2, categoria);
-				pst.setInt(3, 1);
-				pst.setInt(4, 0);
-				pst.setInt(5, 0);
-				pst.setString(6, sdf.format(new Date()));
-				pst.setString(7, respuesta);
-				pst.setLong(8, userID);
+												+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+				
+				for(int i=0; i<p.length; i++){
+					pst.setString(i+1, (String) p[i]);
+				}
+				
+				for(int i=p.length+1;i<6;i++)
+					pst.setNull(i, java.sql.Types.VARCHAR);
+				
+				pst.setString(6, categoria);
+				pst.setInt(7, 1);
+				pst.setInt(8, 0);
+				pst.setInt(9, 0);
+				pst.setString(10, sdf.format(new Date()));
+				pst.setString(11, respuesta);
+				pst.setLong(12, userID);
 				pst.executeUpdate();
-			}
-			
+				
+			}	
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+			
 	}
 	
 	/**
 	 * Method that saves the rating of the user to a specific answer into the database
-	 * @param palabra the word that is searched
+	 * @param palabras the word that is searched
 	 * @param vote the rating to the answer for the word
 	 */
-	public void saveVote(String palabra,int vote){
+	public void saveVote(LinkedHashSet<String> palabras,int vote){
 		
 		int palabraId = 0;
 		int num_votos=0;
 		int valoracion_total=0;
-		
+		Object[] p = palabras.toArray();
+
+			
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
-				if(palabra.equals(rs.getString("palabra"))){
-					palabraId=rs.getInt("id");
-					num_votos=rs.getInt("num_votos");
-					valoracion_total=rs.getInt("valoracion_total");
-					break;
+				
+				if(p.length==1){
+					if(p[0].equals(rs.getString("keyWord1")) && rs.getString("keyWord2")==null && 
+							rs.getString("keyWord3")==null && rs.getString("keyWord4")==null &&  
+							rs.getString("keyWord5")==null && userID==rs.getLong("userid")){
+						
+						palabraId=rs.getInt("id");
+						num_votos=rs.getInt("num_votos");
+						valoracion_total=rs.getInt("valoracion_total");
+					}
+				}else{
+					
+					for(int i=0; i<p.length;i++){
+						if((p[i].equals(rs.getString("keyWord1")) || p[i].equals(rs.getString("keyWord2")) || 
+							p[i].equals(rs.getString("keyWord3")) || p[i].equals(rs.getString("keyWord4")) ||  
+							p[i].equals(rs.getString("keyWord5"))) && userID==rs.getLong("userid")){
+							
+							palabraId=rs.getInt("id");
+							num_votos=rs.getInt("num_votos");
+							valoracion_total=rs.getInt("valoracion_total");
+
+						}else
+							break;
+					}
 				}
-			}	
+			}
 			
 			
 			PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=? WHERE id=?");
@@ -212,19 +275,22 @@ public class DatabaseConnection {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+			
+		
+		
+		
 		
 	}
 	
 	/**
 	 * 
 	 * @param palabra
-	 * @param respuesta
 	 * @return
 	 */
-	private String getCategoria(String palabra, String respuesta){
+	private String getCategoria(String respuesta){
 		
 		int id = 0;
-		String categoria = "";
+		String categoria = null;
 		
 		try{
 			PreparedStatement pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
