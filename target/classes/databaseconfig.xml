@@ -1,0 +1,8 @@
+<DataBaseConfiguration>
+	<HibernateConfigFile>C:/Users/dansa/workspaceJEE/UBUassistant/src/main/resources/hibernate.cfg.xml</HibernateConfigFile>
+	<DescriptionMappingFile>C:/Users/dansa/workspaceJEE/UBUassistant/src/main/resources/caseDescription.hbm.xml</DescriptionMappingFile>
+	<DescriptionClassName>representation.CaseDescription</DescriptionClassName>
+	<SolutionMappingFile>C:/Users/dansa/workspaceJEE/UBUassistant/src/main/resources/caseSolution.hbm.xml</SolutionMappingFile>
+	<SolutionClassName>representation.CaseSolution</SolutionClassName>
+	
+</DataBaseConfiguration>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<SimilarityConfig>
+    <Mapping attribute="Description.keyWord1" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.10"/>
+    <Mapping attribute="Description.id" function="jcolibri.method.retrieve.NNretrieval.similarity.local.Interval" weight="0.00"/>
+    <Mapping attribute="Description.keyWord5" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.15"/>
+    <Mapping attribute="Description" function="jcolibri.method.retrieve.NNretrieval.similarity.global.Euclidean" weight="1.00"/>
+    <Mapping attribute="Description.keyWord4" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.75"/>
+    <Mapping attribute="Description.keyWord3" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.10"/>
+    <Mapping attribute="Description.keyWord2" function="jcolibri.method.retrieve.NNretrieval.similarity.local.MaxString" weight="0.55"/>
+</SimilarityConfig>

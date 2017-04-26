@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<TextFileConfiguration>
+    <FilePath>C:\Users\dansa\Desktop\TFG\DatosUBUassistantKeyWords.xml</FilePath>
+    <Delimiters>,</Delimiters>
+    <DescriptionClassName>main.java.representation.CaseDescription</DescriptionClassName>
+    <DescriptionMappings>
+        <Map>id</Map>
+        <Map>keyWord1</Map>
+        <Map>keyWord2</Map>
+        <Map>keyWord3</Map>
+        <Map>keyWord4</Map>
+        <Map>keyWord5</Map>
+    </DescriptionMappings>
+    <SolutionClassName>main.java.representation.CaseSolution</SolutionClassName>
+    <SolutionMappings>
+        <Map>Id</Map>
+        <Map>answer</Map>
+    </SolutionMappings>
+</TextFileConfiguration>
