@@ -4,7 +4,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
- <class name="representation.CaseSolutions" table="casesolution" >
+ <class name="representation.CaseSolution" table="casesolution" >
   <id name="Id" type="int" column="id" >
    <generator class="native"/>
   </id>

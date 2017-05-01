@@ -1,22 +1,15 @@
 package cbr;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Generated;
 
-import database.DatabaseConnection;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CBRCase;
@@ -30,7 +23,7 @@ import jcolibri.method.retrieve.NNretrieval.NNConfig;
 import jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import representation.CaseDescription;
 import representation.CaseSolution;
-import util.ResultsComparator;
+
 
 /**
  * 
@@ -50,25 +43,22 @@ public class CBR implements StandardCBRApplication {
 	CBRCaseBase casebase;
 
 
-	private static Collection<RetrievalResult> eval;
-	private static CBRQuery query;
-	private static CaseDescription cd = new CaseDescription();
+	private Collection<RetrievalResult> eval;
+	private CBRQuery query;
+	private CaseDescription cd = new CaseDescription();
 	
-	private static LinkedHashSet<CBRCase> casesToReatin;
+	private LinkedHashSet<CBRCase> casesToReatin;
+    private Map<String, List<String>> parcialResults;
+    private Map<LinkedHashSet<String>,List<String>> finalResults;
+    private HashMap<String, List<RetrievalResult>> badResuts = new HashMap<String,List<RetrievalResult>>();
+	
 
-    private static Map<String, List<String>> parcialResults;
-    private static Map<LinkedHashSet<String>,List<String>> finalResults;
-    private static HashMap<String, List<RetrievalResult>> badResuts = new HashMap<String,List<RetrievalResult>>();
-    private static LinkedHashSet<String> suggestWord = new LinkedHashSet<String>();
-    
-    
-    /**
+	/**
      * Constructor of the class
      */
     public CBR() {
     	
-    	configureCBR();
-    	
+    	configureCBR();	
 	}
     
 
@@ -98,8 +88,9 @@ public class CBR implements StandardCBRApplication {
 	private void configureConnector() throws InitializingException{
 				
 		connector = new jcolibri.connector.DataBaseConnector();
+		
 		connector.initFromXMLfile(jcolibri.util.FileIO
-				.findFile("C:/Users/dansa/workspaceJEE/UBUassistant/src/main/resources/databaseconfig.xml"));
+				.findFile("databaseconfig.xml"));
 	}
 
 
@@ -210,6 +201,7 @@ public class CBR implements StandardCBRApplication {
 			e.printStackTrace();
 		}
 	}
+
 	
 	/**
 	 * Method that query for each word, generate the responses and store the best answers
@@ -220,6 +212,7 @@ public class CBR implements StandardCBRApplication {
 		
 		parcialResults=new HashMap<String, List<String>>();
 		casesToReatin = new LinkedHashSet<CBRCase>();
+		badResuts = new HashMap<String,List<RetrievalResult>>();
 		
 		//For each word in the input text
 		for (String word : words) {
@@ -258,8 +251,11 @@ public class CBR implements StandardCBRApplication {
 
 	/**
 	 * Method that generates the final results with the partial results of builEval.
+	 * @return 
 	 */
 	public void buildFinalResults() {
+		
+		finalResults = new HashMap<LinkedHashSet<String>,List<String>>();
 		
 		//If there is an answer for the input text
 		if(!parcialResults.isEmpty()){
@@ -276,7 +272,6 @@ public class CBR implements StandardCBRApplication {
 			}
 			
 			//Getting all the words that have generated the best answer and storing them in a map
-			finalResults = new HashMap<LinkedHashSet<String>,List<String>>();
 			LinkedHashSet<String> word = new LinkedHashSet<String>();
 			
 			for(String res : aux){	
@@ -299,13 +294,47 @@ public class CBR implements StandardCBRApplication {
 				
 				word = new LinkedHashSet<String>();
 			}
-			
-			//printRetrievalSolutions(finalResults);
 		}
+	}
+	
+	public LinkedHashSet<CBRCase> getCasesToReatin() {
+		return casesToReatin;
 	}
 
 
+	public void setCasesToReatin(LinkedHashSet<CBRCase> casesToReatin) {
+		this.casesToReatin = casesToReatin;
+	}
 
-	
+
+	public Map<String, List<String>> getParcialResults() {
+		return parcialResults;
+	}
+
+
+	public void setParcialResults(Map<String, List<String>> parcialResults) {
+		this.parcialResults = parcialResults;
+	}
+
+
+	public Map<LinkedHashSet<String>, List<String>> getFinalResults() {
+		return finalResults;
+	}
+
+
+	public void setFinalResults(Map<LinkedHashSet<String>, List<String>> finalResults) {
+		this.finalResults = finalResults;
+	}
+
+
+	public HashMap<String, List<RetrievalResult>> getBadResuts() {
+		return badResuts;
+	}
+
+
+	public void setBadResuts(HashMap<String, List<RetrievalResult>> badResuts) {
+		this.badResuts = badResuts;
+	}
+
 	
 }

@@ -1,11 +1,15 @@
+<%@page import="database.DatabaseConnection"%>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+
 <html>
 
 	<head>
 		<title>UBUassistant</title>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 		<link rel="stylesheet" href="css/style.css">
+		
+		
 		
 		<script>
 		
@@ -16,7 +20,6 @@
 		}
 		
 		function hideAndSubmit(param){
-			
 			param.style.display = 'none';
 			var buttonDiv = document.getElementById("buttonPanel").innerHTML;
 			
@@ -35,86 +38,53 @@
 			objDiv.scrollTop = objDiv.scrollHeight;
 		};
 		
+
+		</script>
+	</head>
+	
+	
+
+	<body>
+	
+	
+	<% 		UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
+			String userText = request.getParameter("userText"); 
+		   	String divText = request.getParameter("div-content"); 
+
+		   	String responseQ = request.getParameter("response");
+		   	String starBar=ubuassistant.getStarBarButton();
+		   	String buttonDiv=(String)session.getAttribute("buttonDiv");
+		   	
+		%>
+		
+		<script type="text/javascript">
+		
 		function getVoteAndSubmit(param){
 			
 			var vote=param.value;
 			document.getElementById("vote").value=vote;
+			document.getElementById("wordButton").value="<%=userText%>";
+			document.getElementById("buttonDiv").value=document.getElementById("buttonPanel").innerHTML;
 			
 			param.form.submit()
 		}
 		
 		
 		</script>
-	</head>
-
-	<body>
-
-		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
-			String userText = request.getParameter("usertText"); 
-		   	String divText = request.getParameter("div-content"); 
-		%>
-		
-		<% 	String answer = null;
-			String printText=null;
-			if(userText.length()>0){
-				ubuassistant.setUsertText(userText);
-				answer = ubuassistant.getResponse();
-				printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
-			}
-			
-		%>
 		
 		<div class="chat-output" id="chat-output">
-		
 			<%= divText %>
-			
-			<%if(printText!=null && answer!=null){%>
-			
-				<div class='bot-message'>   
-				   
-					<div class='message'> <%= printText  %></div>
-					
-				</div>
-				
-				<div class='user-message'>      
-					<div class='message'> <%= answer %></div>
-				</div>		
-		
-			<%} %>
 		</div>
 		
-
-		<%String suggestButtons=ubuassistant.getSuggestButtons();
-		if(suggestButtons!=null){%>
-			
-			<div id="buttonPanel" class="buttonPanel">
-			  	<%=suggestButtons %>
-			  	<% LinkedHashSet<String> temp = new LinkedHashSet<String>();
-			  	temp.add(userText);
-			  	ubuassistant.getDb().aumentarNumBusquedas(temp, null); %>
-		  	</div>
-		<%} %>
+		<div id="buttonPanel" class="buttonPanel">
+			  <%if(responseQ.equals("no")){ %>
+			  	<%=buttonDiv %>
+			  <%}else{ %>
+			  	<%=starBar %>
+			  <%} %>
+		</div>
 		
-		<%String multipleButtons=ubuassistant.getMultipleButtons();
-		if(multipleButtons!=null){%>
-			
-			<div id="buttonPanel" class="buttonPanel">
-				
-			  	<%=multipleButtons %>
-			
-		  	</div>
-		<%} %>
-		
-		<% String starBar = ubuassistant.getStarBar();
-		if(starBar!=null){%>
-			<div id="buttonPanel" class="buttonPanel">		
-				  	<%=starBar %>
-		  	</div>
-		<%} %>
-		
-		
-		
-		<div class="chat-input">
+		<div id="buttonPanel" class="chat-input">
 				
 		  <form method="post" id="user-input-form" action="response.jsp" onsubmit="if (document.getElementById('user-input').value.length < 1) return false;">
 		    <input type="text" id="user-input" name="usertText" class="user-input" placeholder="Pregunta a UBUassistant">
@@ -123,23 +93,11 @@
 		  </form>
 		</div>
 		
-		
 		<script>var num = document.getElementsByName("div-content").length;
 				var x = document.getElementsByName("div-content")
 				for (i=0; i < num; i++) {
 					x[i].value=getDivContent();
 				}
-		</script>
-		
-		<script>
-		
-		var buttonDiv = document.getElementById("buttonPanel").innerHTML;
-		var num = document.getElementsByName("buttonDiv").length;
-		var x = document.getElementsByName("buttonDiv")
-		for (i=0; i < num; i++) {
-			x[i].value=buttonDiv;
-		}
-		
 		</script>
 		
 	</body>

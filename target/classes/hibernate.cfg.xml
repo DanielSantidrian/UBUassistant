@@ -27,8 +27,6 @@
    
   <!-- Drop and re-create the database schema on startup -->
   <property name="hbm2ddl.auto">update</property>
-
-  <property name="javax.persistence.validation.mode">none</property>
    
   <!-- Mapping files -->
   <!-- <mapping resource="caseDescription.hbm.xml"/> -->

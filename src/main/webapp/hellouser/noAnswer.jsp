@@ -1,5 +1,9 @@
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.List"%>
+<%@page import="jcolibri.method.retrieve.RetrievalResult"%>
+<%@page import="representation.CaseSolution"%>
 <html>
 
 	<head>
@@ -15,33 +19,10 @@
 			return outputAreaText;
 		}
 		
-		function hideAndSubmit(param){
-			
-			param.style.display = 'none';
-			var buttonDiv = document.getElementById("buttonPanel").innerHTML;
-			
-			var num = document.getElementsByName("buttonDiv").length;
-			var x = document.getElementsByName("buttonDiv")
-			for (i=0; i < num; i++) {
-				x[i].value=buttonDiv;
-			}
-			
-			var form = param.form;
-			form.submit();
-		}
-		
 		window.onload = function() {
 			var objDiv = document.getElementById("chat-output");
 			objDiv.scrollTop = objDiv.scrollHeight;
 		};
-		
-		function getVoteAndSubmit(param){
-			
-			var vote=param.value;
-			document.getElementById("vote").value=vote;
-			
-			param.form.submit()
-		}
 		
 		
 		</script>
@@ -49,26 +30,57 @@
 
 	<body>
 
+
 		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
 			String userText = request.getParameter("usertText"); 
 		   	String divText = request.getParameter("div-content"); 
-		%>
-		
-		<% 	String answer = null;
-			String printText=null;
-			if(userText.length()>0){
-				ubuassistant.setUsertText(userText);
-				answer = ubuassistant.getResponse();
-				printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
+		   	String answer = request.getParameter("answer");
+		   	String numString = request.getParameter("num");
+		   	int num = Integer.parseInt(numString);
+
+			String printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
+			String printAnswer=null;
+			if(answer.contains("http")){
+				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+"<a href="+answer+" target=\"_blank\">"+answer+"</a>";
+			}else{
+				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+answer;
 			}
 			
-		%>
+			LinkedHashSet<String> words = new LinkedHashSet<String>();
+			words.add(userText);
+			ubuassistant.getDb().aumentarNumBusquedas(words, answer);
+			
+		    LinkedHashSet<String> suggestWord = new LinkedHashSet<String>();
+			HashMap<String, List<RetrievalResult>> badResuts=ubuassistant.getBadResuts();
+			List<RetrievalResult> listOfValues = ubuassistant.getListOfValues();
+			
+			for (String o : badResuts.keySet()) {
+				if (badResuts.get(o).contains(listOfValues.get(num))) {
+					suggestWord.add(o);
+				}		
+			}
+
+			//When there are no answers and the user push a suggestion button it is supposed
+			//That the text input by the user is related with the button so we store all this 
+			//information for making the system learn
+			ubuassistant.getDb().learnCases(suggestWord.iterator().next(), ((CaseSolution)listOfValues.get(num).get_case().getSolution()).getAnswer().toString());
+			%>
+		
+		<script>
+		function getVoteAndSubmit(param){
+			
+			var vote=param.value;
+			document.getElementById("vote").value=vote;
+			document.getElementById("wordButton").value="<%=userText%>";
+			
+			param.form.submit()
+		}
+		
+		</script>
 		
 		<div class="chat-output" id="chat-output">
 		
 			<%= divText %>
-			
-			<%if(printText!=null && answer!=null){%>
 			
 				<div class='bot-message'>   
 				   
@@ -77,42 +89,17 @@
 				</div>
 				
 				<div class='user-message'>      
-					<div class='message'> <%= answer %></div>
+					<div class='message'> <%= printAnswer %></div>
 				</div>		
 		
-			<%} %>
 		</div>
 		
-
-		<%String suggestButtons=ubuassistant.getSuggestButtons();
-		if(suggestButtons!=null){%>
-			
-			<div id="buttonPanel" class="buttonPanel">
-			  	<%=suggestButtons %>
-			  	<% LinkedHashSet<String> temp = new LinkedHashSet<String>();
-			  	temp.add(userText);
-			  	ubuassistant.getDb().aumentarNumBusquedas(temp, null); %>
-		  	</div>
-		<%} %>
-		
-		<%String multipleButtons=ubuassistant.getMultipleButtons();
-		if(multipleButtons!=null){%>
-			
-			<div id="buttonPanel" class="buttonPanel">
-				
-			  	<%=multipleButtons %>
-			
-		  	</div>
-		<%} %>
-		
-		<% String starBar = ubuassistant.getStarBar();
+		<% String starBar = ubuassistant.getStarBarButton();
 		if(starBar!=null){%>
 			<div id="buttonPanel" class="buttonPanel">		
 				  	<%=starBar %>
 		  	</div>
 		<%} %>
-		
-		
 		
 		<div class="chat-input">
 				
@@ -129,17 +116,6 @@
 				for (i=0; i < num; i++) {
 					x[i].value=getDivContent();
 				}
-		</script>
-		
-		<script>
-		
-		var buttonDiv = document.getElementById("buttonPanel").innerHTML;
-		var num = document.getElementsByName("buttonDiv").length;
-		var x = document.getElementsByName("buttonDiv")
-		for (i=0; i < num; i++) {
-			x[i].value=buttonDiv;
-		}
-		
 		</script>
 		
 	</body>
