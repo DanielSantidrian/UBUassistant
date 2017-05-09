@@ -4,8 +4,17 @@ import java.util.Comparator;
 
 import jcolibri.method.retrieve.RetrievalResult;
 
+/**
+ * 
+ * @author Daniel Santidrian Alonso
+ *
+ */
 public class ResultsComparator implements Comparator<RetrievalResult>{
 
+	/**
+	 * Function that compare two results of a word
+	 * @return the result of the comparation.
+	 */
 	@Override
 	public int compare(RetrievalResult o1, RetrievalResult o2) {
 		

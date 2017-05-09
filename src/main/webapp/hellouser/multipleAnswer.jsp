@@ -99,22 +99,24 @@
 		</div>
 		
 		
-		
+		<div id="buttonPanelContent" class="buttonPanelContent">
 
-		<div id="buttonPanel" class="buttonPanel">
-			  ¿Desea valorar esta respuesta?
-			  <form method="post" action="multipleAnswerQuestion.jsp">
-			  	<input type="hidden" id="div-content-suggest" name="div-content">
-			  	<input type="hidden" id="response" name="response" value="si">
-			  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
-			  	<input type="submit" id="but" class="multBut" value="Si">
-			  </form>
-			  <form method="post" action="multipleAnswerQuestion.jsp">
-			  	<input type="hidden" id="div-content-suggest" name="div-content">
-			  	<input type="hidden" id="response" name="response" value="no">
-			  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
-			  	<input type="submit" id="but" class="multBut" value="No">
-			  </form>
+			<div id="buttonPanel" class="buttonPanel">
+				  ¿Desea valorar esta respuesta?
+				  <form method="post" action="multipleAnswerQuestion.jsp">
+				  	<input type="hidden" id="div-content-suggest" name="div-content">
+				  	<input type="hidden" id="response" name="response" value="si">
+				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
+				  	<input type="submit" id="but" class="multBut" value="Si">
+				  </form>
+				  <form method="post" action="multipleAnswerQuestion.jsp">
+				  	<input type="hidden" id="div-content-suggest" name="div-content">
+				  	<input type="hidden" id="response" name="response" value="no">
+				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
+				  	<input type="submit" id="but" class="multBut" value="No">
+				  </form>
+			 </div>
+		 
 		 </div>
 		
 		<div id="buttonPanel" class="chat-input">

@@ -86,6 +86,8 @@
 
 		<%String suggestButtons=ubuassistant.getSuggestButtons();
 		if(suggestButtons!=null){%>
+		
+		<div id="buttonPanelContent" class="buttonPanelContent">
 			
 			<div id="buttonPanel" class="buttonPanel">
 			  	<%=suggestButtons %>
@@ -93,23 +95,32 @@
 			  	temp.add(userText);
 			  	ubuassistant.getDb().aumentarNumBusquedas(temp, null); %>
 		  	</div>
+		  	
+		 </div>
 		<%} %>
 		
 		<%String multipleButtons=ubuassistant.getMultipleButtons();
 		if(multipleButtons!=null){%>
 			
+		<div id="buttonPanelContent" class="buttonPanelContent">
 			<div id="buttonPanel" class="buttonPanel">
 				
 			  	<%=multipleButtons %>
 			
 		  	</div>
+		  	
+		</div>
 		<%} %>
 		
 		<% String starBar = ubuassistant.getStarBar();
 		if(starBar!=null){%>
+		
+		<div id="buttonPanelContent" class="buttonPanelContent">
 			<div id="buttonPanel" class="buttonPanel">		
 				  	<%=starBar %>
 		  	</div>
+		  	
+		</div>
 		<%} %>
 		
 		

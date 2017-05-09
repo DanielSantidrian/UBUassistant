@@ -22,6 +22,9 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
  */
 public class DatabaseConnection {
 	
+	/**
+	 * Global variables
+	 */
 	private static Connection con = null;
 	private static List<String> sentenceList = new ArrayList<String>();
 	private static List<String> saluteList = new ArrayList<String>();
@@ -29,8 +32,8 @@ public class DatabaseConnection {
 	private long userID;
 	
 	/**
-	 * Constructor of the class that connects the database
-	 * @param userID 
+	 * Constructor of the class that connects the database.
+	 * @param userID unique identifier for a user.
 	 */
 	public DatabaseConnection(String userID) {
 		
@@ -57,7 +60,8 @@ public class DatabaseConnection {
 	}
 	
 	/**
-	 * Method that reads the tables of the database and creates the lists 
+	 * Method that reads the tables of the database and creates the sentenceList, 
+	 * saluteList and saluteResponseList.
 	 */
 	private void createLists(){
 		
@@ -126,9 +130,9 @@ public class DatabaseConnection {
 	
 	/**
 	 * Method that increases the field numBusquedas in the database
-	 * @param palabras the word that is searched
+	 * @param palabras the words that are searched
+	 * @param respuesta response for that set of words
 	 */
-	
 	public void aumentarNumBusquedas(LinkedHashSet<String> palabras, String respuesta){
 		
 		boolean flag=false;
@@ -222,8 +226,8 @@ public class DatabaseConnection {
 	
 	/**
 	 * Method that saves the rating of the user to a specific answer into the database
-	 * @param palabras the word that is searched
-	 * @param vote the rating to the answer for the word
+	 * @param palabras the words that are searched
+	 * @param vote the rating to the answer for the words
 	 */
 	public void saveVote(LinkedHashSet<String> palabras,int vote){
 		
@@ -271,21 +275,15 @@ public class DatabaseConnection {
 			pst.setInt(3, palabraId);
 			pst.executeUpdate();
 					
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
-		
-		
-		
-		
 	}
 	
 	/**
-	 * 
-	 * @param palabra
-	 * @return
+	 * Function that returns the category of a response.
+	 * @param respuesta response from which we want to know its category.
+	 * @return categoria category of the response.
 	 */
 	private String getCategoria(String respuesta){
 		

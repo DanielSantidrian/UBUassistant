@@ -48,6 +48,7 @@ public class CBR implements StandardCBRApplication {
 	private CaseDescription cd = new CaseDescription();
 	
 	private LinkedHashSet<CBRCase> casesToReatin;
+	private LinkedHashSet<CBRCase> casesToReatinGood;
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
     private HashMap<String, List<RetrievalResult>> badResuts = new HashMap<String,List<RetrievalResult>>();
@@ -68,7 +69,7 @@ public class CBR implements StandardCBRApplication {
     
     /**
      * Method that calls the configuration methods
-     * @throws ExecutionException
+     * @throws ExecutionException exception that is thrown when an error occurs at execution time.
      */
 	@Override
 	public void configure() throws ExecutionException {
@@ -81,8 +82,8 @@ public class CBR implements StandardCBRApplication {
 	}
 
 	/**
-	 * Configures the connector
-	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the casebase
+	 * Method that configures the connector and load the cases from the database.
+	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the case base.
 	 */
 	@Generated(value = { "CS-PTConector" })	
 	private void configureConnector() throws InitializingException{
@@ -95,7 +96,7 @@ public class CBR implements StandardCBRApplication {
 
 
 	/**
-	 * Configures the case base
+	 * Method that configures the case base
 	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the casebase
 	 */
 	@Generated(value = { "CS-CaseManager" })	
@@ -107,9 +108,12 @@ public class CBR implements StandardCBRApplication {
 	// Similarity
 	//******************************************************************/
 	
-	/** Configures the similarity */
+	/**
+	 * Function that configures the similarity configuration for the keyWords.
+	 * @return simConfig object that contains the similarity configuration.
+	 */
 	@Generated(value = { "CS-Similarity" })	
-	private static NNConfig getSimilarityConfig() {
+	private NNConfig getSimilarityConfig() {
 		NNConfig simConfig = new NNConfig();
 		simConfig
 				.setDescriptionSimFunction(new jcolibri.method.retrieve.NNretrieval.similarity.global.Euclidean());
@@ -153,7 +157,8 @@ public class CBR implements StandardCBRApplication {
 	
 	/**
 	 * Method preCycle that will be called to initialize and return the case base
-	 * @throws ExecutionException
+	 * @throws ExecutionException exception that is thrown when an error occurs at execution time.
+	 * @return casebase object that contains all the cases.
 	 */
 	@Generated(value = { "ColibriStudio" })
 	@Override
@@ -163,21 +168,20 @@ public class CBR implements StandardCBRApplication {
 	}
 	
 	/**
-	 * Method that save in a collection the nearest neighbors of the query
-	 * @param query 
-	 * @throws ExecutionException
+	 * Method that save in a collection the RetrievalResults of the similar cases.
+	 * @param query specific case.
+	 * @throws ExecutionException exception that is thrown when an error occurs at execution time.
 	 */
 	@Generated(value = { "ColibriStudio" })	
 	@Override
 	public void cycle(CBRQuery query) throws ExecutionException {
 		NNConfig simConfig = getSimilarityConfig();
 		eval= NNScoringMethod.evaluateSimilarity(casebase.getCases(), query, simConfig);
-		//eval = SelectCases.selectTopKRR(eval, 3);
 	}
 
 	/**
-	 * Method that will be called to close the connection
-	 * @throws ExecutionException
+	 * Method that will be called to close the connection.
+	 * @throws ExecutionException exception that is thrown when an error occurs at execution time.
 	 */
 	@Generated(value = { "ColibriStudio" })
 	@Override
@@ -186,7 +190,7 @@ public class CBR implements StandardCBRApplication {
 	}
 
 	/**
-	 * Main method
+	 * Method that calls the configuration method, the preCycle method, and creates a new query.
 	 */
 	@Generated(value = { "ColibriStudio" })
 	public void configureCBR() {
@@ -206,12 +210,16 @@ public class CBR implements StandardCBRApplication {
 	/**
 	 * Method that query for each word, generate the responses and store the best answers
 	 * with the word that generated it.
-	 * @param words Each word of the input text
+	 * @param words array with each word of the input text
 	 */
 	public void buildEval(String[] words) {
 		
+		//Map with all the responses found in value and the word that generate them in key.
 		parcialResults=new HashMap<String, List<String>>();
+		//Set that store all the cases with some similarity with the words input.
 		casesToReatin = new LinkedHashSet<CBRCase>();
+		casesToReatinGood = new LinkedHashSet<CBRCase>();
+		//Map that saves all the results in value with the word that generate them in key.
 		badResuts = new HashMap<String,List<RetrievalResult>>();
 		
 		//For each word in the input text
@@ -232,8 +240,8 @@ public class CBR implements StandardCBRApplication {
 					e1.printStackTrace();
 				}
 				
-				//Adding all the nearest neighbors to allResults map with the word that generates the answer
 				badResuts.put(word, new ArrayList<RetrievalResult>(eval));
+				//Remove the results with similarity worst than 0.35
 				eval.removeIf(e -> e.getEval()<0.35);
 				List<String> answer = new ArrayList<String>();
 				for(RetrievalResult r : eval){
@@ -246,15 +254,14 @@ public class CBR implements StandardCBRApplication {
 					parcialResults.put(word, answer);
 			}
 		}
-		
 	}
 
 	/**
 	 * Method that generates the final results with the partial results of builEval.
-	 * @return 
 	 */
 	public void buildFinalResults() {
 		
+		//Map with the response in value and all the words that generated them in key.
 		finalResults = new HashMap<LinkedHashSet<String>,List<String>>();
 		
 		//If there is an answer for the input text
@@ -294,47 +301,50 @@ public class CBR implements StandardCBRApplication {
 				
 				word = new LinkedHashSet<String>();
 			}
+			
+			
+			for(List<String> list : finalResults.values()){
+				for(String answer : list){
+					for(CBRCase cs : casesToReatin){
+						if(((CaseSolution)cs.getSolution()).getAnswer().equals(answer)){
+							casesToReatinGood.add(cs);
+						}
+					}
+				}
+			}
 		}
 	}
 	
+	/**
+	 * Function that returns the casesToRetain
+	 * @return casesToReatin set that store all the cases with some similarity with the words input.
+	 */
 	public LinkedHashSet<CBRCase> getCasesToReatin() {
-		return casesToReatin;
+		return casesToReatinGood;
 	}
 
-
-	public void setCasesToReatin(LinkedHashSet<CBRCase> casesToReatin) {
-		this.casesToReatin = casesToReatin;
-	}
-
-
+	/**
+	 * Function that returns the parcialResults
+	 * @return parcialResults map with all the responses found for a word in value and the word that generate them in key.
+	 */
 	public Map<String, List<String>> getParcialResults() {
 		return parcialResults;
 	}
 
-
-	public void setParcialResults(Map<String, List<String>> parcialResults) {
-		this.parcialResults = parcialResults;
-	}
-
-
+	/**
+	 * Function that returns the finalResults
+	 * @return finalResults map with the response in value and all the words that generated them in key.
+	 */
 	public Map<LinkedHashSet<String>, List<String>> getFinalResults() {
 		return finalResults;
 	}
 
-
-	public void setFinalResults(Map<LinkedHashSet<String>, List<String>> finalResults) {
-		this.finalResults = finalResults;
-	}
-
-
+	/**
+	 * Function that returns the badResuts
+	 * @return badResuts map that stores all the results in value with the word that generate them in key.
+	 */
 	public HashMap<String, List<RetrievalResult>> getBadResuts() {
 		return badResuts;
 	}
 
-
-	public void setBadResuts(HashMap<String, List<RetrievalResult>> badResuts) {
-		this.badResuts = badResuts;
-	}
-
-	
 }

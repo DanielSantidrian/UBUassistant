@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic");
 
 
-html, body, div, span, applet, object, h1, h2, h3, p, pre, a, img, ins, q, s, strong, var, b, u, i, center, ol, ul, li, form, label, embed, footer, header, menu, section{
+html, body, div, span, h1, h2, h3, p, pre, a,img, center, ol, ul, li, form, footer, header, menu, section{
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -80,6 +80,67 @@ h2 {
 	padding: 6em 0 4em 0 ;
 	text-align: center;
 }
+
+.pinguino{
+	position: fixed;
+    bottom: 10;
+    right: 5;
+    height: 92px;
+    width: 102px;
+}
+
+.divchat-window{
+	bottom: 10;
+    right: 5;
+	position: fixed; 
+	overflow: auto;
+	width: 420px;
+}
+
+.divchat{
+	border: 0px none; 
+	border-radius: 15px;
+	overflow:hidden;
+}
+
+
+.divchat-button{
+	
+	background-color:#0FB0DF;
+	color:white;
+	text-align: center;
+	border: 0px none; 
+	border-radius: 15px;
+	width: 45%;
+	margin-left: 220px;
+}
+
+
+
+
+.iframe{
+	height: 400px; 
+	border: 0px none; 
+	margin-left:5px;
+	width: 410px; 
+	height: 500px;
+}
+
+.btn-minimize {
+    width: 20px;
+    height: 20px;
+    margin-left: 2px;
+}
+
+
+.btn-close {
+    width: 20px;
+    height: 20px;
+    margin-left: 2px;
+
+}
+
+
 
 /* List */
 

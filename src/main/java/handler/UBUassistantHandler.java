@@ -18,20 +18,24 @@ import representation.CaseDescription;
 import representation.CaseSolution;
 import util.ResultsComparator;
 
-
+/**
+ * 
+ * @author Daniel Santidrian Alonso
+ *
+ */
 public class UBUassistantHandler {
 
+	/**
+	 * Global variables
+	 */
     private String usertText;
-    
     private String response;
-    
     private String userId;
     
     private String starBar;
     private String starBarButton;
     
     private String suggestButtons;
-    
     private String multipleButtons;
     
     private DatabaseConnection db;
@@ -40,18 +44,20 @@ public class UBUassistantHandler {
     private List<String> saluteResponseList;
     
     private LinkedHashSet<CBRCase> casesToReatin;
-
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
     private HashMap<String, List<RetrievalResult>> badResuts;
     List<RetrievalResult> listOfValues;
-
-    
     private LinkedHashSet<String> currentWords;
     
     private CBR cbrApp;
     
-          
+    /**
+     * Constructor of the class.
+     * Obtains the salute lists and sentence list of the database.
+     * Creates a instance of CBR.
+     * @param userID unique identifier for a user.
+     */
     public UBUassistantHandler(String userID) { 
     	this.userId=userID;
     	usertText = null;  
@@ -64,50 +70,19 @@ public class UBUassistantHandler {
 		
 		cbrApp = new CBR();
     }
-
-
-    public String getSalute(){
-    	
-    	return sentenceList.get((int) (Math.random()*5));
+    
+    /**
+     * Method that sets the user text and calls the searchAnswer method.
+     * @param usertText text input by the user.
+     */
+    public void setUsertText( String usertText ) {
+    	this.usertText = usertText; 
+    	searchAnswer();
     }
-    
-    public String getRandomSentence(){
-    	return sentenceList.get((int)(Math.random()*5+5));
-    }
-    
-    private void putStarBar(){
-		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp\">"+
-							"<div class=\"rate\">"+
-							"Valora esta respuesta "+
-							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
-							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
-					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
-					        "</div>"+
-					   "</form>";
-	}
-    
-    
-    private void putStarBarButton(){
-		setStarBarButton("<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp\">"+
-							"<div class=\"rate\">"+
-							"Valora esta respuesta "+
-							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
-							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
-							"<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
-							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
-					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
-					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
-					        "</div>"+
-					   "</form>");
-	}
-    
+
+    /**
+     * Method that restart the variables and calls the answerNonReservedWord method.
+     */
     private void searchAnswer(){
     	
     	starBar=null;
@@ -118,7 +93,11 @@ public class UBUassistantHandler {
     	answerNonReservedWord(userTextLower);	
     }
     
-    
+    /**
+     * Method that generates the response when a reserved word is input by the user.
+     * @param userTextLower text input by the user.
+     * @return true or false if the text input by the user is a reserved word.
+     */
     private boolean answerReservedWord(String userTextLower) {
 		
     	String userTextOneUp=userTextLower.substring(0, 1).toUpperCase() + userTextLower.substring(1);
@@ -135,7 +114,11 @@ public class UBUassistantHandler {
 		return false;	
 	}
     
-    
+    /**
+     * Method that call other method for generating the response when the text input by the user
+     * is not a reserved word.
+     * @param userTextLower text input by the user.
+     */
     private void answerNonReservedWord(String userTextLower){
     	
     	response="<p>"+getRandomSentence()+"</p>";
@@ -164,8 +147,9 @@ public class UBUassistantHandler {
 
 	
 	/**
-	 * Method that prints the answer in the text pane.
-	 * @param finalResults Map with the best answers and the words that generated them.
+	 * Method that call the corresponding methods if there is only one answer 
+	 * or multiple answers were found.
+	 * After that it sets down the connection.
 	 */
 	public void getAnswers() {
 		
@@ -191,9 +175,7 @@ public class UBUassistantHandler {
 	
 
 	/**
-	 * Method that prints the answer when there is only one answer
-	 * @param finalResults Map with the best answers and the words that generated them.
-	 * @param cont Number of answers
+	 * Method that generates the response when there is only one answer.
 	 */
 	private void oneAnswerResponse() {
 		
@@ -211,16 +193,22 @@ public class UBUassistantHandler {
 		//Calling the method to ask the user about the utility of the answer
 		putStarBar();
 			
-		
 	}
 	
+	/**
+	 * Method that generates the response when there are multiple answers.
+	 */
 	private void multipleAnswersResponse() {
-		
 		
 		multipleButtons="";
 		
 		response="<p>Vaya, parece que tengo demasiadas respuestas.<p>"+
 				 "<p>Intenta ser más concreto o selecciona alguna sugerencia.<p>";
+		
+		
+	
+		
+		
 		
 		for(CBRCase c : casesToReatin){
 			String temp=((CaseDescription)c.getDescription()).getKeyWord1().toString();
@@ -236,10 +224,13 @@ public class UBUassistantHandler {
 								"</form>";
 		}
 		
+		//Calling the method to ask the user about the utility of the answer
 		putStarBarButton();
-
 	}
 
+	/**
+	 * Method that generates the response when there is not an answer.
+	 */
 	public void noAnswerSuggestions() {
 		
 		if(parcialResults.isEmpty()){
@@ -281,119 +272,164 @@ public class UBUassistantHandler {
 		}
 	}
 	
-	 public void setUsertText( String usertText ) {
-    	this.usertText = usertText; 
-    	searchAnswer();
+	/**
+	 * Method that generates the string of a star bar.
+	 */
+	private void putStarBar(){
+		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp\">"+
+							"<div class=\"rate\">"+
+							"Valora esta respuesta "+
+							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
+							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
+					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
+					        "</div>"+
+					   "</form>";
+	}
+    
+	/**
+	 * Method that generates the string of a star bar when there are buttons available.
+	 */
+    private void putStarBarButton(){
+		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp\">"+
+							"<div class=\"rate\">"+
+							"Valora esta respuesta "+
+							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
+							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
+							"<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
+							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
+					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
+					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
+					        "</div>"+
+					   "</form>";
+	}
+	
+	
+	/**
+	 * Method that returns a random salute.
+	 * @return random salute.
+	 */
+	public String getSalute(){
+    	
+    	return sentenceList.get((int) (Math.random()*5));
     }
     
-    
+	/**
+	 * Method that returns a random sentence.
+	 * @return random sentence.
+	 */
+    public String getRandomSentence(){
+    	return sentenceList.get((int)(Math.random()*5+5));
+    }
+	
+    /**
+	 * Method that returns the user text.
+	 * @return usertText Text input by the user.
+	 */
     public String getUsertText() {   
         return usertText;     
     }
 
-
+    /**
+   	 * Method that returns the response.
+   	 * @return response response generated for the input text.
+   	 */
 	public String getResponse() {
 		return response;
 	}
 
-
+	/**
+	 * Method that sets the response.
+	 * @param response response for the input text.
+	 */
 	public void setResponse(String response) {
 		this.response = response;
 	}
 
-
+	/**
+   	 * Method that returns the userId.
+   	 * @return userId unique identifier of the user.
+   	 */
 	public String getUserId() {
 		return userId;
 	}
 
-
+	/**
+	 * Method that sets the user id.
+	 * @param userId unique identifier of the user.
+	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 
-
+	/**
+   	 * Method that returns the starBar.
+   	 * @return starBar method for rate the response given.
+   	 */
 	public String getStarBar() {
 		return starBar;
 	}
 
-
-	public void setStarBar(String starBar) {
-		this.starBar = starBar;
-	}
-
-
+	/**
+   	 * Method that returns the suggestButtons.
+   	 * @return suggestButtons string with the buttons generated when there is not answer.
+   	 */
 	public String getSuggestButtons() {
 		return suggestButtons;
 	}
 
-
-	public void setSuggestButtons(String suggestButtons) {
-		this.suggestButtons = suggestButtons;
-	}
-
-
+	/**
+   	 * Method that returns the multipleButtons.
+   	 * @return multipleButtons string with the buttons generated when there are multiple answers.
+   	 */
 	public String getMultipleButtons() {
 		return multipleButtons;
 	}
 
-
-	public void setMultipleButtons(String multipleButtons) {
-		this.multipleButtons = multipleButtons;
-	}
-
-
+	/**
+	 * Method that returns the currentWords.
+	 * @return currentWords words that generates the simple answer.
+	 */
 	public LinkedHashSet<String> getCurrentWords() {
 		return currentWords;
 	}
 
-
-	public void setCurrentWords(LinkedHashSet<String> currentWords) {
-		this.currentWords = currentWords;
-	}
-
-
+	/**
+	 * Method that returns the db.
+	 * @return db connection to the database.
+	 */
 	public DatabaseConnection getDb() {
 		return db;
 	}
 
-
-	public void setDb(DatabaseConnection db) {
-		this.db = db;
-	}
-
-
+	/**
+	 * Method that returns the badResuts.
+	 * @return badResuts map that stores all the results in value with the word that generate them in key.
+	 */
 	public HashMap<String, List<RetrievalResult>> getBadResuts() {
 		return badResuts;
 	}
 
-
-	public void setBadResuts(HashMap<String, List<RetrievalResult>> badResuts) {
-		this.badResuts = badResuts;
-	}
-
-
+	/**
+	 * Method that returns the listOfValues.
+	 * @return listOfValues list with the results of badResults.
+	 */
 	public List<RetrievalResult> getListOfValues() {
 		return listOfValues;
 	}
 
-
-	public void setListOfValues(List<RetrievalResult> listOfValues) {
-		this.listOfValues = listOfValues;
-	}
-
-
+	/**
+   	 * Method that returns the starBarButton.
+   	 * @return starBarButton method for rate the response given.
+   	 */
 	public String getStarBarButton() {
 		return starBarButton;
 	}
-
-
-	public void setStarBarButton(String starBarButton) {
-		this.starBarButton = starBarButton;
-	}
-	
-	
-	
-    
-    
 
 }

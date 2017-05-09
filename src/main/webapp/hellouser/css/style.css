@@ -13,7 +13,7 @@ body, html {
 
 body {
   font-family: 'Source Sans Pro', sans-serif;
-  font-size: 115%;
+  font-size: 100%;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -21,15 +21,16 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  max-width: 700px;
+  max-width: 500px;
   margin: 0 auto;
+  padding: 5px;
 }
 
 .chat-output {
   -webkit-box-flex: 1;
       -ms-flex: 1;
           flex: 1;
-  padding: 20px;
+  padding: 10px;
   margin-top:5px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -40,11 +41,22 @@ body {
       -ms-flex-direction: column;
           flex-direction: column;
   border-radius:15px;
-  overflow: auto
+  overflow: auto;
+  overflow-x: hidden;
 }
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
 .chat-output > div {
   margin: 0 0 20px 0;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 
@@ -64,20 +76,25 @@ a {
 }
 .chat-output .message {
   display: inline-block;
-  padding: 12px 20px;
+  padding: 10px 18px;
   border-radius: 10px;
 }
 
 .chat-input {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 5px;
   background: rgba(171, 34, 60, 1);
   border: 1px;
   border-bottom: 0;
 }
+
+#user-input-form{
+	margin-bottom: 0px;
+}
+
 .chat-input .user-input {
   width: 80%;
-  font-size: 2rem;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 15px;
   padding: 8px;
@@ -86,57 +103,64 @@ a {
 
 .chat-input .enviar {
   width: 17%;
-  font-size: 2rem;
+  font-size: 1rem;
   text-align: center;
   border: 1px;
   border-radius: 15px;
   padding: 8px;
   display: inline-block;
-  margin-left: 12px;
+  margin-left: 8px;
   background: #0FB0DF;
   color: white;
   cursor: pointer;
 
 }
 
-.buttonPanel{
+.buttonPanelContent{
 	text-align: center;
+}
+
+.buttonPanel{
+	
 	float:left;
 	display: inline-block;
 	vertical-align: middle;
 	padding-top: 5px;
 	color: white;
+	margin: 0 auto;
 	}
 
 .buttonPanel .sugBut {
+  margin: 0 auto;
   width: auto;
-  font-size: 1rem;
+  font-size: 0.8rem;
   text-align: center;
   border: 1px;
   border-radius: 15px;
-  padding: 12px;
+  padding: 8px;
   display: inline-block;
   background: #0FB0DF;
   color: white;
   cursor: pointer;
   float:left;
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 
 .buttonPanel .multBut {
+  margin: 0 auto;
   width: auto;
-  font-size: 1rem;
+  font-size: 0.8rem;
   text-align: center;
   border: 1px;
   border-radius: 15px;
-  padding: 12px;
+  padding: 8px;
   display: inline-block;
   background: #0FB0DF;
   color: white;
   cursor: pointer;
   float:left;
-  margin-left: 12px;
+  margin-left: 8px;
 }
 
 .multipleForm{
