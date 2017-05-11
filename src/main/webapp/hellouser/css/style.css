@@ -46,13 +46,10 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+    width: 0px; 
+    background: transparent; 
 }
-/* optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-    background: #FF0000;
-}
+
 
 .chat-output > div {
   margin: 0 0 20px 0;
@@ -81,7 +78,7 @@ a {
 }
 
 .chat-input {
-  padding-top: 10px;
+  padding-top: 8px;
   padding-bottom: 5px;
   background: rgba(171, 34, 60, 1);
   border: 1px;
@@ -120,14 +117,17 @@ a {
 	text-align: center;
 }
 
+
+
 .buttonPanel{
 	
-	float:left;
+	
 	display: inline-block;
 	vertical-align: middle;
 	padding-top: 5px;
 	color: white;
-	margin: 0 auto;
+
+	text-align: center;
 	}
 
 .buttonPanel .sugBut {
@@ -143,7 +143,8 @@ a {
   color: white;
   cursor: pointer;
   float:left;
-  margin-left: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 
@@ -160,15 +161,21 @@ a {
   color: white;
   cursor: pointer;
   float:left;
-  margin-left: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .multipleForm{
-  float:left
+  float:left;
+  margin-bottom: 4px;
 }
 
 
 /************************************************************/
+
+.rate-text{
+	
+}
 
 
 .rate {

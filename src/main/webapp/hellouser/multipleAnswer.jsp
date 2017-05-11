@@ -54,7 +54,7 @@
 		   	String buttonDiv = request.getParameter("buttonDiv");
 		   	session.setAttribute("buttonDiv", buttonDiv);
 
-			String printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
+			String printText=userText.substring(0, 1).toUpperCase() + userText.substring(1).toLowerCase();
 			String printAnswer=null;
 			if(answer.contains("http")){
 				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+"<a href="+answer+" target=\"_blank\">"+answer+"</a>";
@@ -101,15 +101,15 @@
 		
 		<div id="buttonPanelContent" class="buttonPanelContent">
 
-			<div id="buttonPanel" class="buttonPanel">
-				  ¿Desea valorar esta respuesta?
-				  <form method="post" action="multipleAnswerQuestion.jsp">
+			<div id="buttonPanel" style="margin-bottom: -18px;" class="buttonPanel">
+				  <div class="rate-text">¿Desea valorar esta respuesta?</div>
+				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
 				  	<input type="hidden" id="div-content-suggest" name="div-content">
 				  	<input type="hidden" id="response" name="response" value="si">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
 				  	<input type="submit" id="but" class="multBut" value="Si">
 				  </form>
-				  <form method="post" action="multipleAnswerQuestion.jsp">
+				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
 				  	<input type="hidden" id="div-content-suggest" name="div-content">
 				  	<input type="hidden" id="response" name="response" value="no">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
@@ -119,15 +119,7 @@
 		 
 		 </div>
 		
-		<div id="buttonPanel" class="chat-input">
-				
-		  <form method="post" id="user-input-form" action="response.jsp" onsubmit="if (document.getElementById('user-input').value.length < 1) return false;">
-		    <input type="text" id="user-input" name="usertText" class="user-input" placeholder="Pregunta a UBUassistant">
-		    <input type="hidden" id="div-content" name="div-content">
-		    <input type="submit" class="enviar" value="Enviar">
-		  </form>
-		</div>
-		
+		<%@ include file="form.html" %>
 		
 		<script>var num = document.getElementsByName("div-content").length;
 				var x = document.getElementsByName("div-content")

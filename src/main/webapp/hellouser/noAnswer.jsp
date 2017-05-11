@@ -38,7 +38,7 @@
 		   	String numString = request.getParameter("num");
 		   	int num = Integer.parseInt(numString);
 
-			String printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
+			String printText=userText.substring(0, 1).toUpperCase() + userText.substring(1).toLowerCase();
 			String printAnswer=null;
 			if(answer.contains("http")){
 				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+"<a href="+answer+" target=\"_blank\">"+answer+"</a>";
@@ -96,20 +96,14 @@
 		
 		<% String starBar = ubuassistant.getStarBarButton();
 		if(starBar!=null){%>
-			<div id="buttonPanel" class="buttonPanel">		
-				  	<%=starBar %>
-		  	</div>
+			<div id="buttonPanelContent" class="buttonPanelContent">
+				<div id="buttonPanel" class="buttonPanel">		
+					  	<%=starBar %>
+			  	</div>
+			</div>
 		<%} %>
 		
-		<div class="chat-input">
-				
-		  <form method="post" id="user-input-form" action="response.jsp" onsubmit="if (document.getElementById('user-input').value.length < 1) return false;">
-		    <input type="text" id="user-input" name="usertText" class="user-input" placeholder="Pregunta a UBUassistant">
-		    <input type="hidden" id="div-content" name="div-content">
-		    <input type="submit" class="enviar" value="Enviar">
-		  </form>
-		</div>
-		
+		<%@ include file="form.html" %>
 		
 		<script>var num = document.getElementsByName("div-content").length;
 				var x = document.getElementsByName("div-content")

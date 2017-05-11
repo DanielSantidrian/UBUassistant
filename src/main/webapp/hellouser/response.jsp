@@ -57,9 +57,9 @@
 		<% 	String answer = null;
 			String printText=null;
 			if(userText.length()>0){
+				printText=userText.substring(0, 1).toUpperCase() + userText.substring(1).toLowerCase();
 				ubuassistant.setUsertText(userText);
 				answer = ubuassistant.getResponse();
-				printText=userText.substring(0, 1).toUpperCase() + userText.substring(1);
 			}
 			
 		%>
@@ -87,9 +87,9 @@
 		<%String suggestButtons=ubuassistant.getSuggestButtons();
 		if(suggestButtons!=null){%>
 		
-		<div id="buttonPanelContent" class="buttonPanelContent">
+		<div id="buttonPanelContent" class="buttonPanelContent" >
 			
-			<div id="buttonPanel" class="buttonPanel">
+			<div id="buttonPanel" class="buttonPanel" style="margin-bottom: -15px">
 			  	<%=suggestButtons %>
 			  	<% LinkedHashSet<String> temp = new LinkedHashSet<String>();
 			  	temp.add(userText);
@@ -124,15 +124,7 @@
 		<%} %>
 		
 		
-		
-		<div class="chat-input">
-				
-		  <form method="post" id="user-input-form" action="response.jsp" onsubmit="if (document.getElementById('user-input').value.length < 1) return false;">
-		    <input type="text" id="user-input" name="usertText" class="user-input" placeholder="Pregunta a UBUassistant">
-		    <input type="hidden" id="div-content" name="div-content">
-		    <input type="submit" class="enviar" value="Enviar">
-		  </form>
-		</div>
+		<%@ include file="form.html" %>
 		
 		
 		<script>var num = document.getElementsByName("div-content").length;

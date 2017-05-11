@@ -42,20 +42,13 @@
 			<%= divText %>
 		</div>
 		
-		
-		<div id="buttonPanel" class="buttonPanel">
-			  	Voto guardado con éxito. Su voto ha sido <%=vote %>
-		 </div>
-		
-		<div class="chat-input">
-				
-		  <form method="post" id="user-input-form" action="response.jsp" onsubmit="if (document.getElementById('user-input').value.length < 1) return false;">
-		    <input type="text" id="user-input" name="usertText" class="user-input" placeholder="Pregunta a UBUassistant">
-		    <input type="hidden" id="div-content" name="div-content">
-		    <input type="submit" class="enviar" value="Enviar">
-		  </form>
+		<div id="buttonPanelContent" class="buttonPanelContent">
+			<div id="buttonPanel" class="buttonPanel">
+				  	Voto guardado con éxito. Su voto ha sido <%=vote %>
+			 </div>
 		</div>
 		
+		<%@ include file="form.html" %>
 		
 		<script>document.getElementById("div-content").value=getDivContent();</script>
 		

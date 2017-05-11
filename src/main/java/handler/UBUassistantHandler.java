@@ -258,7 +258,7 @@ public class UBUassistantHandler {
 					String word=((CaseDescription)listOfValues.get(i).get_case().getDescription()).getKeyWord1();
 					String answer=((CaseSolution)listOfValues.get(i).get_case().getSolution()).getAnswer().toString();
 
-					suggestButtons+="<form method=\"post\" action=\"noAnswer.jsp\">"+
+					suggestButtons+="<form method=\"post\" action=\"noAnswer.jsp\" style=\"display: inline-block;\">"+
 						"<input type=\"hidden\" id=\"num\" name=\"num\" value=\""+i+"\">"+
 					    "<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
 					    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
@@ -278,7 +278,7 @@ public class UBUassistantHandler {
 	private void putStarBar(){
 		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp\">"+
 							"<div class=\"rate\">"+
-							"Valora esta respuesta "+
+							"<div class=\"rate-text\">Valora esta respuesta</div> "+
 							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
 					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
@@ -296,7 +296,7 @@ public class UBUassistantHandler {
     private void putStarBarButton(){
 		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp\">"+
 							"<div class=\"rate\">"+
-							"Valora esta respuesta "+
+							"<div class=\"rate-text\">Valora esta respuesta</div> "+
 							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
 							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
 							"<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
