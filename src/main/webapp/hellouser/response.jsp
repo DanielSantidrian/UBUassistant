@@ -1,5 +1,8 @@
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+<%@ page import="storage.Storage" %>
+			
+
 <html>
 
 	<head>
@@ -8,12 +11,6 @@
 		<link rel="stylesheet" href="css/style.css">
 		
 		<script>
-		
-		function getDivContent(){
-			
-			var outputAreaText = document.getElementById("chat-output").innerHTML;
-			return outputAreaText;
-		}
 		
 		function hideAndSubmit(param){
 			
@@ -51,7 +48,6 @@
 
 		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
 			String userText = request.getParameter("usertText"); 
-		   	String divText = request.getParameter("div-content"); 
 		%>
 		
 		<% 	String answer = null;
@@ -62,25 +58,16 @@
 				answer = ubuassistant.getResponse();
 			}
 			
+			Storage storage = ubuassistant.getStorage();
+			
+			storage.setChatOutput("bot-message",printText);
+			storage.setChatOutput("user-message",answer);
+			
 		%>
 		
 		<div class="chat-output" id="chat-output">
 		
-			<%= divText %>
-			
-			<%if(printText!=null && answer!=null){%>
-			
-				<div class='bot-message'>   
-				   
-					<div class='message'> <%= printText  %></div>
-					
-				</div>
-				
-				<div class='user-message'>      
-					<div class='message'> <%= answer %></div>
-				</div>		
-		
-			<%} %>
+			<%=storage.getChatOutput() %>
 		</div>
 		
 
@@ -127,13 +114,6 @@
 		<%@ include file="form.html" %>
 		
 		
-		<script>var num = document.getElementsByName("div-content").length;
-				var x = document.getElementsByName("div-content")
-				for (i=0; i < num; i++) {
-					x[i].value=getDivContent();
-				}
-		</script>
-		
 		<script>
 		
 		var buttonDiv = document.getElementById("buttonPanel").innerHTML;
@@ -147,19 +127,3 @@
 		
 	</body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

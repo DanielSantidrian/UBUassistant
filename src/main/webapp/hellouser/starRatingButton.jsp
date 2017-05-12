@@ -1,6 +1,9 @@
 <%@page import="database.DatabaseConnection"%>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+<%@page import="storage.Storage" %>
+			
+
 <html>
 
 	<head>
@@ -9,12 +12,6 @@
 		<link rel="stylesheet" href="css/style.css">
 		
 		<script>
-		
-		function getDivContent(){
-			
-			var outputAreaText = document.getElementById("chat-output").innerHTML;
-			return outputAreaText;
-		}
 		
 		function hideAndSubmit(param){
 			param.style.display = 'none';
@@ -43,7 +40,6 @@
 
 
 		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler"); 
-		   	String divText = request.getParameter("div-content"); 
 		   	String vote=request.getParameter("vote");
 		   	String wordButton=request.getParameter("wordButton");
 
@@ -55,11 +51,12 @@
 		   	String buttonDiv=(String)session.getAttribute("buttonDiv");
 		   	session.removeAttribute("buttonDiv");
 		   	
+		   	Storage storage = ubuassistant.getStorage();
 		%>
 		
 		<div class="chat-output" id="chat-output">
 		
-			<%= divText %>
+			<%= storage.getChatOutput() %>
 		</div>
 		
 		<%if(buttonDiv==null){ %>

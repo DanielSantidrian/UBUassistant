@@ -1,5 +1,8 @@
 
 <%@ page import="handler.UBUassistantHandler" %>
+<%@ page import="storage.Storage" %>
+<%@ page import="java.text.DateFormat" import="java.text.SimpleDateFormat" import="java.util.Date"%>
+
 
 <html>
 
@@ -8,35 +11,35 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 		<link rel="stylesheet" href="css/style.css">
 		
-		<script>
-		
-			function getDivContent(){
-				var outputAreaText = document.getElementById("chat-output").innerHTML;
-				return outputAreaText;
-			}
-			
-			
-		</script>
-		
 	</head>
 
 	<body>	
 	
-	
-		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");%>
-		<% 	String salute=ubuassistant.getSalute();	%>
+		<%
+ 
+		
+		DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
+			
+		String userID=formatForId.format(new Date()); 
+		
+		UBUassistantHandler handler = new UBUassistantHandler(userID);
+		
+		session.setAttribute("ubuassistantHandler", handler); 
+				
+		UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
+		
+		String salute=ubuassistant.getSalute();	
+		Storage storage = ubuassistant.getStorage();
+		if(storage.getChatOutput().length()==0)
+			storage.setChatOutput("user-message",salute);
+		%>
 
 		<div class="chat-output" id="chat-output">
-			<div class="user-message">
-		    	<div class="message"><%= salute %></div>
-		  	</div>
+			<%=storage.getChatOutput() %>
 		</div>
 		
 		
 		<%@ include file="form.html" %>
-		
-
-		<script>document.getElementById("div-content").value=getDivContent();</script>
 			  
 	</body>
 	

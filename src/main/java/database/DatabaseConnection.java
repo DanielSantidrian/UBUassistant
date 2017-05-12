@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -140,7 +141,11 @@ public class DatabaseConnection {
 		int num_busquedas=0;
 		String categoria=null;
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Object[] p = palabras.toArray();
+
+		List<String> temp = new ArrayList<String>();
+		
+		temp.addAll(palabras);
+		Collections.sort(temp);
 		
 		try{
 			
@@ -148,37 +153,22 @@ public class DatabaseConnection {
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
 				
-				if(p.length==1){
-					if(p[0].equals(rs.getString("keyWord1")) && rs.getString("keyWord2")==null && 
-							rs.getString("keyWord3")==null && rs.getString("keyWord4")==null &&  
-							rs.getString("keyWord5")==null && userID==rs.getLong("userid")){
-						
+				List<String> databaseWords = new ArrayList<String>();
+				databaseWords.add(rs.getString("keyWord1"));
+				databaseWords.add(rs.getString("keyWord2"));
+				databaseWords.add(rs.getString("keyWord3"));
+				databaseWords.add(rs.getString("keyWord4"));
+				databaseWords.add(rs.getString("keyWord5"));
+				
+				databaseWords.removeAll(Collections.singleton(null));
+				Collections.sort(databaseWords);
+				
+				if(databaseWords.equals(temp) && userID==rs.getLong("userid")){
+
 						flag=true;
 						palabraId=rs.getInt("id");
 						num_busquedas=rs.getInt("num_busquedas");
-					}
-				}else{
-					
-					for(int i=0; i<p.length;i++){
-						
-						if((p[i].equals(rs.getString("keyWord1")) || p[i].equals(rs.getString("keyWord2")) || 
-							p[i].equals(rs.getString("keyWord3")) || p[i].equals(rs.getString("keyWord4")) ||  
-							p[i].equals(rs.getString("keyWord5"))) && userID==rs.getLong("userid")){
-
-							flag=true;
-							palabraId=rs.getInt("id");
-							num_busquedas=rs.getInt("num_busquedas");
-						}else{
-
-							flag=false;
-							break;
-						}
-					}
-					if(flag==true)
-						break;
 				}
-				
-				
 			}	
 			
 			if(flag){
@@ -200,11 +190,11 @@ public class DatabaseConnection {
 												+ " fecha, respuesta, userid) "
 												+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 				
-				for(int i=0; i<p.length; i++){
-					pst.setString(i+1, (String) p[i]);
+				for(int i=0; i<temp.size(); i++){
+					pst.setString(i+1, temp.get(i));
 				}
 				
-				for(int i=p.length+1;i<6;i++)
+				for(int i=temp.size()+1;i<6;i++)
 					pst.setNull(i, java.sql.Types.VARCHAR);
 				
 				pst.setString(6, categoria);
@@ -215,13 +205,11 @@ public class DatabaseConnection {
 				pst.setString(11, respuesta);
 				pst.setLong(12, userID);
 				pst.executeUpdate();
-				
 			}	
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-			
 	}
 	
 	/**
@@ -234,40 +222,34 @@ public class DatabaseConnection {
 		int palabraId = 0;
 		int num_votos=0;
 		int valoracion_total=0;
-		Object[] p = palabras.toArray();
-
-			
+		
+		List<String> temp = new ArrayList<String>();
+		
+		temp.addAll(palabras);
+		Collections.sort(temp);
+		
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 			while (rs.next()) {
 				
-				if(p.length==1){
-					if(p[0].equals(rs.getString("keyWord1")) && rs.getString("keyWord2")==null && 
-							rs.getString("keyWord3")==null && rs.getString("keyWord4")==null &&  
-							rs.getString("keyWord5")==null && userID==rs.getLong("userid")){
-						
-						palabraId=rs.getInt("id");
-						num_votos=rs.getInt("num_votos");
-						valoracion_total=rs.getInt("valoracion_total");
-					}
-				}else{
-					
-					for(int i=0; i<p.length;i++){
-						if((p[i].equals(rs.getString("keyWord1")) || p[i].equals(rs.getString("keyWord2")) || 
-							p[i].equals(rs.getString("keyWord3")) || p[i].equals(rs.getString("keyWord4")) ||  
-							p[i].equals(rs.getString("keyWord5"))) && userID==rs.getLong("userid")){
-							
-							palabraId=rs.getInt("id");
-							num_votos=rs.getInt("num_votos");
-							valoracion_total=rs.getInt("valoracion_total");
+				List<String> databaseWords = new ArrayList<String>();
+				databaseWords.add(rs.getString("keyWord1"));
+				databaseWords.add(rs.getString("keyWord2"));
+				databaseWords.add(rs.getString("keyWord3"));
+				databaseWords.add(rs.getString("keyWord4"));
+				databaseWords.add(rs.getString("keyWord5"));
+				
+				databaseWords.removeAll(Collections.singleton(null));
+				Collections.sort(databaseWords);
+				
+				if(databaseWords.equals(temp) && userID==rs.getLong("userid")){
 
-						}else
-							break;
-					}
+					palabraId=rs.getInt("id");
+					num_votos=rs.getInt("num_votos");
+					valoracion_total=rs.getInt("valoracion_total");
 				}
 			}
-			
 			
 			PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=? WHERE id=?");
 			pst.setInt(1, (num_votos+=1));

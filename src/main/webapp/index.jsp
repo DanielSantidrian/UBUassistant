@@ -1,9 +1,4 @@
 
-<%@page import="handler.UBUassistantHandler"%>
-
-<%@page import="java.text.DateFormat" import="java.text.SimpleDateFormat" import="java.util.Date"%>
-
-
 <html>
 	<head>
 		<title>UBUassistant</title>
@@ -52,20 +47,6 @@
 	</head>
 	<body>
 	
-		<% 
-		
-		DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
-			
-		String userID=formatForId.format(new Date()); 
-		
-		UBUassistantHandler ubuassistant = new UBUassistantHandler(userID);
-		
-		session.setAttribute("ubuassistantHandler", ubuassistant); 
-				
-		%>
-	
-		
-
 		<!-- Header -->
 			<section id="header">
 				<div class="inner">

@@ -1,6 +1,7 @@
 <%@page import="database.DatabaseConnection"%>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+<%@page import="storage.Storage" %>
 
 <html>
 
@@ -12,12 +13,6 @@
 		
 		
 		<script>
-		
-		function getDivContent(){
-			
-			var outputAreaText = document.getElementById("chat-output").innerHTML;
-			return outputAreaText;
-		}
 		
 		function hideAndSubmit(param){
 			param.style.display = 'none';
@@ -49,7 +44,6 @@
 	
 	<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
 			String userText = request.getParameter("usertText"); 
-		   	String divText = request.getParameter("div-content"); 
 		   	String answer = request.getParameter("answer");
 		   	String buttonDiv = request.getParameter("buttonDiv");
 		   	session.setAttribute("buttonDiv", buttonDiv);
@@ -61,6 +55,12 @@
 			}else{
 				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+answer;
 			}
+			
+			Storage storage = ubuassistant.getStorage();
+			
+			storage.setChatOutput("bot-message", printText);
+			storage.setChatOutput("user-message", printAnswer);
+			
 			LinkedHashSet<String> words = new LinkedHashSet<String>();
 			words.add(userText.toLowerCase());
 			DatabaseConnection db = ubuassistant.getDb();
@@ -84,17 +84,7 @@
 		
 		<div class="chat-output" id="chat-output">
 		
-			<%= divText %>
-			
-				<div class='bot-message'>   
-				   
-					<div class='message'> <%= printText  %></div>
-					
-				</div>
-				
-				<div class='user-message'>      
-					<div class='message'> <%= printAnswer %></div>
-				</div>		
+			<%= storage.getChatOutput() %>	
 		
 		</div>
 		
@@ -104,13 +94,11 @@
 			<div id="buttonPanel" style="margin-bottom: -18px;" class="buttonPanel">
 				  <div class="rate-text">¿Desea valorar esta respuesta?</div>
 				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
-				  	<input type="hidden" id="div-content-suggest" name="div-content">
 				  	<input type="hidden" id="response" name="response" value="si">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
 				  	<input type="submit" id="but" class="multBut" value="Si">
 				  </form>
 				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
-				  	<input type="hidden" id="div-content-suggest" name="div-content">
 				  	<input type="hidden" id="response" name="response" value="no">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
 				  	<input type="submit" id="but" class="multBut" value="No">
@@ -121,28 +109,5 @@
 		
 		<%@ include file="form.html" %>
 		
-		<script>var num = document.getElementsByName("div-content").length;
-				var x = document.getElementsByName("div-content")
-				for (i=0; i < num; i++) {
-					x[i].value=getDivContent();
-				}
-		</script>
-		
 	</body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

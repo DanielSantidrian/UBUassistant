@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import cbr.CBR;
 import database.DatabaseConnection;
@@ -16,6 +18,7 @@ import jcolibri.exception.ExecutionException;
 import jcolibri.method.retrieve.RetrievalResult;
 import representation.CaseDescription;
 import representation.CaseSolution;
+import storage.Storage;
 import util.ResultsComparator;
 
 /**
@@ -43,12 +46,14 @@ public class UBUassistantHandler {
     private List<String> saluteList;
     private List<String> saluteResponseList;
     
-    private LinkedHashSet<CBRCase> casesToReatin;
+    private Map<CBRCase,Double> casesToReatin;
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
     private HashMap<String, List<RetrievalResult>> badResuts;
     List<RetrievalResult> listOfValues;
     private LinkedHashSet<String> currentWords;
+    
+    private Storage storage;
     
     private CBR cbrApp;
     
@@ -67,6 +72,8 @@ public class UBUassistantHandler {
     	sentenceList=db.getSentenceList();
 		saluteList=db.getSaluteList();
 		saluteResponseList=db.getSaluteResponseList();
+		
+		storage=new Storage();
 		
 		cbrApp = new CBR();
     }
@@ -90,6 +97,7 @@ public class UBUassistantHandler {
     	suggestButtons=null;
     	multipleButtons=null;
     	String userTextLower=usertText.toLowerCase();
+    	userTextLower=removeEspecialChar(userTextLower);
     	answerNonReservedWord(userTextLower);	
     }
     
@@ -207,21 +215,39 @@ public class UBUassistantHandler {
 		
 		
 	
+		int max=0;
+		if(casesToReatin.size()>10)
+			max=10;
+		else
+			max=casesToReatin.size();
 		
+		int i=0;
 		
+		casesToReatin=casesToReatin.entrySet().stream()
+        .sorted(Map.Entry.<CBRCase, Double>comparingByValue().reversed())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2, LinkedHashMap::new));
 		
-		for(CBRCase c : casesToReatin){
-			String temp=((CaseDescription)c.getDescription()).getKeyWord1().toString();
-			String word=temp.substring(0, 1).toUpperCase() + temp.substring(1);
-			String answer=((CaseSolution)c.getSolution()).getAnswer().toString();
+		for(CBRCase c : casesToReatin.keySet()){
 			
-			multipleButtons+="<form method=\"post\" id=\"multipleForm\" class=\"multipleForm\" action=\"multipleAnswer.jsp\">"+
-									"<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
-								    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
-								    "<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
-								    "<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
-								    "<input type=\"button\" id=\"but\" class=\"multBut\" onclick=\"hideAndSubmit(this)\" value=\""+word+"\">"+
-								"</form>";
+			
+			if(i<max){
+				
+				String temp=((CaseDescription)c.getDescription()).getKeyWord1().toString();
+				String word=temp.substring(0, 1).toUpperCase() + temp.substring(1);
+				String answer=((CaseSolution)c.getSolution()).getAnswer().toString();
+				
+				multipleButtons+="<form method=\"post\" id=\"multipleForm\" class=\"multipleForm\" action=\"multipleAnswer.jsp\">"+
+										"<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
+									    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
+									    "<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
+									    "<input type=\"button\" id=\"but\" class=\"multBut\" onclick=\"hideAndSubmit(this)\" value=\""+word+"\">"+
+									"</form>";
+			}else{
+				break;
+			}
+			
+			i+=1;
+			
 		}
 		
 		//Calling the method to ask the user about the utility of the answer
@@ -262,7 +288,6 @@ public class UBUassistantHandler {
 						"<input type=\"hidden\" id=\"num\" name=\"num\" value=\""+i+"\">"+
 					    "<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
 					    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
-					    "<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
 					    "<input type=\"submit\" class=\"sugBut\" value=\""+word+"\">"+
 					    "</form>";
 				}
@@ -279,7 +304,6 @@ public class UBUassistantHandler {
 		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp\">"+
 							"<div class=\"rate\">"+
 							"<div class=\"rate-text\">Valora esta respuesta</div> "+
-							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
 					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
@@ -297,7 +321,6 @@ public class UBUassistantHandler {
 		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp\">"+
 							"<div class=\"rate\">"+
 							"<div class=\"rate-text\">Valora esta respuesta</div> "+
-							"<input type=\"hidden\" id=\"div-content-suggest\" name=\"div-content\">"+
 							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
 							"<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
@@ -431,5 +454,25 @@ public class UBUassistantHandler {
 	public String getStarBarButton() {
 		return starBarButton;
 	}
+
+	/**
+	 * Method that returns the storage object
+	 * @return the storage
+	 */
+	public Storage getStorage() {
+		return storage;
+	}
+	
+	private String removeEspecialChar(String input) {
+	    String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ´";
+	    String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC ";
+	    
+	    String output = input;
+	    for (int i=0; i<original.length(); i++) {
+	        output = output.replace(original.charAt(i), ascii.charAt(i));
+	    }
+	    return output;
+	}
+
 
 }

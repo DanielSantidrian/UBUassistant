@@ -1,6 +1,9 @@
 <%@page import="database.DatabaseConnection"%>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
+<%@page import="storage.Storage" %>
+		
+
 <html>
 
 	<head>
@@ -9,12 +12,6 @@
 		<link rel="stylesheet" href="css/style.css">
 		
 		<script>
-		
-		function getDivContent(){
-			
-			var outputAreaText = document.getElementById("chat-output").innerHTML;
-			return outputAreaText;
-		}
 		
 		window.onload = function() {
 			var objDiv = document.getElementById("chat-output");
@@ -29,17 +26,17 @@
 
 
 		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler"); 
-		   	String divText = request.getParameter("div-content"); 
 		   	LinkedHashSet<String> currentWords=ubuassistant.getCurrentWords();
 		   	String vote=request.getParameter("vote");
 		   	DatabaseConnection db = ubuassistant.getDb();
 		   	db.saveVote(currentWords, Integer.parseInt(vote));
-		   	
+
+			Storage storage = ubuassistant.getStorage();
 		%>
 		
 		<div class="chat-output" id="chat-output">
 		
-			<%= divText %>
+			<%= storage.getChatOutput() %>
 		</div>
 		
 		<div id="buttonPanelContent" class="buttonPanelContent">

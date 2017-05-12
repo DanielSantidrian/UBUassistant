@@ -47,8 +47,8 @@ public class CBR implements StandardCBRApplication {
 	private CBRQuery query;
 	private CaseDescription cd = new CaseDescription();
 	
-	private LinkedHashSet<CBRCase> casesToReatin;
-	private LinkedHashSet<CBRCase> casesToReatinGood;
+	private Map<CBRCase,Double> casesToReatin;
+	private Map<CBRCase,Double> casesToReatinGood;
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
     private HashMap<String, List<RetrievalResult>> badResuts = new HashMap<String,List<RetrievalResult>>();
@@ -217,8 +217,8 @@ public class CBR implements StandardCBRApplication {
 		//Map with all the responses found in value and the word that generate them in key.
 		parcialResults=new HashMap<String, List<String>>();
 		//Set that store all the cases with some similarity with the words input.
-		casesToReatin = new LinkedHashSet<CBRCase>();
-		casesToReatinGood = new LinkedHashSet<CBRCase>();
+		casesToReatin = new HashMap<CBRCase,Double>();
+		casesToReatinGood = new HashMap<CBRCase,Double>();
 		//Map that saves all the results in value with the word that generate them in key.
 		badResuts = new HashMap<String,List<RetrievalResult>>();
 		
@@ -246,7 +246,7 @@ public class CBR implements StandardCBRApplication {
 				List<String> answer = new ArrayList<String>();
 				for(RetrievalResult r : eval){
 					CBRCase _case = r.get_case();
-					casesToReatin.add(_case);
+					casesToReatin.put(_case,r.getEval());
 					answer.add(((CaseSolution)r.get_case().getSolution()).getAnswer());
 				}
 				
@@ -305,9 +305,9 @@ public class CBR implements StandardCBRApplication {
 			
 			for(List<String> list : finalResults.values()){
 				for(String answer : list){
-					for(CBRCase cs : casesToReatin){
+					for(CBRCase cs : casesToReatin.keySet()){
 						if(((CaseSolution)cs.getSolution()).getAnswer().equals(answer)){
-							casesToReatinGood.add(cs);
+							casesToReatinGood.put(cs,casesToReatin.get(cs));
 						}
 					}
 				}
@@ -319,7 +319,7 @@ public class CBR implements StandardCBRApplication {
 	 * Function that returns the casesToRetain
 	 * @return casesToReatin set that store all the cases with some similarity with the words input.
 	 */
-	public LinkedHashSet<CBRCase> getCasesToReatin() {
+	public Map<CBRCase,Double> getCasesToReatin() {
 		return casesToReatinGood;
 	}
 

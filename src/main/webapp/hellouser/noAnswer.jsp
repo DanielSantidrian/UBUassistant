@@ -4,6 +4,9 @@
 <%@page import="java.util.List"%>
 <%@page import="jcolibri.method.retrieve.RetrievalResult"%>
 <%@page import="representation.CaseSolution"%>
+<%@ page import="storage.Storage" %>
+			
+
 <html>
 
 	<head>
@@ -12,12 +15,6 @@
 		<link rel="stylesheet" href="css/style.css">
 		
 		<script>
-		
-		function getDivContent(){
-			
-			var outputAreaText = document.getElementById("chat-output").innerHTML;
-			return outputAreaText;
-		}
 		
 		window.onload = function() {
 			var objDiv = document.getElementById("chat-output");
@@ -32,8 +29,7 @@
 
 
 		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
-			String userText = request.getParameter("usertText"); 
-		   	String divText = request.getParameter("div-content"); 
+			String userText = request.getParameter("usertText");  
 		   	String answer = request.getParameter("answer");
 		   	String numString = request.getParameter("num");
 		   	int num = Integer.parseInt(numString);
@@ -45,6 +41,11 @@
 			}else{
 				printAnswer="<p>"+ubuassistant.getRandomSentence()+"<p>"+answer;
 			}
+			
+			Storage storage = ubuassistant.getStorage();
+			
+			storage.setChatOutput("bot-message", printText);
+			storage.setChatOutput("user-message", printAnswer);
 			
 			LinkedHashSet<String> words = new LinkedHashSet<String>();
 			words.add(userText);
@@ -80,17 +81,7 @@
 		
 		<div class="chat-output" id="chat-output">
 		
-			<%= divText %>
-			
-				<div class='bot-message'>   
-				   
-					<div class='message'> <%= printText  %></div>
-					
-				</div>
-				
-				<div class='user-message'>      
-					<div class='message'> <%= printAnswer %></div>
-				</div>		
+			<%= storage.getChatOutput() %>	
 		
 		</div>
 		
@@ -104,13 +95,6 @@
 		<%} %>
 		
 		<%@ include file="form.html" %>
-		
-		<script>var num = document.getElementsByName("div-content").length;
-				var x = document.getElementsByName("div-content")
-				for (i=0; i < num; i++) {
-					x[i].value=getDivContent();
-				}
-		</script>
 		
 	</body>
 </html>
