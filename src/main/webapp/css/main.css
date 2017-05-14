@@ -1,6 +1,9 @@
 @import url("font-awesome.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic");
 
+html, body{
+  height: 100%;
+}
 
 html, body, div, span, h1, h2, h3, p, pre, a,img, center, ol, ul, li, form, footer, header, menu, section{
 	margin: 0;
@@ -9,6 +12,7 @@ html, body, div, span, h1, h2, h3, p, pre, a,img, center, ol, ul, li, form, foot
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	
 }
 
 body {
@@ -27,6 +31,17 @@ ul {
 a {
 	color: inherit;
 	text-decoration: none;
+}
+
+.admin{
+	position: fixed;
+	top: 10;
+    right: 5;
+}
+
+.adminLink{
+   height: 50px;
+   width: 50px;
 }
 
 strong, b {
@@ -85,8 +100,8 @@ h2 {
 	position: fixed;
     bottom: 10;
     right: 5;
-    height: 92px;
-    width: 102px;
+    height: 160px;
+    width: 138px;
 }
 
 .divchat-window{
@@ -140,6 +155,13 @@ h2 {
 
 }
 
+.content{
+		display: flex;
+	  flex-flow: column;
+	  height: 80%;
+	  flex:1;
+}
+
 
 
 /* List */
@@ -169,10 +191,9 @@ ul.icons {
 
 	#header {
 		padding: 3em 0 5em 0 ;
-		background-color: #4686a0;
+		background-color: #ab223c;
 		color: rgba(255, 255, 255, 0.75);
 		background-attachment: fixed;
-		background-image: url("images/header.jpg");
 		background-size: auto;
 		overflow: hidden;
 		position: relative;
@@ -215,10 +236,9 @@ ul.icons {
 
 	#footer {
 		padding: 3em 0 1em 0 ;
-		background-color: #4686a0;
+		background-color: #3a3a3a;
 		color: rgba(255, 255, 255, 0.75);
 		background-attachment: fixed;
-		background-image: url("images/footer.jpg");
 		background-size: auto;
 		text-align: center;
 	}

@@ -47,19 +47,10 @@
 	</head>
 	<body>
 	
-		<!-- Header -->
-			<section id="header">
-				<div class="inner">
-					
-					<img src="LogoWeb.png" width="150" height="124" />
-					<h1>Hola, soy <strong>UBUassistant</strong>, un asistente<br />
-					que te ayudar&aacute; con cualquier duda sobre la UBU</h1>
-					<p>Preguntame cualquier aspecto sobre la Universidad<br />
-					de Burgos y te echar&eacute; una mano.</p>
-				</div>
-			</section>
+
+			<%@ include file="header.html" %>
 			
-			<input type="image" id="pinguino" class="pinguino" src="pinguino.png" />
+			<input type="image" id="pinguino" class="pinguino" src="img/pinguino3.png" />
 			
 			<div id="divchat-window" class="divchat-window" style="display:none;">
 			
@@ -72,22 +63,26 @@
 				   
 				<div id="divchat" class="divchat">
 					
-				    <iframe class="iframe" src="./hellouser/hellouser.jsp"></iframe>
+				    <iframe class="iframe" src="./UBUassistant/hellouser.jsp"></iframe>
 				</div>
 
 			</div>
 			
-	
-		<!-- Footer -->
-			<section id="footer">
-				<ul class="icons">
-					<li><a href="https://github.com/DanielSantidrian/UBUassistant"><img src="GitHub.png" width="80" height="54" /></a></li>
-					<li><a href="#"><img src="HTMLCSS.png" width="80" height="54" /></a></li>
-				</ul>
-				<ul class="copyright">
-					<li>&copy; UBUassistant</li><li>Realizado por: Daniel Santidri&aacute;n Alonso</li><li>Tutor: Pedro Renedo Fern&aacute;ndez</li>
-				</ul>
-			</section>
+			<div class="admin"> 
+				<a href="./admin/adminLogin.jsp">
+					<input type="image" class="adminLink" src="img/admin.png" />
+				</a>
+			</div>
+			
+			
+			<div class="content">
+			<p>
+			<br><br><br><br><br><br><br>
+			</p>
+			
+			</div>
+			
 
+			<%@ include file="footer.html" %>
 	</body>
 </html>
