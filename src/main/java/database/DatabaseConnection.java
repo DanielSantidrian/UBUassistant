@@ -30,7 +30,7 @@ public class DatabaseConnection {
 	private static List<String> sentenceList = new ArrayList<String>();
 	private static List<String> saluteList = new ArrayList<String>();
 	private static List<String> saluteResponseList = new ArrayList<String>();
-	private long userID;
+	private String userID;
 	
 	/**
 	 * Constructor of the class that connects the database.
@@ -38,7 +38,7 @@ public class DatabaseConnection {
 	 */
 	public DatabaseConnection(String userID) {
 		
-		this.userID=Long.parseLong(userID.toString());
+		this.userID=userID;
 		
 		MysqlDataSource ds = new MysqlDataSource();
 
@@ -116,7 +116,7 @@ public class DatabaseConnection {
 				
 				PreparedStatement pst = con.prepareStatement(
 						"INSERT INTO aprendizaje (userid, palabra1, palabra2) VALUES (?, ?, ?)");
-				pst.setLong(1, userID);
+				pst.setString(1, userID);
 				pst.setString(2, p1);
 				pst.setString(3, p2);
 				
@@ -163,7 +163,7 @@ public class DatabaseConnection {
 				databaseWords.removeAll(Collections.singleton(null));
 				Collections.sort(databaseWords);
 				
-				if(databaseWords.equals(temp) && userID==rs.getLong("userid")){
+				if(databaseWords.equals(temp) && userID.equals(rs.getString("userid"))){
 
 						flag=true;
 						palabraId=rs.getInt("id");
@@ -203,7 +203,7 @@ public class DatabaseConnection {
 				pst.setInt(9, 0);
 				pst.setString(10, sdf.format(new Date()));
 				pst.setString(11, respuesta);
-				pst.setLong(12, userID);
+				pst.setString(12, userID);
 				pst.executeUpdate();
 			}	
 			
@@ -243,7 +243,7 @@ public class DatabaseConnection {
 				databaseWords.removeAll(Collections.singleton(null));
 				Collections.sort(databaseWords);
 				
-				if(databaseWords.equals(temp) && userID==rs.getLong("userid")){
+				if(databaseWords.equals(temp) && userID.equals(rs.getString("userid"))){
 
 					palabraId=rs.getInt("id");
 					num_votos=rs.getInt("num_votos");

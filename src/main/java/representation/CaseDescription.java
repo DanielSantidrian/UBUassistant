@@ -132,7 +132,7 @@ public class CaseDescription implements CaseComponent {
 	 * @return a string with the variables of the class.
 	 */
 	public String toString()		{
-			return "["+ keyWord4 + " , " + keyWord3 + " , " + keyWord2 + " , " + keyWord1 + " , " + keyWord5 + " , " + id +"]";
+			return "["+ id + " , " + keyWord1 + " , " + keyWord2 + " , " + keyWord3 + " , " + keyWord4 + " , " + keyWord5 +"]";
 		}
 
 }

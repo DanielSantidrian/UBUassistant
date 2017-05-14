@@ -62,6 +62,6 @@ public class CaseSolution implements CaseComponent {
 	 * @return a string with the variables of the class.
 	 */
 	public String toString(){
-		return "["+ answer + " , " + Id +"]";
+		return "["+ Id + " , " + answer +"]";
 	}
 }
