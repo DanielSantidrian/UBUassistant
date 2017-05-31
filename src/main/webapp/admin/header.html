@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="css/bootstrap.css">
+<script src="bootstrap.js"></script>
 
 <section id="header">
 	<div class="inner">
@@ -8,13 +10,26 @@
 		<p>Aqu&iacute; podr&aacute;s configurar la aplicaci&oacute;n para perfeccionar su funcionamiento.</p>
 	</div>
 	
-	<div id="nav">
-		<ul>
-		  <li><a id="estadis" href="estadistics.jsp">Estad&iacute;sticas</a></li>
-		  <li><a id="lea" href="learn.jsp">Aprendizaje</a></li>
-		  <li style="float:right"><a href="../index.jsp">UBUassistant</a></li>
-		</ul>
-	</div>
+
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container-fluid">
+	    <ul class="nav navbar-nav">
+	      <li><a id="log" href="log.jsp">Log</a></li>
+	      <li><a id="learn" href="learn.jsp">Aprendizaje</a></li>
+	      
+	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Editor de Casos<span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+	          <li><a id="add" href="addCase.jsp">A&ntilde;adir Caso</a></li>
+	          <li><a id="edit" href="modifyCases.jsp">Modificar Casos</a></li>
+	        </ul>
+	      </li>
+	      
+	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+        	<li style="float:right"><a href="../index.jsp">UBUassistant</a></li>
+      </ul>
+	  </div>
+</nav>
 	
 </section>
 

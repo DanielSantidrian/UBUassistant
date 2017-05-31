@@ -17,11 +17,49 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="sorttable.js"></script>
 		
+  		<script src="tableExport/tableExport.js"></script>
+		<script src="tableExport/jquery.base64.js"></script>
+		<script src="tableExport/html2canvas.js"></script>
+		<script src="tableExport/jspdf/libs/sprintf.js"></script>
+		<script src="tableExport/jspdf/jspdf.js"></script>
+		<script src="tableExport/jspdf/libs/base64.js"></script>
+
+		<script>
+			$(document).ready(function(){
+			   $(".saveas").click(function(){
+			    $("#saveButtons").toggle( "slide" );
+			  });
+			});
+		</script>
+		
 		<script type="text/javascript">
 		window.onload = function() {
-			  document.getElementById('estadis').className = 'active';
+			  document.getElementById('log').className = 'active';
 			};
+			
+
 		</script>
+		
+		
+		
+		<%
+		boolean logged=false;
+		
+		if(session.getAttribute("logged")!=null){
+			
+			logged=(boolean)session.getAttribute("logged");
+		}
+		
+		
+		if(!logged){
+			
+			response.sendRedirect("adminLogin.jsp");
+			
+		}%>
+		
+		
+	
+		
 		
 	</head>
 	<body>
@@ -29,6 +67,9 @@
 		<%@ include file="header.html" %>
 		
 		<div id="content" class="content">
+		
+			
+		<%@ include file="saveMenu.html" %>
 	
 		<%
 		MysqlDataSource ds = new MysqlDataSource();
@@ -58,13 +99,16 @@
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
 		%>
-		<div>
+		
+		
+		
+		<div class="divtable">
 			<table id="tabla" class="sortable">
 			<thead>
 			  <tr><th>ID Usuario</th><th>Fecha</th><th>Palabra clave 1</th>
 			  <th>Palabra clave 2</th><th>Palabra clave 3</th><th>Palabra clave 4</th>
-			  <th>Palabra clave 5</th><th>Categoría</th><th>Respuesta</th><th>Numero de búsquedas</th>
-			  <th>Número de votos</th><th>Valoración total</th></tr>
+			  <th>Palabra clave 5</th><th>Categoria</th><th>Respuesta</th><th>Numero de busquedas</th>
+			  <th>Numero de votos</th><th>Valoracion total</th></tr>
 			</thead>
 			<tbody>
 		<%
@@ -84,6 +128,12 @@
 		</div>
 		
 	</div>
+	
+	<script>
+		$('td').each(function () {
+		    $(this).html($(this).html().replace('null', '-'));
+		});
+	</script>
 	
 	<%@ include file="footer.html" %>
 	

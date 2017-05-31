@@ -463,6 +463,11 @@ public class UBUassistantHandler {
 		return storage;
 	}
 	
+	/**
+	 * Function that returns a String without special characters
+	 * @param input String with special characters
+	 * @return output String without special characters
+	 */
 	private String removeEspecialChar(String input) {
 	    String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ´";
 	    String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC ";

@@ -40,10 +40,157 @@ html, body{
 .content{
 	margin: 5px;
 	display: flex;
-	  flex-flow: column;
-	  height: 80%;
-	  flex:1;
+	flex-flow: column;
+	flex:1;
+	padding-top: 50px;
+	padding-bottom: 50px;
 	}
+	
+.saveMenu{
+	display: flex;
+    align-items: center;
+	padding: 15px;
+}
+
+#saveButtons li a {
+	cursor: pointer;
+	font-size: 16px;
+	color:#bc360a;
+}
+
+.divtable{
+	padding: 15px;
+	display: grid;
+}
+
+.actionform{
+	margin: 0px;
+	margin-top: 3px;
+}
+
+#button{
+
+  text-align: center;
+  border: 1px;
+  border-radius: 4px;
+  padding: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.aprender{
+	background: #2fd006;
+}
+
+.descartar{
+	background: #c41325;
+}
+
+.addForm{
+	padding:15px;
+	display: table;
+}
+
+input[type=text] {
+    width: 150%;
+	padding: 6px 10px;
+	margin: 6px 0;
+	margin-left:5px;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    display: table-cell;
+    font-size: 1.5em;
+}
+
+input[type=text]:focus {
+    border: 3px solid #0FB0DF;
+    color: #0FB0DF;
+}
+
+.txt{
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-size: 1.5em;
+	display: table-cell;
+}
+
+.pForm{ 
+	display: table-row;  
+}
+
+.aceptButton{
+	font-size: 1.5em;
+	background-color: #0FB0DF;
+	color: white;
+	border: 0;
+	margin-top: 30px;
+	width: 157px;
+	height: 50px;
+	border-radius: 4px;
+	-webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.aceptButton:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+#error{
+	display:none; 
+	color:red;
+	font-size: 1.5em;
+	padding: 15px;
+}
+
+
+/*** Button ***/
+
+.saveas{
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px;
+  width: 160px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+.saveas span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.saveas span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.saveas:hover span {
+  padding-right: 25px;
+}
+
+.saveas:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+/*** End Button ***/
+	
+
+
+
 
 
 /* Header */
@@ -91,12 +238,13 @@ html, body{
 #tabla {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    
 }
 
 #tabla td, #tabla th {
     border: 1px solid #ddd;
     padding: 8px;
+    
 }
 
 #tabla tr:nth-child(even){background-color: #f2f2f2;}
@@ -106,10 +254,16 @@ html, body{
 #tabla th {
     padding-top: 12px;
     padding-bottom: 12px;
-    text-align: left;
+    text-align: center;
     background-color: #0FB0DF;
     color: white;
 }
+
+#tabla td{
+	text-align: center;
+
+}
+
 
 
 /* Footer */
@@ -128,8 +282,7 @@ html, body{
 		.copyright {
 			font-size: 0.8em;
 			list-style: none;
-			margin: 2em 0 0 0;
-			padding: 0;
+			margin: unset;
 		}
 
 			.copyright li {
