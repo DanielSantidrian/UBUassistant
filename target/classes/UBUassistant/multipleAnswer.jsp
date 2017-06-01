@@ -7,26 +7,12 @@
 
 	<head>
 		<title>UBUassistant</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="../css/ubuassistant/normalize.css">
+		<link rel="stylesheet" href="../css/ubuassistant/style.css">
 		
-		
-		
+		<script src="../js/ubuassistant.js"></script>
+
 		<script>
-		
-		function hideAndSubmit(param){
-			param.style.display = 'none';
-			var buttonDiv = document.getElementById("buttonPanel").innerHTML;
-			
-			var num = document.getElementsByName("buttonDiv").length;
-			var x = document.getElementsByName("buttonDiv")
-			for (i=0; i < num; i++) {
-				x[i].value=buttonDiv;
-			}
-			
-			var form = param.form;
-			form.submit();
-		}
 		
 		window.onload = function() {
 			var objDiv = document.getElementById("chat-output");
@@ -37,10 +23,7 @@
 		</script>
 	</head>
 	
-	
-
 	<body>
-	
 	
 	<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
 			String userText = request.getParameter("usertText"); 
@@ -66,21 +49,6 @@
 			DatabaseConnection db = ubuassistant.getDb();
 			db.aumentarNumBusquedas(words, answer);
 		%>
-		
-		<script type="text/javascript">
-		
-		function getVoteAndSubmit(param){
-			
-			var vote=param.value;
-			document.getElementById("vote").value=vote;
-			document.getElementById("wordButton").value="<%=userText%>";
-			document.getElementById("buttonDiv").value=document.getElementById("buttonPanel").innerHTML;
-			
-			param.form.submit()
-		}
-		
-		
-		</script>
 		
 		<div class="chat-output" id="chat-output">
 		

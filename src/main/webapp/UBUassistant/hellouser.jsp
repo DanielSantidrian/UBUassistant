@@ -8,16 +8,14 @@
 
 	<head>
 		<title>UBUassistant</title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="../css/ubuassistant/normalize.css">
+		<link rel="stylesheet" href="../css/ubuassistant/style.css">
 		
 	</head>
 
 	<body>	
 	
 		<%
- 
-		
 		DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
 			
 		String userID=formatForId.format(new Date()); 
@@ -37,7 +35,6 @@
 		<div class="chat-output" id="chat-output">
 			<%=storage.getChatOutput() %>
 		</div>
-		
 		
 		<%@ include file="form.html" %>
 			  
