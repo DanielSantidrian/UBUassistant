@@ -150,7 +150,7 @@ public class DatabaseConnection {
 		try{
 			
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
 				List<String> databaseWords = new ArrayList<String>();
@@ -173,7 +173,7 @@ public class DatabaseConnection {
 			
 			if(flag){
 				
-				PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_busquedas = ?, fecha=? WHERE id=?");
+				PreparedStatement pst = con.prepareStatement("UPDATE logger SET num_busquedas = ?, fecha=? WHERE id=?");
 
 				pst.setInt(1, (num_busquedas+=1));
 				pst.setString(2, sdf.format(new Date()));
@@ -185,7 +185,7 @@ public class DatabaseConnection {
 				categoria=getCategoria(respuesta);
 				
 				PreparedStatement pst = 
-						con.prepareStatement("INSERT INTO estadisticas "
+						con.prepareStatement("INSERT INTO logger "
 												+ "(keyWord1, keyWord2, keyWord3, keyWord4, keyWord5, categoria, num_busquedas, num_votos, valoracion_total,"
 												+ " fecha, respuesta, userid) "
 												+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -230,7 +230,7 @@ public class DatabaseConnection {
 		
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
 				List<String> databaseWords = new ArrayList<String>();
@@ -251,7 +251,7 @@ public class DatabaseConnection {
 				}
 			}
 			
-			PreparedStatement pst = con.prepareStatement("UPDATE estadisticas SET num_votos=?, valoracion_total=? WHERE id=?");
+			PreparedStatement pst = con.prepareStatement("UPDATE logger SET num_votos=?, valoracion_total=? WHERE id=?");
 			pst.setInt(1, (num_votos+=1));
 			pst.setInt(2, (valoracion_total+=vote));
 			pst.setInt(3, palabraId);

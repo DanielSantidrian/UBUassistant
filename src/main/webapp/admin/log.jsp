@@ -5,6 +5,7 @@
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.sql.Statement" %>
+<%@ page import="database.DatabaseAdministration" %>
 
 
 <html>
@@ -38,7 +39,14 @@
 			  document.getElementById('log').className = 'active';
 			};
 			
-		
+		function ask(){
+			var r = confirm("¿Está seguro de que desea borrar la tabla de logs?");
+		    if (r == true) {
+		        return true;
+		    } else {
+		        return false;
+		    }
+		}
 
 		</script>
 		
@@ -46,6 +54,14 @@
 		
 	</head>
 	<body>
+	
+		<%
+		
+		if(request.getParameter("borrar")!=null){
+			DatabaseAdministration dba = new DatabaseAdministration();
+			dba.clearLog();
+		}
+		%>
 	
 		<%@ include file="header.html" %>
 		
@@ -56,8 +72,17 @@
 		
 		<div id="content" class="content">
 		
-			
-		<%@ include file="saveMenu.html" %>
+		<div class="buttonsDiv">
+			<%@ include file="saveMenu.html" %>
+			<div class="saveMenu">
+				<form action="log.jsp" method="POST" onsubmit="return ask()" class="formClear">
+					<input type="hidden" name="borrar" value="borrar">
+					<input type="submit" class='clean' value="Limpiar tabla"><span></span>
+				</form>
+				
+			</div>
+		</div>	
+		
 	
 		<%
 		MysqlDataSource ds = new MysqlDataSource();
@@ -85,7 +110,7 @@
 		
 		if(con!=null){
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
 		%>
 		
 		

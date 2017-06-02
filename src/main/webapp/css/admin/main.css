@@ -144,6 +144,16 @@ input[type=text]:focus {
 	padding: 15px;
 }
 
+.buttonsDiv{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.formClear{
+	margin: auto;
+}
+
 
 /*** Button ***/
 
@@ -185,6 +195,24 @@ input[type=text]:focus {
   opacity: 1;
   right: 0;
 }
+
+
+.clean{
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #FFFFFF;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px;
+  width: 160px;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+
+
 
 /*** End Button ***/
 	

@@ -38,6 +38,21 @@
 		   	
 		%>
 		
+		<script type="text/javascript">
+		
+		function getVoteAndSubmit(param){
+			
+			var vote=param.value;
+			document.getElementById("vote").value=vote;
+			document.getElementById("wordButton").value="<%=userText%>";
+			document.getElementById("buttonDiv").value=document.getElementById("buttonPanel").innerHTML;
+			
+			param.form.submit()
+		}
+		
+		
+		</script>
+		
 		<div class="chat-output" id="chat-output">
 			<%= storage.getChatOutput() %>
 		</div>

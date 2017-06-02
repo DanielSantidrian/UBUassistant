@@ -11,13 +11,3 @@ function hideAndSubmit(param){
 	var form = param.form;
 	form.submit();
 }
-
-function getVoteAndSubmit(param){
-			
-	var vote=param.value;
-	document.getElementById("vote").value=vote;
-	document.getElementById("wordButton").value="<%=userText%>";
-	document.getElementById("buttonDiv").value=document.getElementById("buttonPanel").innerHTML;
-
-	param.form.submit()
-}

@@ -9,6 +9,7 @@
 		<title>UBUassistant</title>
 		<link rel="stylesheet" href="../css/ubuassistant/normalize.css">
 		<link rel="stylesheet" href="../css/ubuassistant/style.css">
+		
 		<script src="../js/ubuassistant.js"></script>
 		
 		<script>
