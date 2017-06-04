@@ -63,13 +63,13 @@
 				   
 				<div id="divchat" class="divchat">
 					
-				    <iframe class="iframe" src="./UBUassistant/hellouser.jsp"></iframe>
+				    <iframe id="ubuassistantFrame" class="iframe" src="./UBUassistant/hellouser.jsp"></iframe>
 				</div>
 
 			</div>
 			
 			<div class="admin"> 
-				<a href="./admin/adminLogin.jsp">
+				<a href="./admin/adminLogin.jsp;jsessionid=<%=session.getId()%>">
 					<input type="image" class="adminLink" src="img/admin.png" />
 				</a>
 			</div>

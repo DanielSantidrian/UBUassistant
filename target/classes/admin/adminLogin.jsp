@@ -45,7 +45,7 @@
 				while(rs.next()){
 					if(user.equals(rs.getString("mail")) && password.equals(rs.getString("contrasena"))){
 						session.setAttribute("logged", true);
-						response.sendRedirect("log.jsp");
+						response.sendRedirect("log.jsp;jsessionid="+session.getId());
 						
 					}else{
 						text="Usuario y/o contraseña no válidos";

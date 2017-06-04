@@ -189,7 +189,7 @@
 			  
 			  <td>
 			  	
-			  	<form action="editCase.jsp" method="POST">
+			  	<form action="editCase.jsp;jsessionid=<%=session.getId()%>" method="POST">
 			  		<input type="hidden" name="id" value="<%=rs.getInt("id") %>">
 			  		<input type="hidden" name="keyWord1" value="<%=rs.getString("keyWord1") %>">
 			  		<input type="hidden" name="keyWord2" value="<%=rs.getString("keyWord2") %>">
@@ -201,7 +201,7 @@
 			  		<input type="submit" id="button" class="aprender" value="Editar">
 			  	</form>
 			  	
-			  	<form  action="modifyCases.jsp" method="POST" onsubmit="return confirmDelete();">
+			  	<form  action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return confirmDelete();">
 			  		<input type="hidden" name="id" value="<%=rs.getInt("id") %>">
 			  		<input type="submit" id="button" class="descartar" value="Eliminar">
 			  	</form>

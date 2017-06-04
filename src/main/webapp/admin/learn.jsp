@@ -114,13 +114,13 @@
 				  <td><%=rs.getString("palabra1") %></td>
 				  <td><%=rs.getString("palabra2") %></td>
 				  <td>
-				  	<form method="post" action="learn.jsp" class="actionform">
+				  	<form method="post" action="learn.jsp;jsessionid=<%=session.getId()%>" class="actionform">
 				  		<input type="hidden" name="palabra" value="<%=rs.getString("palabra1") %>">
 				  		<input type="hidden" name="respuesta" value="<%=rs.getString("palabra2") %>">
 				  		<input type="hidden" name="accion" value="aprender">
 				  		<input type="submit" id="button" class="aprender" value="Aprender">
 				  	</form>
-				  	<form method="post" action="learn.jsp" class="actionform">
+				  	<form method="post" action="learn.jsp;jsessionid=<%=session.getId()%>" class="actionform">
 				  		<input type="hidden" name="palabra" value="<%=rs.getString("palabra1") %>">
 				  		<input type="hidden" name="respuesta" value="<%=rs.getString("palabra2") %>">
 				  		<input type="hidden" name="accion" value="descartar">

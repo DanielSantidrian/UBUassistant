@@ -7,7 +7,7 @@ function checkInput(){
 	var c =document.getElementById('categoria');
 	var r =document.getElementById('respuesta');
 	
-	if(k1.value!="" && (k2.value!="" || k3.value!="" || k4.value!="" || k5.value!="") && c.value!="" && r.value!=""){
+	if(k1.value!="" && c.value!="" && r.value!=""){
 		return true;
 	}else{
 
@@ -31,7 +31,7 @@ function showErrorIfExists(param){
 
 function confirmDelete(){
 			 
-	var r = confirm("¿Está seguro de que desea borrar el caso?");
+	var r = confirm("¿Esta seguro de que desea borrar el caso?");
     if (r == true) {
         return true;
     } else {

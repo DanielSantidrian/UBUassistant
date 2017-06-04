@@ -8,13 +8,13 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="container-fluid">
 	    <ul class="nav navbar-nav">
-	      <li><a id="log" href="log.jsp">Log</a></li>
-	      <li><a id="learn" href="learn.jsp">Aprendizaje</a></li>
+	      <li><a id="log" href="log.jsp;jsessionid=<%=session.getId()%>">Log</a></li>
+	      <li><a id="learn" href="learn.jsp;jsessionid=<%=session.getId()%>">Aprendizaje</a></li>
 	      
 	      <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Editor de Casos<span class="caret"></span></a>
 	        <ul class="dropdown-menu">
-	          <li><a id="add" href="addCase.jsp">A&ntilde;adir Caso</a></li>
-	          <li><a id="edit" href="modifyCases.jsp">Modificar Casos</a></li>
+	          <li><a id="add" href="addCase.jsp;jsessionid=<%=session.getId()%>">A&ntilde;adir Caso</a></li>
+	          <li><a id="edit" href="modifyCases.jsp;jsessionid=<%=session.getId()%>">Modificar Casos</a></li>
 	        </ul>
 	      </li>
 	      

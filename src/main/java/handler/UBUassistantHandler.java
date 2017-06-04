@@ -31,6 +31,9 @@ public class UBUassistantHandler {
 	/**
 	 * Global variables
 	 */
+	
+	private String sessionId;
+	
     private String usertText;
     private String response;
     private String userId;
@@ -236,7 +239,7 @@ public class UBUassistantHandler {
 				String word=temp.substring(0, 1).toUpperCase() + temp.substring(1);
 				String answer=((CaseSolution)c.getSolution()).getAnswer().toString();
 				
-				multipleButtons+="<form method=\"post\" id=\"multipleForm\" class=\"multipleForm\" action=\"multipleAnswer.jsp\">"+
+				multipleButtons+="<form method=\"post\" id=\"multipleForm\" class=\"multipleForm\" action=\"multipleAnswer.jsp;jsessionid="+getSessionId()+"\">"+
 										"<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
 									    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
 									    "<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
@@ -284,7 +287,7 @@ public class UBUassistantHandler {
 					String word=((CaseDescription)listOfValues.get(i).get_case().getDescription()).getKeyWord1();
 					String answer=((CaseSolution)listOfValues.get(i).get_case().getSolution()).getAnswer().toString();
 
-					suggestButtons+="<form method=\"post\" action=\"noAnswer.jsp\" style=\"display: inline-block;\">"+
+					suggestButtons+="<form method=\"post\" action=\"noAnswer.jsp;jsessionid="+getSessionId()+"\" style=\"display: inline-block;\">"+
 						"<input type=\"hidden\" id=\"num\" name=\"num\" value=\""+i+"\">"+
 					    "<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
 					    "<input type=\"hidden\" id=\"answer\" name=\"answer\" value=\""+answer+"\">"+
@@ -301,7 +304,7 @@ public class UBUassistantHandler {
 	 * Method that generates the string of a star bar.
 	 */
 	private void putStarBar(){
-		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp\">"+
+		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp;jsessionid="+getSessionId()+"\">"+
 							"<div class=\"rate\">"+
 							"<div class=\"rate-text\">Valora esta respuesta</div> "+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
@@ -318,7 +321,7 @@ public class UBUassistantHandler {
 	 * Method that generates the string of a star bar when there are buttons available.
 	 */
     private void putStarBarButton(){
-		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp\">"+
+		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp;jsessionid="+getSessionId()+"\">"+
 							"<div class=\"rate\">"+
 							"<div class=\"rate-text\">Valora esta respuesta</div> "+
 							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
@@ -477,6 +480,22 @@ public class UBUassistantHandler {
 	        output = output.replace(original.charAt(i), ascii.charAt(i));
 	    }
 	    return output;
+	}
+
+	/**
+	 * Function that returns the identifier of the HTTPsession.
+	 * @return the sessionId identifier of the HTTPsession.
+	 */
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	/**
+	 * Method that sets the identifier of the HTTPsession.
+	 * @param sessionId identifier of the HTTPsession.
+	 */
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 
 

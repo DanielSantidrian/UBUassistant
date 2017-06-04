@@ -90,7 +90,7 @@
 		  <li class="breadcrumb-item actual">Editar Caso</li>
 		</ol>
 		
-			<form id="addForm" class="addForm" action="modifyCases.jsp" method="POST" onsubmit="return checkInput()">
+			<form id="addForm" class="addForm" action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
 				
 				<input type="hidden" name="id" value="<%=id %>">
 			

@@ -85,7 +85,7 @@
 		
 		<div id="content" class="content">
 		
-			<form id="addForm" class="addForm" action="addCase.jsp" method="POST" onsubmit="return checkInput()">
+			<form id="addForm" class="addForm" action="addCase.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
 				<p class="pForm">
 					<label class="txt" for="b">Palabra Clave 1:</label>
 					<input id="keyWord1" type="text" name="keyWord1">

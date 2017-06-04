@@ -75,7 +75,7 @@
 		<div class="buttonsDiv">
 			<%@ include file="saveMenu.html" %>
 			<div class="saveMenu">
-				<form action="log.jsp" method="POST" onsubmit="return ask()" class="formClear">
+				<form action="log.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return ask()" class="formClear">
 					<input type="hidden" name="borrar" value="borrar">
 					<input type="submit" class='clean' value="Limpiar tabla"><span></span>
 				</form>

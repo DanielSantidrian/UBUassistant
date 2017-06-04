@@ -76,12 +76,12 @@
 
 			<div id="buttonPanel" style="margin-bottom: -18px;" class="buttonPanel">
 				  <div class="rate-text">¿Desea valorar esta respuesta?</div>
-				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
+				  <form method="post" action="multipleAnswerQuestion.jsp;jsessionid=<%=session.getId()%>" style="display: inline-block;">
 				  	<input type="hidden" id="response" name="response" value="si">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
 				  	<input type="submit" id="but" class="multBut" value="Si">
 				  </form>
-				  <form method="post" action="multipleAnswerQuestion.jsp" style="display: inline-block;">
+				  <form method="post" action="multipleAnswerQuestion.jsp;jsessionid=<%=session.getId()%>" style="display: inline-block;">
 				  	<input type="hidden" id="response" name="response" value="no">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">
 				  	<input type="submit" id="but" class="multBut" value="No">

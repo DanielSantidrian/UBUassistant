@@ -22,9 +22,13 @@
 		
 		UBUassistantHandler handler = new UBUassistantHandler(userID);
 		
+		handler.setSessionId(session.getId());
+		
 		session.setAttribute("ubuassistantHandler", handler); 
 				
 		UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
+		
+		
 		
 		String salute=ubuassistant.getSalute();	
 		Storage storage = ubuassistant.getStorage();

@@ -33,7 +33,8 @@
 
 	<body>
 
-		<% 	UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
+		<% 	
+			UBUassistantHandler ubuassistant= (UBUassistantHandler) session.getAttribute("ubuassistantHandler");
 			String userText = request.getParameter("usertText"); 
 		%>
 		

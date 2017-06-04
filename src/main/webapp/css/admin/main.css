@@ -270,7 +270,7 @@ input[type=text]:focus {
 #tabla {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
-    
+    width:100%;
 }
 
 #tabla td, #tabla th {
@@ -293,8 +293,12 @@ input[type=text]:focus {
 
 #tabla td{
 	text-align: center;
-
+	overflow: hidden;
+max-width: 400px;
+word-wrap: break-word;
 }
+
+
 
 
 
