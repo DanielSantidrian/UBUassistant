@@ -77,9 +77,14 @@
 		      <input type="text" id="user" name="user"  placeholder="email"/>
 		      <input type="password" id="password" name="password" placeholder="contraseña"/>
 		      <p id="error" class="error"></p>
-		      <button>Ingresar</button>
+		      <button id="ingresar">Ingresar</button>
 		    </form>
+		    
+		    <a href="../index.jsp">
+					<button id="volver2" class="volver2">Volver</button>		
+				</a>
 		  </div>
+		 	 
 		</div>
 		
 		

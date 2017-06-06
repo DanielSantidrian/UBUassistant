@@ -306,7 +306,7 @@ public class UBUassistantHandler {
 	private void putStarBar(){
 		starBar="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRating.jsp;jsessionid="+getSessionId()+"\">"+
 							"<div class=\"rate\">"+
-							"<div class=\"rate-text\">Valora esta respuesta</div> "+
+							"<div class=\"rate-text\">Valora esta respuesta </div> "+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+
 					        "<input type=\"radio\" id=\"star5\" name=\"rate\" value=\"5\" onclick=\"getVoteAndSubmit(this)\" /><label for=\"star5\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star4\" name=\"rate\" value=\"4\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star4\" title=\"text\"></label>"+
@@ -323,7 +323,7 @@ public class UBUassistantHandler {
     private void putStarBarButton(){
 		starBarButton="<form method=\"post\" id=\"starForm\" class=\"multipleForm\" action=\"starRatingButton.jsp;jsessionid="+getSessionId()+"\">"+
 							"<div class=\"rate\">"+
-							"<div class=\"rate-text\">Valora esta respuesta</div> "+
+							"<div class=\"rate-text\">Valora esta respuesta </div> "+
 							"<input type=\"hidden\" id=\"wordButton\" name=\"wordButton\">"+
 							"<input type=\"hidden\" id=\"buttonDiv\" name=\"buttonDiv\">"+
 							"<input type=\"hidden\" id=\"vote\" name=\"vote\">"+

@@ -7,42 +7,8 @@
 		<link rel="stylesheet" href="css/main.css" />
 		
 		<script src="./js/jquery.js"></script>
-		<script>
-		$(document).ready(function(){
-			   $(".btn-minimize").click(function(){
+		<script src="./js/index.js"></script>
 
-
-			    if($(".btn-minimize").text() == '-') {
-			    	$(".btn-minimize").html('+');
-			    } 
-			    else {
-			    	$(".btn-minimize").html('-');
-			    }
-			    
-			    $(".divchat").slideToggle();
-			    
-			  });
-			});
-		
-		$(document).ready(function(){
-			   $(".btn-close").click(function(){
-			    $(".divchat-window").slideToggle();
-			    $('.pinguino').slideToggle();
-			  });
-			});
-		
-		
-		$(document).ready(function(){
-			   $(".pinguino").click(function(){
-				   	var e = $('.iframe');
-				   	e.attr("src", e.attr("src"));
-					$('.pinguino').slideToggle();
-			    	$(".divchat-window").slideToggle();
-			  });
-			});
-		
-			
-		</script>
 
 	</head>
 	<body>
@@ -50,14 +16,20 @@
 
 			<%@ include file="header.html" %>
 			
-			<input type="image" id="pinguino" class="pinguino" src="img/pinguino3.png" />
+			<div class="pringuinoDiv">
+				
+				<input type="image" class="btn-close-pinguino" src="img/close.png" />
+				
+				<input type="image" id="pinguino" class="pinguino" src="img/pinguino3.png" />
+			</div>
+			
 			
 			<div id="divchat-window" class="divchat-window" style="display:none;">
 			
 				<div id="divchat-button" class="divchat-button">
-					UBUassistant
-					<button class="btn-minimize">-</button>
-					<button class="btn-close">x</button>
+					<span class="text">UBUassistant</span>
+					<input type="image" id="btn-minimize" class="btn-minimize" src="./img/min.png" />
+					<input type="image" class="btn-close" src="img/close.png" />
 				</div>
 				
 				   

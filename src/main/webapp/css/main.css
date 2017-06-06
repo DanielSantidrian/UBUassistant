@@ -1,5 +1,7 @@
 @import url("font-awesome.min.css");
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,400,400italic");
+@import url("http://fonts.googleapis.com/css?family=Unica+One");
+
 
 html, body{
   height: 100%;
@@ -40,8 +42,8 @@ a {
 }
 
 .adminLink{
-   height: 50px;
-   width: 50px;
+   height: 35px;
+   width: 35px;
 }
 
 strong, b {
@@ -66,50 +68,36 @@ h2 {
 	line-height: 1.35em;
 }
 	
-.button {
 
-	border-radius: 4px;
-	box-shadow: inset 0 0 0 1px rgba(144, 144, 144, 0.5);
-	color: #555 !important;
-	cursor: pointer;
-	display: inline-block;
-	font-size: 0.9em;
-	font-weight: 400;
-	height: 2.75em;
-	letter-spacing: 0.125em;
-	line-height: 2.75em;
-	padding: 0 2em;
-	white-space: nowrap;
-}
-
-.container {
-		margin-left: auto;
-		margin-right: auto;
-		width: 60em;
-		text-align: center;
-		align: center;
-}
-
-
-.main {
-	padding: 6em 0 4em 0 ;
-	text-align: center;
-}
-
-.pinguino{
+.pringuinoDiv{
 	position: fixed;
     bottom: 10;
     right: 5;
-    height: 160px;
-    width: 138px;
 }
+
+.btn-close-pinguino{
+	cursor: pointer;
+	position: fixed;
+	right: inherit;
+	height: 10px;
+	width: 10px;
+}
+
+.pinguino{
+    height: 100px;
+    width: 78px;
+}
+
+
 
 .divchat-window{
 	bottom: 10;
     right: 5;
 	position: fixed; 
 	overflow: auto;
-	width: 420px;
+	width: 270px;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .divchat{
@@ -122,36 +110,53 @@ h2 {
 .divchat-button{
 	
 	background-color:#0FB0DF;
-	color:white;
-	text-align: center;
+	color:#ffffff;
 	border: 0px none; 
 	border-radius: 15px;
-	width: 45%;
-	margin-left: 220px;
+	width: 125px;
+	margin-left: 135px;
+	font-family: 'Unica One';
+	margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	text-align: center;
 }
 
-
-
+.text{
+	margin-left: 10px;
+	font-size: 14;
+}
 
 .iframe{
-	height: 400px; 
-	border: 0px none; 
-	margin-left:5px;
-	width: 410px; 
-	height: 500px;
+		border: 0px none; 
+		margin-left:5px;
+		border-radius: 15px;
+		width: 260px; 
+		height: 350px;
+	}
+	
+	
+.btn-minimize {
+   width: 7px;
+   height: 7px;
+   margin-left: 10px;
+	cursor: pointer;
 }
 
-.btn-minimize {
-    width: 20px;
-    height: 20px;
-    margin-left: 2px;
+.btn-maximize {
+    width: 7px;
+    height: 7px;
+    margin-left: 10px;
+	cursor: pointer;
 }
 
 
 .btn-close {
-    width: 20px;
-    height: 20px;
-    margin-left: 2px;
+    width: 7px;
+    height: 7px;
+    margin-left: 5px;
+    text-align: center;
+	cursor: pointer;
 
 }
 
@@ -161,6 +166,205 @@ h2 {
 	  height: 80%;
 	  flex:1;
 }
+
+/************************************************************************************/	
+
+@media (min-width: 820px),(min-heigh: 567px) {
+		.iframe{
+			border: 0px none; 
+			margin-left:5px;
+			border-radius: 15px;
+			width: 360px; 
+			height: 450px;
+		}
+		
+		.divchat-window{
+			width: 370px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		
+		.divchat-button{
+		
+		background-color:#0FB0DF;
+		color:#ffffff;
+		border: 0px none; 
+		border-radius: 15px;
+		width: 145px;
+		margin-left: 215px;
+		font-family: 'Unica One';
+		margin-bottom: 3px;
+		display: flex;
+		align-items: center;
+		text-align: center;
+		}
+	
+		.adminLink{
+		   height: 40px;
+		   width: 40px;
+		}
+		
+
+		.pringuinoDiv{
+			position: fixed;
+		    bottom: 10;
+		    right: 5;
+		}
+		
+		.btn-close-pinguino{
+			cursor: pointer;
+			position: fixed;
+			right: inherit;
+			height: 15px;
+			width: 15px;
+		}
+		
+		.pinguino{
+		    height: 130px;
+		    width: 108px;
+		}
+		
+		.divchat{
+			border: 0px none; 
+			border-radius: 15px;
+			overflow:hidden;
+		}
+	
+		.text{
+			margin-left: 10px;
+			font-size: 16px;
+		}
+		
+		
+		.btn-minimize {
+		    width: 10px;
+		    height: 10px;
+		    margin-left: 10px;
+			cursor: pointer;
+		}
+		
+		.btn-maximize {
+		    width: 10px;
+		    height: 10px;
+		    margin-left: 10px;
+			cursor: pointer;
+		}
+		
+		
+		.btn-close {
+		    width: 10px;
+		    height: 10px;
+		    margin-left: 5px;
+		    text-align: center;
+			cursor: pointer;
+		
+		}
+	
+}
+
+/******************************************************************************************/
+
+@media (min-width: 1300px),(min-heigh: 638px) {
+		.iframe{
+			border: 0px none; 
+			margin-left:5px;
+			border-radius: 15px;
+			width: 410px; 
+			height: 500px;
+		}
+		
+	
+		.adminLink{
+		   height: 50px;
+		   width: 50px;
+		}
+		
+		.pringuinoDiv{
+			position: fixed;
+		    bottom: 10;
+		    right: 5;
+		}
+		
+		.btn-close-pinguino{
+			cursor: pointer;
+			position: fixed;
+			right: inherit;
+			height: 15px;
+			width: 15px;
+		}
+		
+		.pinguino{
+		    height: 160px;
+		    width: 138px;
+		}
+		
+		
+		
+		.divchat-window{
+			bottom: 10;
+		    right: 5;
+			position: fixed; 
+			overflow: auto;
+			width: 420px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+		
+		.divchat{
+			border: 0px none; 
+			border-radius: 15px;
+			overflow:hidden;
+		}
+		
+		
+		.divchat-button{
+			
+			background-color:#0FB0DF;
+			color:#ffffff;
+			border: 0px none; 
+			border-radius: 15px;
+			width: 190px;
+			margin-left: 220px;
+			font-family: 'Unica One';
+			margin-bottom: 5px;
+			display: flex;
+			align-items: center;
+			text-align: center;
+		}
+		
+		.text{
+			margin-left: 10px;
+			font-size: 22px;
+		}
+		
+		
+		.btn-minimize {
+		    width: 15px;
+		    height: 15px;
+		    margin-left: 10px;
+			cursor: pointer;
+		}
+		
+		.btn-maximize {
+		    width: 15px;
+		    height: 15px;
+		    margin-left: 10px;
+			cursor: pointer;
+		}
+		
+		
+		.btn-close {
+		    width: 15px;
+		    height: 15px;
+		    margin-left: 5px;
+		    text-align: center;
+			cursor: pointer;
+		
+		}
+	
+}
+
+
 
 
 

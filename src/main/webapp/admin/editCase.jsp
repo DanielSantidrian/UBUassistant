@@ -90,55 +90,77 @@
 		  <li class="breadcrumb-item actual">Editar Caso</li>
 		</ol>
 		
-			<form id="addForm" class="addForm" action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
+			<form id="addForm" class="form-horizontal" action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
 				
 				<input type="hidden" name="id" value="<%=id %>">
-			
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 1:</label>
-					<input id="keyWord1" type="text" name="keyWord1" value="<%=keyWord1 %>">
-				</p>
 				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 2:</label>
-					<input id="keyWord2" type="text" name="keyWord2" value="<%=keyWord2 %>">
-				</p>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord1">Palabra Clave 1:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord1" class="form-control" type="text" name="keyWord1" value="<%=keyWord1 %>">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord2">Palabra Clave 2:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord2" class="form-control" type="text" name="keyWord2" value="<%=keyWord2 %>">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord3">Palabra Clave 3:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord3" class="form-control" type="text" name="keyWord3" value="<%=keyWord3 %>">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord4">Palabra Clave 4:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord4" class="form-control" type="text" name="keyWord4" value="<%=keyWord4 %>">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord5">Palabra Clave 5:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord5" class="form-control" type="text" name="keyWord5" value="<%=keyWord5 %>">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="categoria">Categor&iacute;a:</label>
+				    <div class="col-sm-10">
+				    	<input id="categoria" class="form-control" type="text" name="categoria" value="<%=categoria %>">
+				    </div>
+		    	</div>
 				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 3:</label>
-					<input id="keyWord3" type="text" name="keyWord3" value="<%=keyWord3 %>">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 4:</label>
-					<input id="keyWord4" type="text" name="keyWord4" value="<%=keyWord4 %>">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 5:</label>
-					<input id="keyWord5" type="text" name="keyWord5" value="<%=keyWord5 %>">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Categor&iacute;a:</label>
-					<input id="categoria" type="text" name="categoria" value="<%=categoria %>">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Respuesta:</label>
-					<input style="width: 300%;" id="respuesta" type="text" name="respuesta" value="<%=respuesta %>">
-				</p>
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="respuesta">Respuesta:</label>
+				    <div class="col-sm-10">
+				    	<textarea rows="4" cols="50" id="respuesta" class="form-control" name="respuesta"><%=respuesta %></textarea>
+				    </div>
+		    	</div>
 				
 				<input type="hidden" name="edit" value="yes">
 				
-				<input class="aceptButton" type="submit" value="Aceptar">
+				<div class="form-group">        
+			      <div class="col-sm-offset-2 col-sm-10">
+			        <p id="error">
+						*Debe rellenar al menos la palabra clave 1, la categor&iacute;a y la respuesta.
+					</p>
+			      </div>
+			    </div>
+
+			    <div class="form-group">        
+			      <div class="col-sm-offset-2 col-sm-10">
+			        <input class="aceptButton" type="submit" value="Aceptar">
+			      </div>
+			    </div>
 				
 			</form>
 			
-			<p id="error">
-					*Debe rellenar al menos la palabra clave 1, la categor&iacute;a y la respuesta.
-			</p>
-	
 		</div>
 		
 

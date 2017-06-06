@@ -14,6 +14,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../css/admin/main.css" />
+		<link rel="stylesheet" href="../css/admin/resizeTable.css" />
 		
 		<script src="../js/admin.js"></script>
 		<script src="../js/jquery.js"></script>
@@ -134,6 +135,8 @@
 		%>
 			</tbody>
 			</table>
+			
+			
 
 		</div>
 		
@@ -141,7 +144,7 @@
 
 	</div>
 	
-	
+	<script src="../js/resizeTable.js"></script>
 	<%@ include file="footer.html" %>
 	</body>
 </html>

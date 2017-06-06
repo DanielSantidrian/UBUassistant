@@ -1,3 +1,4 @@
+
 function hideAndSubmit(param){
 	param.style.display = 'none';
 	var buttonDiv = document.getElementById("buttonPanel").innerHTML;

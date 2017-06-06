@@ -1,9 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
 .login-page {
-  width: 360px;
-  padding: 8% 0 0;
-  margin: auto;
+  	max-width: 360px;
+	padding: 8% 0 0;
+	margin: auto;
   
 }
 .form {
@@ -13,6 +13,7 @@
   max-width: 360px;
   margin: 0 auto 100px;
   padding: 45px;
+  padding-bottom: 10px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
@@ -27,7 +28,7 @@
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.form #ingresar {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -40,8 +41,9 @@
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
   cursor: pointer;
+  margin-bottom: 10px;
 }
-.form button:hover,.form button:active,.form button:focus {
+.form #ingresar:hover,.form #ingresar:active,.form #ingresar:focus {
   background: #ab223c;
 }
 .form .message {
@@ -93,12 +95,15 @@
 	font-size: 14px;
 }
 
+
 .volver{
+	display: none;
   margin: 0 auto;
   width: auto;
   font-size: 1rem;
   text-align: center;
-  border: 1px;
+  border-radius: 6px;
+  border: none;
   padding: 8px;
   position: fixed;
   top: 10;
@@ -106,6 +111,33 @@
   background: #0FB0DF;
   color: white;
   cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .volver{
+	display: block;
+	}
+}
+
+.volver2{
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background: #0FB0DF;
+	width: 50%;
+	border: 0;
+	padding: 15px;
+	color: #FFFFFF;
+	font-size: 14px;
+	-webkit-transition: all 0.3 ease;
+	transition: all 0.3 ease;
+	cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .volver2{
+	display: none;
+	}
 }
 
 body {

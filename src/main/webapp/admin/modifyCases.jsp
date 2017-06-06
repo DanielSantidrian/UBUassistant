@@ -15,6 +15,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../css/admin/main.css" />
+		<link rel="stylesheet" href="../css/admin/resizeTable.css" />
 		
 		<script src="../js/admin.js"></script>
 		<script src="../js/jquery.js"></script>
@@ -133,8 +134,21 @@
 			    <li><a onclick="$('#tabla').tableExport({type:'txt',escape:'false'});">TXT</a></li>
 			    <li><a onclick="$('#tabla').tableExport({type:'excel',escape:'false'});">XLS</a></li>
 			    <li><a onclick="$('#tabla').tableExport({type:'doc',escape:'false'});">Word</a></li>
-			    <li><a onclick="$('#tabla').tableExport({type:'pdf',pdfFontSize:'7',escape:'false'});">PDF</a></li>
 			 </ul>
+			 
+			 <div class="dropdown">
+			    <button class="btn2 dropdown-toggle" type="button" data-toggle="dropdown">Guardar como
+			    <span class="caret"></span></button>
+			    <ul class="color dropdown-menu">
+			      <li><a onclick="$('#tabla').tableExport({type:'json',escape:'false'});">JSON</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'xml',escape:'false'});">XML</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'sql'});">SQL</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'csv',escape:'false'});">CSV</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'txt',escape:'false'});">TXT</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'excel',escape:'false'});">XLS</a></li>
+				    <li><a onclick="$('#tabla').tableExport({type:'doc',escape:'false'});">Word</a></li>
+			    </ul>
+ 			 </div>
 		
 		</div>
 		
@@ -183,13 +197,13 @@
 			while (rs.next() && rs1.next()) {
 			%>
 			  <tr><td><%=rs.getInt("id") %></td><td><%=rs.getString("keyWord1") %></td><td><%=rs.getString("keyWord2") %></td>
-			  <td class="c"><%=rs.getString("keyWord3") %></td><td><%=rs.getString("keyWord4") %></td>
+			  <td><%=rs.getString("keyWord3") %></td><td><%=rs.getString("keyWord4") %></td>
 			  <td><%=rs.getString("keyWord5") %></td><td><%=rs.getString("categoria") %></td>
-			  <td><%=rs1.getString("answer") %></td>
+			  <td class="resp"><%=rs1.getString("answer") %></td>
 			  
-			  <td>
+			  <td >
 			  	
-			  	<form action="editCase.jsp;jsessionid=<%=session.getId()%>" method="POST">
+			  	<form class="modifyForm" action="editCase.jsp;jsessionid=<%=session.getId()%>" method="POST">
 			  		<input type="hidden" name="id" value="<%=rs.getInt("id") %>">
 			  		<input type="hidden" name="keyWord1" value="<%=rs.getString("keyWord1") %>">
 			  		<input type="hidden" name="keyWord2" value="<%=rs.getString("keyWord2") %>">
@@ -201,7 +215,7 @@
 			  		<input type="submit" id="button" class="aprender" value="Editar">
 			  	</form>
 			  	
-			  	<form  action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return confirmDelete();">
+			  	<form class="modifyForm" action="modifyCases.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return confirmDelete();">
 			  		<input type="hidden" name="id" value="<%=rs.getInt("id") %>">
 			  		<input type="submit" id="button" class="descartar" value="Eliminar">
 			  	</form>
@@ -218,6 +232,8 @@
 		</div>
 		
 	</div>
+	
+	<script src="../js/resizeTable.js"></script>
 	
 	<script>
 	

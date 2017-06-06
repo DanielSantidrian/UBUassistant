@@ -14,10 +14,12 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="stylesheet" href="../css/admin/main.css" />
+		<link rel="stylesheet" href="../css/admin/resizeTable.css" />
 		
 		<script src="../js/jquery.js"></script>
 		<script src="../js/admin.js"></script>
 		<script src="../js/sorttable.js"></script>
+		
 		
   		<script src="../js/tableExport/tableExport.js"></script>
 		<script src="../js/tableExport/jquery.base64.js"></script>
@@ -77,7 +79,7 @@
 			<div class="saveMenu">
 				<form action="log.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return ask()" class="formClear">
 					<input type="hidden" name="borrar" value="borrar">
-					<input type="submit" class='clean' value="Limpiar tabla"><span></span>
+					<input type="submit" class='clean' value="Limpiar tabla">
 				</form>
 				
 			</div>
@@ -147,6 +149,8 @@
 		    $(this).html($(this).html().replace('null', '-'));
 		});
 	</script>
+	
+	<script src="../js/resizeTable.js"></script>
 	
 	<%@ include file="footer.html" %>
 	

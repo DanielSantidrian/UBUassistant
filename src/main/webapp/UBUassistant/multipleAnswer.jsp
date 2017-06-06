@@ -75,7 +75,7 @@
 		<div id="buttonPanelContent" class="buttonPanelContent">
 
 			<div id="buttonPanel" style="margin-bottom: -18px;" class="buttonPanel">
-				  <div class="rate-text">¿Desea valorar esta respuesta?</div>
+				  <div class="rate-text-q">¿Desea valorar esta respuesta?</div>
 				  <form method="post" action="multipleAnswerQuestion.jsp;jsessionid=<%=session.getId()%>" style="display: inline-block;">
 				  	<input type="hidden" id="response" name="response" value="si">
 				  	<input type="hidden" id="userText" name="userText" value="<%=userText%>">

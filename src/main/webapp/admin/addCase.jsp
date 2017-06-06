@@ -17,6 +17,18 @@
 			  document.getElementById('add').className = 'active';
 			};
 			
+			//Navbar Scroll Event
+			var lastScrollTop = 0;
+			var navbar        = $('.navbar');
+			$(window).scroll(function(event){
+			   var st = $(this).scrollTop();
+			   if (st > lastScrollTop){
+			       navbar.addClass('navbar-scroll-custom');
+			   } else {
+			      navbar.removeClass('navbar-scroll-custom');
+			   }
+			   lastScrollTop = st;
+			});
 		
 		</script>
 		
@@ -83,51 +95,80 @@
 			document.getElementById("subtitle").innerHTML="Formulario para añadir un caso a la base de datos.";
 		</script>
 		
+
 		<div id="content" class="content">
 		
-			<form id="addForm" class="addForm" action="addCase.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 1:</label>
-					<input id="keyWord1" type="text" name="keyWord1">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 2:</label>
-					<input id="keyWord2" type="text" name="keyWord2">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 3:</label>
-					<input id="keyWord3" type="text" name="keyWord3">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 4:</label>
-					<input id="keyWord4" type="text" name="keyWord4">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Palabra Clave 5:</label>
-					<input id="keyWord5" type="text" name="keyWord5">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Categor&iacute;a:</label>
-					<input id="categoria" type="text" name="categoria">
-				</p>
-				
-				<p class="pForm">
-					<label class="txt" for="b">Respuesta:</label>
-					<input style="width: 300%;" id="respuesta" type="text" name="respuesta">
-				</p>
-				
-				<input class="aceptButton" type="submit" value="Aceptar">
-				
-			</form>
+		
+			<form id="addForm" class="form-horizontal" action="addCase.jsp;jsessionid=<%=session.getId()%>" method="POST" onsubmit="return checkInput()">
+		    
+				<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord1">Palabra Clave 1:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord1" class="form-control" type="text" name="keyWord1">
+				    </div>
+		    	</div>
+		    	
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord2">Palabra Clave 2:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord2" class="form-control" type="text" name="keyWord2">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord3">Palabra Clave 3:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord3" class="form-control" type="text" name="keyWord3">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord4">Palabra Clave 4:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord4" class="form-control" type="text" name="keyWord4">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="keyWord5">Palabra Clave 5:</label>
+				    <div class="col-sm-10">
+				    	<input id="keyWord5" class="form-control" type="text" name="keyWord5">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="categoria">Categor&iacute;a:</label>
+				    <div class="col-sm-10">
+				    	<input id="categoria" class="form-control" type="text" name="categoria">
+				    </div>
+		    	</div>
+		    	
+		    	<div class="form-group">
+					<label class="control-label col-sm-2" for="respuesta">Respuesta:</label>
+				    <div class="col-sm-10">
+				    	<textarea rows="4" cols="50" id="respuesta" class="form-control" name="respuesta"></textarea>
+				    </div>
+		    	</div>
+
+				<div class="form-group">        
+			      <div class="col-sm-offset-2 col-sm-10">
+			        <p id="error">
+						*Debe rellenar al menos la palabra clave 1, la categor&iacute;a y la respuesta.
+					</p>
+			      </div>
+			    </div>
+
+			    <div class="form-group">        
+			      <div class="col-sm-offset-2 col-sm-10">
+			        <input class="aceptButton" type="submit" value="Aceptar">
+			      </div>
+			    </div>
+		    
+		  </form>
+		
 			
-			<p id="error">
-					*Debe rellenar al menos la palabra clave 1, la categor&iacute;a y la respuesta.
-			</p>
+			
 	
 		</div>
 		
