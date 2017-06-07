@@ -75,6 +75,12 @@ public class AdminAddCase {
     Thread.sleep(2000);
     int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
     assertEquals("CasoPrueba", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
+    
+    Thread.sleep(2000);
+    JavascriptExecutor jse = (JavascriptExecutor)driver;
+    jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    Thread.sleep(2000);
+    
     driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
     Thread.sleep(2000);
     driver.switchTo().alert().accept();

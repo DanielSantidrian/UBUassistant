@@ -28,7 +28,7 @@ public class AdminLog {
     System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
 	driver = new ChromeDriver();
     baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     driver.manage().window().maximize();
   }
 
@@ -47,7 +47,6 @@ public class AdminLog {
     driver.findElement(By.cssSelector("button.saveas")).click();
     Thread.sleep(2000);
     assertTrue(isElementPresent(By.linkText("CSV")));
-    assertTrue(isElementPresent(By.xpath("//table[@id='tabla']/tbody/tr/td[9]")));
     driver.findElement(By.cssSelector("input.clean")).click();
     Thread.sleep(2000);
     assertTrue(closeAlertAndGetItsText().matches("^¿Está seguro de que desea borrar la tabla de logs[\\s\\S]$"));

@@ -41,20 +41,26 @@ public class AdminLearn {
     driver.findElement(By.cssSelector("button.saveas")).click();
     Thread.sleep(2000);
     assertTrue(isElementPresent(By.linkText("XLS")));
-    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr/td[2]")).getText());
-    driver.findElement(By.id("button")).click();
+    
+    int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    
+    assertEquals("ccc", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
+    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
     Thread.sleep(2000);
-    assertEquals("ccc", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr/td[2]")).getText());
-    driver.findElement(By.xpath("(//input[@id='button'])[2]")).click();
+    
+    rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    
+    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
+    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2-1)+"]")).click();
     Thread.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
     Thread.sleep(2000);
     driver.findElement(By.id("edit")).click();
     
-    int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    int rowCount2=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
 
-    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
-    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
+    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount2+"]/td[2]")).getText());
+    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount2*2)+"]")).click();
     Thread.sleep(2000);
     driver.switchTo().alert().accept();
     Thread.sleep(5000);

@@ -183,7 +183,7 @@ public class DatabaseConnectionTest {
 			
 			List<Integer> num = new ArrayList<Integer>();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
 			
 			while (rs.next()) {
 				if(rs.getString("keyWord1").equals("inventada1")){
@@ -195,7 +195,7 @@ public class DatabaseConnectionTest {
 			assertSame(num.get(0),1);
 			assertSame(num.get(1),2);
 			
-			stmt.executeUpdate("DELETE FROM estadisticas WHERE keyWord1='inventada1'");
+			stmt.executeUpdate("DELETE FROM logger WHERE keyWord1='inventada1'");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -228,7 +228,7 @@ public class DatabaseConnectionTest {
 			List<Integer> num = new ArrayList<Integer>();
 			List<Integer> vot = new ArrayList<Integer>();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM estadisticas");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
 			
 			while (rs.next()) {
 				if(rs.getString("keyWord1").equals("inventada1")){
@@ -241,7 +241,7 @@ public class DatabaseConnectionTest {
 			assertSame(num.get(0),1);
 			assertSame(num.get(1),2);
 			
-			stmt.executeUpdate("DELETE FROM estadisticas WHERE keyWord1='inventada1'");
+			stmt.executeUpdate("DELETE FROM logger WHERE keyWord1='inventada1'");
 
 		} catch (SQLException e) {
 			e.printStackTrace();

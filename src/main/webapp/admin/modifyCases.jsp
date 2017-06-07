@@ -187,7 +187,7 @@
 		
 		
 		<div class="divtable">
-			<table id="tabla" class="sortable">
+			<table id="tabla" class="sortable" >
 			<thead>
 			  <tr><th>ID</th><th>Palabra clave 1</th><th>Palabra clave 2</th><th>Palabra clave 3</th>
 			  <th>Palabra clave 4</th><th>Palabra clave 5</th><th>Categoria</th><th>Respuesta</th><th>Acci&oacute;n</th></tr>

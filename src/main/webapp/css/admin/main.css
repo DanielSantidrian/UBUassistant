@@ -151,8 +151,8 @@ input[type=text]:focus {
 
 @media (min-width: 768px) {
   .arrowLink{
-   height: 50px;
-   width: 50px;
+   height: 40px;
+   width: 40px;
 	}
 }
 
@@ -339,6 +339,7 @@ input[type=text]:focus {
 }
 			
 #tabla {
+	/*table-layout: fixed;*/
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width:100%;

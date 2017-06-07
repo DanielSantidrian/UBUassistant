@@ -28,10 +28,9 @@ public class MinimizeAndClose {
     driver.findElement(By.id("pinguino")).click();
     Thread.sleep(2000);
     assertTrue(isElementPresent(By.id("divchat-window")));
-    driver.findElement(By.cssSelector("button.btn-minimize")).click();
+    driver.findElement(By.id("btn-minimize")).click();
     Thread.sleep(2000);
-    assertEquals("+", driver.findElement(By.cssSelector("button.btn-minimize")).getText());
-    driver.findElement(By.cssSelector("button.btn-minimize")).click();
+    driver.findElement(By.id("btn-minimize")).click();
     Thread.sleep(2000);
 
     /***/
@@ -46,9 +45,9 @@ public class MinimizeAndClose {
     driver.switchTo().defaultContent();
     /***/
     
-    driver.findElement(By.cssSelector("button.btn-minimize")).click();
+    driver.findElement(By.id("btn-minimize")).click();
     Thread.sleep(2000);
-    driver.findElement(By.cssSelector("button.btn-minimize")).click();
+    driver.findElement(By.id("btn-minimize")).click();
     Thread.sleep(2000);
     
     /***/
@@ -62,7 +61,7 @@ public class MinimizeAndClose {
     driver.switchTo().defaultContent();
     /***/
     
-    driver.findElement(By.cssSelector("button.btn-close")).click();
+    driver.findElement(By.cssSelector("input.btn-close")).click();
     Thread.sleep(2000);
     assertTrue(isElementPresent(By.id("pinguino")));
     driver.findElement(By.id("pinguino")).click();
@@ -73,6 +72,15 @@ public class MinimizeAndClose {
     /***/
     
     assertFalse(isElementPresent(By.xpath("//div[@id='chat-output']/div[3]/div")));
+    
+    /***/
+    driver.switchTo().defaultContent();
+    /***/
+    
+    driver.findElement(By.cssSelector("input.btn-close")).click();
+    Thread.sleep(2000);
+    driver.findElement(By.cssSelector("input.btn-close-pinguino")).click();
+
   }
 
   @After

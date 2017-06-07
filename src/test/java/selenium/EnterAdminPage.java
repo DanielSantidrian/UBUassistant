@@ -17,6 +17,7 @@ public class EnterAdminPage {
 	driver = new ChromeDriver();
     baseUrl = "http://localhost:8080/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    driver.manage().window().maximize();
   }
 
   @Test

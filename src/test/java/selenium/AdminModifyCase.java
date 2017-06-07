@@ -49,6 +49,11 @@ public class AdminModifyCase {
     
     int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
     
+    Thread.sleep(2000);
+    JavascriptExecutor jse = (JavascriptExecutor)driver;
+    jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    Thread.sleep(2000);
+    
     driver.findElement(By.xpath("(//input[@id='button'])["+((rowCount*2)-1)+"]")).click();
     driver.findElement(By.id("keyWord1")).clear();
     driver.findElement(By.id("keyWord1")).sendKeys("CasoPruebaEdit");
@@ -67,6 +72,11 @@ public class AdminModifyCase {
     assertEquals("Caso5Edit", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[6]")).getText());
     assertEquals("CategoriaEditada", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[7]")).getText());
     assertEquals("RespuestaEditada", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[8]")).getText());
+    
+    Thread.sleep(2000);
+    jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    Thread.sleep(2000);
+    
     driver.findElement(By.xpath("(//input[@id='button'])["+((rowCount*2)-1)+"]")).click();
     Thread.sleep(2000);
     driver.findElement(By.id("keyWord1")).clear();
@@ -92,6 +102,11 @@ public class AdminModifyCase {
     Thread.sleep(2000);
     driver.findElement(By.id("edit")).click();
     Thread.sleep(2000);
+    
+    Thread.sleep(2000);
+    jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+    Thread.sleep(2000);
+    
     driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
     Thread.sleep(2000);
     assertTrue(closeAlertAndGetItsText().matches("^Â¿Esta seguro de que desea borrar el caso[\\s\\S]$"));
