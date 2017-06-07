@@ -200,44 +200,60 @@ Fue necesaria una ampliación muy grande de los pocos conocimientos que se tení
 
 La aplicación de los conceptos de redirección para realizar llamadas al servidor y su mezcla con la programación en el cliente mediante \emph{JavaScript} fue una de las tareas más complicadas.
 
+En cuanto al desarrollo de pruebas con Selenium, se encontraron varios problemas.
 
-\section{Testing - Por hacer}
+Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOLIBRI2 utiliza una más versión antigua de la que necesitaba el WebDriver de Selenium para funcionar correctamente. Este problema fue más complicado de detectar y resolver de lo que puede parecer a primera vista ya que los errores que devolvía Selenium no eran muy descriptivos.
 
-Selenium
+Otro de los problemas encontrados fue el uso de las variables de sesión el la aplicación. El WebDriver de Selenium al ejecutar las pruebas inicia una versión del navegador elegido que no es completa, esto ocasionaba que la sesión cambiase al realizar cualquier acción sobre la web, dejando al usuario sin identificar. Además de con la herramienta de Selenium, este problema afectaba también al navegador Microsoft Edge que, aún teniendo las \emph{cookies} activadas, no almacenaba la sesión correctamente. Este problema fue solucionado añadiendo la identificación de sesión a la URL mediante el método de \emph{encodeURL} + \emph{HTTPSession} en lugar de únicamente con \emph{HTTPSession}. De esta forma el identificador de usuario es pasado en la URL impidiendo su variación.
 
-JUnit
 
-\section{Estadísticas - Por Hacer}
+\section{Testing - Actualizar}
+
+La aplicación se ha testeado mediante test unitarios así como con test de interfaz.
+
+Los test unitarios han sido los encargados de probar cada módulo de la aplicación por separado. Dentro de los test unitarios se han probado los métodos de las clases Java exceptuando el algoritmo de búsqueda de respuesta para lo que es necesario arrancar el servidor.
+
+Por otra parte, se han realizado test de interfaz con Selenium. Se ha llevado a cabo un test de interfaz por cada requisito planteado, además de comprobar la funcionalidad básica de la web. Los test de interfaz se ejecutan sobre la página web y simulan el comportamiento de un usuario comprobando si el resultado obtenido de realizar una acción es la correcta. En este punto se comprueba también la integración de cada módulo del sistema, así como el correcto funcionamiento del algoritmo de búsqueda de respuesta. No es posible testear el algoritmo sin el servidor arrancado porque son necesarias dependencias que son cargadas dinámicamente desde el fichero \emph{pom.xml} mediante Maven.
+
+La realización de pruebas con la herramienta Selenium ha ocasionado varios problemas, ralentizando el desarrollo de los test de interfaz y por ente de la aplicación. Los problemas detallados pueden encontrase en la sección \ref{problemas}.
+
+
+\section{Estadísticas - Actualizar}
+
+A continuación se detallan algunas de las características más interesantes del proyecto. Para recoger las estadísticas no se han tenido en consideración los ficheros JSP en cuanto a estadísticas de código Java.
+
+Las denominadas clases deseadas son aquellas que no forman parte del algoritmo de búsqueda de respuesta ya que, como se ha comentado, se necesitan dependencias dinámicas descargadas mediante Maven.
+
+Los datos han sido obtenidos de las mediciones realizadas por RefactorIt y Eclipse.
 
 \begin{table}
 \centering
 \begin{tabular}{lr}
 \toprule
-\textbf{Concepto}                  & \multicolumn{1}{r}{\textbf{Valor}} \\ 
+\textbf{Entidad} & \multicolumn{1}{r}{\textbf{Valor}} \\ 
 \midrule
-Ratio de fiabilidad                &          												\\
-Ratio de seguridad                 & 																	\\
-Ratio de mantenibilidad						 & 																  \\ 
+Número de clases Java              & 8                  \\
+Número de archivos XML             & 10                 \\
+Número de archivos JSP             & 15                 \\
+Número de archivos HTML            & 6                  \\
+Número de archivos CSS             & 9                  \\
+Número de archivos JS              & 14                 \\
 \midrule
-Número de clases Java              &                                 \\
-Número de archivos XML             &                               \\
+Total de líneas Java               & 1750              	\\
+Líneas de código                   & 54.6\%            	\\
+Comentarios                        & 25.7\%             \\
+Líneas en blanco                   & 19.7\%    		    \\
 \midrule
-Total de líneas Java               &                              \\
-Líneas de código                   & 58\%            				            \\
-Comentarios                        & 29\%          			                \\
-Líneas en blanco                   & 13\%    		                        \\
-\midrule
-Número de test unitarios           & 																\\
-Cobertura total test unitarios     & 35,8\%                             \\
-Cobertura test unitarios algoritmo & 100\%                              \\
-Número de UI test                  & 																\\ 
+Número de test unitarios           & 14					\\
+Cobertura total test unitarios     & 31,2\%             \\
+Cobertura test unitarios clases deseadas & 97.8\%       \\
+Número de test de interfaz         & 10					\\ 
 \bottomrule
 \end{tabular}
 \caption{Estadísticas del proyecto.}
 \label{stats}
 \end{table}
 
-\emph{*Los datos han sido obtenidos de las mediciones realizadas por RefactorIt y Eclipse.}
 
 \section{Documentación}
 
