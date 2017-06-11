@@ -11,10 +11,20 @@
 \RequirePackage{xtab}
 \RequirePackage{multirow}
 
+%Euro
+\usepackage{eurosym}
+
+%Citas bibliografía
+\usepackage{cite}
+\usepackage[numbers,sort]{natbib}
+
+%Tabla
+\usepackage{longtable}
+
 % Links
 \usepackage[colorlinks]{hyperref}
 \hypersetup{
-	allcolors = {red}
+	allcolors = {blue}
 }
 
 % Ecuaciones
@@ -338,9 +348,9 @@
 
 
 % Datos de portada
-\title{título del TFG \\Documentación Técnica}
-\author{nombre alumno}
-\tutor{nombre tutor}
+\title{UBUassisatnt \\Documentación Técnica}
+\author{Daniel Santidrián Alonso}
+\tutor{Pedro Renedo Fernández}
 \date{\today}
 
 \begin{document}
@@ -385,8 +395,7 @@
 \include{./tex/D_Manual_programador}
 \include{./tex/E_Manual_usuario}
 
-
-\bibliographystyle{plain}
+\bibliographystyle{plainnat}
 \bibliography{bibliografiaAnexos}
 
 \end{document}
