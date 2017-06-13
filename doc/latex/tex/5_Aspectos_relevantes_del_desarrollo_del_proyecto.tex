@@ -101,7 +101,7 @@ Por ello en el paso de recordar se analiza cada palabra del usuario de manera in
 \item
 \textbf{Revisar:} consiste en realizar una valoración de la respuesta. Esta tarea es desempeñada por el usuario, que será el que decida si valora una respuesta o no. Por lo tanto esta fase puede no ser ejecutada siempre y es independiente del ciclo.
 
-Se le otorga al usuario una barra de estrellas que cuando es pulsada guarda en base de datos mediante JDBC una entrada en la tabla de estadísticas con la puntuación otorgada asociada a las palabras del caso que han generado la respuesta. 
+Se le otorga al usuario una barra de estrellas que cuando es pulsada guarda en base de datos mediante JDBC una entrada en la tabla de log de uso con la puntuación otorgada asociada a las palabras del caso que han generado la respuesta. 
 
 De esta manera, desde la página de administración, un encargado puede visualizar aquellos casos que necesitan ser revisados.
 \item
@@ -146,7 +146,7 @@ El gestor de base de datos elegido fue MySQL. Su elección se basó en su simpli
 
 La base de datos está compuesta por siete tablas. Dos de ellas referentes a la representación de los casos.
 
-La tabla \emph{casedescription} contiene la descripción de los casos, cinco palabras clave junto con la categoría a la que pertenecen para almacenar estadísticas.
+La tabla \emph{casedescription} contiene la descripción de los casos, cinco palabras clave junto con la categoría a la que pertenecen para almacenar el log de uso.
 
 La tabla \emph{casesolution} contiene la solución para cada caso, que está formada por una cadena de texto.
 
@@ -156,7 +156,7 @@ La tabla \emph{frases} es la que posee tanto las frases de saludo como las frase
 
 La tabla \emph{aprendizaje} recoge la palabra a aprender junto con la respuesta asociada.
 
-En la tabla \emph{estadisticas} se almacenan las estadísticas de búsqueda de cada usuario. Se guardan por cada conjunto de palabras buscadas el identificador de usuario, la fecha, las palabras buscadas, la respuesta otorgada, la categoría de la búsqueda, el número de búsquedas, el número de votos y la votación total.
+En la tabla \emph{logger} se almacena el log de uso de cada usuario. Se guardan por cada conjunto de palabras buscadas el identificador de usuario, la fecha, las palabras buscadas, la respuesta otorgada, la categoría de la búsqueda, el número de búsquedas, el número de votos y la votación total.
 
 Por último la tabla \emph{administradores} es la encargada de almacenar las credenciales para que los administradores puedan acceder a la página de mantenimiento.
 
@@ -179,7 +179,7 @@ Los ficheros que forman la configuración de Hibernate son:
 
 El driver \emph{JDBC} es utilizado por la clase Java \emph{DatabaseConnection}. Esta engloba todo el acceso a la base de datos, y se encarga de la lectura y escritura en la base de datos de las tablas que no pertenecen a los casos.
 
-Concretamente, realiza la lectura de las tablas que contienen las frases de saludo y las palabras comunes, y se encarga de la escritura de las estadísticas y las de aprendizaje.
+Concretamente, realiza la lectura de las tablas que contienen las frases de saludo y las palabras comunes, y se encarga de la escritura del log y del aprendizaje.
 
 
 \section{Problemas}\label{problemas}
@@ -226,13 +226,10 @@ Las denominadas clases deseadas son aquellas que no forman parte del algoritmo d
 
 Los datos han sido obtenidos de las mediciones realizadas por RefactorIt y Eclipse.
 
-\begin{table}
-\centering
-\begin{tabular}{lr}
-\toprule
-\textbf{Entidad} & \multicolumn{1}{r}{\textbf{Valor}} \\ 
-\midrule
-Número de clases Java              & 8                  \\
+\tablaSmallSinColores{Estadísticas del proyecto.}
+{l l}{Estadisticas del proyecto}
+{\textbf{Entidad} & \textbf{Valor}\\}
+{Número de clases Java              & 8                  \\
 Número de archivos XML             & 10                 \\
 Número de archivos JSP             & 15                 \\
 Número de archivos HTML            & 6                  \\
@@ -248,11 +245,7 @@ Número de test unitarios           & 14					\\
 Cobertura total test unitarios     & 31,2\%             \\
 Cobertura test unitarios clases deseadas & 97.8\%       \\
 Número de test de interfaz         & 10					\\ 
-\bottomrule
-\end{tabular}
-\caption{Estadísticas del proyecto.}
-\label{stats}
-\end{table}
+}
 
 
 \section{Documentación}

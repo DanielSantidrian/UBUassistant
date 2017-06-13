@@ -11,8 +11,17 @@
 \RequirePackage{xtab}
 \RequirePackage{multirow}
 
+%Float
+\usepackage{float}
+
+%Landscape
+\usepackage{lscape}
+
 %Euro
 \usepackage{eurosym}
+
+%TabItem
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
 
 %Citas bibliografía
 \usepackage{cite}
@@ -43,6 +52,15 @@
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=0.9\textwidth]{#1}
+		\caption{#2}\label{fig:#1}
+	\end{figure}
+	\FloatBarrier
+}
+
+\newcommand{\imagenLarga}[2]{
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=1.2\textwidth]{#1}
 		\caption{#2}\label{fig:#1}
 	\end{figure}
 	\FloatBarrier
@@ -99,6 +117,10 @@
 % Para las tablas
 \newcommand{\otoprule}{\midrule [\heavyrulewidth]}
 %
+
+%Table width
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
 % Nuevo comando para tablas pequeñas (menos de una página).
 \newcommand{\tablaSmall}[5]{%
  \begin{table}
@@ -164,14 +186,14 @@
       \otoprule
     }
     \tablehead{
-      \multicolumn{#3}{l}{\small\sl continúa desde la página anterior}\\
+      \multicolumn{#3}{l}{\small continúa desde la página anterior}\\
       \toprule
       #5
       \otoprule
     }
     \tabletail{
       \hline
-      \multicolumn{#3}{r}{\small\sl continúa en la página siguiente}\\
+      \multicolumn{#3}{r}{\small continúa en la página siguiente}\\
     }
     \tablelasttail{
       \hline
@@ -186,6 +208,8 @@
   \end{center}
 }
 
+
+
 %
 % Nuevo comando para tablas grandes con cabecera.
 \newcommand{\tablaSinColores}[6]{%
@@ -196,14 +220,14 @@
       \otoprule
     }
     \tablehead{
-      \multicolumn{#3}{l}{\small\sl continúa desde la página anterior}\\
+      \multicolumn{#3}{l}{\small continúa desde la página anterior}\\
       \toprule
       #5
       \otoprule
     }
     \tabletail{
       \hline
-      \multicolumn{#3}{r}{\small\sl continúa en la página siguiente}\\
+      \multicolumn{#3}{r}{\small continúa en la página siguiente}\\
     }
     \tablelasttail{
       \hline

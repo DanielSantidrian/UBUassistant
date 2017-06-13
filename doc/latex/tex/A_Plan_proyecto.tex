@@ -88,7 +88,7 @@ Las horas estimadas fueron 6,50h, invirtiendo finalmente 12,25h completando la t
 
 \subsection{Sprint 4 (07/03/17 - 13/03/17)}
 
-En este sprint se continuó con la adición de requisitos, en este caso se añadieron los sistemas de recogida de estadísticas y el sistema de aprendizaje supervisado.
+En este sprint se continuó con la adición de requisitos, en este caso se añadieron los sistemas de recogida de datos para el log de uso y el sistema de aprendizaje supervisado.
 
 Las tareas que se llevaron a cabo para cumplir con los objetivos del sprint pueden verse en \href{https://github.com/DanielSantidrian/UBUassistant/milestone/7?closed=1}{Sprint4}
 
@@ -98,7 +98,7 @@ Las horas estimadas fueron 4,75h, invirtiendo finalmente 6,75h completando la to
 
 \subsection{Sprint 5 (14/03/17 - 20/03/17)}
 
-El objetivo de este sprint fue cambiar la estructura de la tabla donde se almacenan las estadísticas para guardar más información relevante.
+El objetivo de este sprint fue cambiar la estructura de la tabla donde se almacena el log de uso para guardar más información relevante.
 
 Las tareas que se llevaron a cabo para cumplir con los objetivos del sprint pueden verse en \href{https://github.com/DanielSantidrian/UBUassistant/milestone/8?closed=1}{Sprint5}
 
@@ -108,7 +108,7 @@ Las horas estimadas fueron 1,50h, invirtiendo finalmente 2,25h completando la to
 
 \subsection{Sprint 6 (21/03/17 - 17/04/17)}
 
-Los objetivos marcados en este sprint se centraron en incluir nuevas características al producto, como ofrecer la posibilidad de valorar la respuesta cuando hay varias disponibles. Además se mejoraron ciertas funcionalidades de las que ya se disponía, como la búsqueda de respuesta y el almacenamiento de estadísticas. También se modificó la estructura de clases separando la interfaz gráfica del algoritmo de búsqueda de respuestas.
+Los objetivos marcados en este sprint se centraron en incluir nuevas características al producto, como ofrecer la posibilidad de valorar la respuesta cuando hay varias disponibles. Además se mejoraron ciertas funcionalidades de las que ya se disponía, como la búsqueda de respuesta y el almacenamiento del log. También se modificó la estructura de clases separando la interfaz gráfica del algoritmo de búsqueda de respuestas.
 
 Las tareas que se llevaron a cabo para cumplir con los objetivos del sprint pueden verse en \href{https://github.com/DanielSantidrian/UBUassistant/milestone/9?closed=1}{Sprint6}
 
@@ -170,73 +170,35 @@ Las horas estimadas fueron 12,75h, invirtiendo finalmente 17h quedando una tarea
 
 \imagen{burndowns/sprint11}{Gráfico burndown sprint 11.}
 
+
+\subsection{Sprint 12 (08/06/17 - 14/06/17)}
+
+Los objetivos de este sprint se centraron en avanzar con la documentación de los anexos, añadir los binarios necesarios para la ejecución del framework de inteligencia artificial, añadir la licencia y en corregir un bug encontrado.
+
+Las tareas que se llevaron a cabo para cumplir con los objetivos del sprint pueden verse en \href{https://github.com/DanielSantidrian/UBUassistant/milestone/15?closed=1}{Sprint12}
+
+Las horas estimadas fueron 23,50h, invirtiendo finalmente 35h completando todas las tareas.
+
+\imagen{burndowns/sprint12}{Gráfico burndown sprint 12.}
+
+
 \subsection{Resumen}\label{resumen}
 
 La siguiente tabla recoge el desglose de las horas dedicadas por tipo de tarea a modo de resumen.
 
-\begin{longtable}[]{@{}lrr@{}}
-\toprule
-\begin{minipage}[b]{0.37\columnwidth}\raggedright\strut
-Categoría\strut
-\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright\strut
-\emph{Issues}\strut
-\end{minipage} & \begin{minipage}[b]{0.19\columnwidth}\raggedright\strut
-Horas\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-
-\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
-\emph{Documentación}\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-19\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-10,70\strut
-\end{minipage}\tabularnewline
-
-
-\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
-\emph{Test}\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-3\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-7\strut
-\end{minipage}\tabularnewline
-
-
-\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
-\emph{Bug}\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-12\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-15,25\strut
-\end{minipage}\tabularnewline
-
-
-\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
-\emph{Feature}\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-63\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-124\strut
-\end{minipage}\tabularnewline
-\midrule
-
-\begin{minipage}[t]{0.37\columnwidth}\raggedright\strut
-TOTAL\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-97\strut
-\end{minipage} & \begin{minipage}[t]{0.19\columnwidth}\raggedright\strut
-156,95\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Resumen horas dedicadas al proyecto.}
-\end{longtable}
+\tablaSmallSinColores{Resumen horas dedicadas al proyecto.}
+{l l l}{Resumen horas dedicadas al proyecto.}
+{\textbf{Categoría} & \textbf{Issues} & \textbf{Horas} \\}
+{Documentacion 	& 24 	& 45.20 \\
+ Test			& 3 	& 7 	\\
+ Bug		 	& 13 	& 15.75 \\
+ Feature	 	& 63 	& 124	\\
+ \midrule
+ TOTAL			& 103	& 191.95 \\
+}
 
 \imagen{ResumenHoras}{Porcentaje de horas por tipo de tarea.}
 
-
-\newpage
 
 \section{Estudio de viabilidad}
 
@@ -254,278 +216,100 @@ En la siguiente tabla se desglosan los costes para un empresa de contratar a un 
 
 Para calcular los pagos a la seguridad social por parte de la empresa se han tenido en cuenta las retribuciones comunes (23,60\%), el desempleo de tipo general (5,50\%), el fondo de garantía salarial (0,20\%) y la formación profesional (0,60\%).
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Salario mensual bruto\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-1200 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Retención IRPF (15\%)\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-180 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Seguridad Social (29,9\%)\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-358,8 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Total bruto\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-1738,8 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total 5 meses}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-8694 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes humanos.}
-\end{longtable}
+\tablaSmallSinColores{Costes Humanos.}
+{l l}{Costes Humanos.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Salario mensual bruto 	& 1200 \euro{}	\\
+ Seguridad Social		& 358.8 \euro{} \\
+ Total				 	& 1738.8 \euro{}\\
+ \midrule
+ Total 5 meses			& 8694 \euro{}	\\
+}
 
 \subsubsection{Costes hardware}
 
 Los costes hardware engloban todos aquellos costes de componentes físicos que son necesarios para desarrollar el proyecto.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
+\tablaSmallSinColores{Costes hardware.}
+{l l}{Costes hardware.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Ordenador personal \cite{pago:pc} 	& 700 \euro{}	\\
+ Servidor Tomcat 	\cite{tom:server}& 100 \euro{} \\
+ \midrule
+ Total					& 800 \euro{}	\\
+}
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Ordenador Personal \cite{pago:pc} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-700 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Servidor Tomcat \cite{tom:server} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-100 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-800 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes hardware.}
-\end{longtable}
 
 \subsubsection{Costes licencias}
 
 En los costes de licencias se tiene en cuenta todo el software de pago necesario en el proyecto.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
+\tablaSmallSinColores{Costes de licencias.}
+{l l}{Costes de licencias.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Windows 10 Home \cite{pago:w10} 	& 135 \euro{}	\\
+ Microsoft Office 2016 	\cite{pago:office}& 279 \euro{} \\
+ \midrule
+ Total					& 414 \euro{}	\\
+}
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Windows 10 Home \cite{pago:w10} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-135 \euro{}\strut
-\end{minipage}\tabularnewline
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Microsoft Office 2016 \cite{pago:office} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-279 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-414 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes licencias.}
-\end{longtable}
 
 \subsubsection{Costes redes y comunicación}
 
 Se estiman los costes de implantar una red de comunicación.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
+\tablaSmallSinColores{Costes de redes y comunicación.}
+{l l}{Costes de redes y comunicacion.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Internet \cite{pago:int}& 150 \euro{} \\
+ \midrule
+ Total					& 150 \euro{}	\\
+}
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Internet \cite{pago:int} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-150 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-150 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes redes y comunicación.}
-\end{longtable}
 
 \subsubsection{Costes infraestructura}
 
 En esta sección se tienen en cuenta los costes de alojamiento.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
+\tablaSmallSinColores{Costes infraestructura.}
+{l l}{Costes de infraestructura.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Alquiler oficina \cite{pago:alq}& 1000 \euro{} \\
+ \midrule
+ Total					& 1000 \euro{}	\\
+}
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Alquiler oficina \cite{pago:alq} \strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-1000 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-1000 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes alojamiento.}
-\end{longtable}
 
 \subsubsection{Costes impresión}
 
 En esta sección se tienen en cuenta los costes de impresión de la documentación.
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Concepto}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Impresión memoria y cartel\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-30 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-30 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes impresión.}
-\end{longtable}
+\tablaSmallSinColores{Costes de impresión.}
+{l l}{Costes de impresion.}
+{\textbf{Concepto} & \textbf{Coste}\\}
+{Impresión memoria y cartel & 30 \euro{} \\
+ \midrule
+ Total					& 30 \euro{}	\\
+}
 
 \subsubsection{Costes totales}
 
 Los costes totales de llevar a cabo el proyecto por una empresa son:
 
-\begin{longtable}[]{@{}lr@{}}
-\toprule
-\begin{minipage}[b]{0.38\columnwidth}\raggedright\strut
-\textbf{Tipo coste}\strut
-\end{minipage} & \begin{minipage}[b]{0.20\columnwidth}\raggedright\strut
-\textbf{Coste}\strut
-\end{minipage}\tabularnewline
-\midrule
-\endhead
+\tablaSmallSinColores{Costes totales.}
+{l l}{Costes totales.}
+{\textbf{Tipo coste} & \textbf{Coste}\\}
+{Humano 				& 8694 \euro{} \\
+ Hardware 				& 800 \euro{} \\
+ Licencias 				& 414 \euro{} \\
+ Redes y comunicación 	& 150 \euro{} \\
+ Infraestructura 		& 1000 \euro{} \\
+ Impresión 				& 30 \euro{} \\
+ \midrule
+ Total					& 11088 \euro{}	\\
+}
 
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Humano\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-8694 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Hardware\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-800 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Licencias\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-414 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Redes y comunicación\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-150 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Infraestructura\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-1000 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-Impresión\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-30 \euro{}\strut
-\end{minipage}\tabularnewline
-
-\midrule
-
-\begin{minipage}[t]{0.38\columnwidth}\raggedright\strut
-\textbf{Total}\strut
-\end{minipage} & \begin{minipage}[t]{0.20\columnwidth}\raggedright\strut
-11088 \euro{}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\caption{Costes totales.}
-\end{longtable}
 
 \subsubsection{Beneficios}
 
@@ -544,200 +328,30 @@ Hay que comprobar que todas las dependencias y bibliotecas usadas en el proyecto
 La licencias de las dependencias utilizadas se recogen en la siguiente tabla.
 
 
-\begin{longtable}[]{@{}llll@{}}
-\toprule
-\begin{minipage}[b]{0.18\columnwidth}\raggedright\strut
-Dependencia\strut
-\end{minipage} & \begin{minipage}[b]{0.10\columnwidth}\raggedright\strut
-Versión\strut
-\end{minipage} & \begin{minipage}[b]{0.49\columnwidth}\raggedright\strut
-Descripción\strut
-\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright\strut
-Licencia\strut
-\end{minipage}\tabularnewline\tabularnewline
-\midrule
-\endhead
 
+\tablaSinColores{Licencias del proyecto.}
+{L{3cm} l L{6cm} l}
+{4}
+{Licencias del proyecto.}
+{\textbf{Dependencia} & \textbf{Versión} & \textbf{Descripción} & \textbf{Licencia} \\}
+{jCOLIBRI \cite{lic:jcol} & 2.3 & Framework de inteligencia artificial.	& LGPL\\ 
+ HSQLDB \cite{lic:hsql}	  & 2.3.4 & Sistema gestor de base de datos. & BSD\\
+ Antlr \cite{lic:antlr}	  & 2.7.7 & \emph{Parser} para trabajar con texto en archivos binarios. & BSD\\
+ Commons Collections \cite{lic:col} & 3.2.1 & Framework que añade tipos de colecciones. & Apache v2.0\\
+ Commons Logging \cite{lic:colog} & 1.1 & Librería que permite generar logs de forma sencilla. & Apache v2.0\\
+ Dom4j \cite{lic:dom} & 1.6.1 &  Framework XML flexible. & BSD\\
+ Hibernate \cite{lic:hiber}  & Múltiples & Herramienta de mapeo Objeto-Relacional (ORM). & LGPL\\
+ Javassist \cite{lic:javss} & 3.15.0 & Librería para manipular bytecode Java. & LGPL\\
+ JBoss \cite{lic:jboss} & Múltiples & Servidor de aplicaciones Java EE. & LGPL\\
+ Log4j \cite{lic:log4j} & 1.2.16 & Biblioteca que permite escribir mensajes de registro. & Apache v2.0 \\
+ MySQL Connector \cite{lic:mysql} & 5.1.18 & Proporciona drivers para JDBC. & LGPL\\
+ Javaee Web Api \cite{lic:jwa} & 7.0 & Framework que permite la creación de aplicaciones web Java. & GPL\\
+ Java Persistence API \cite{lic:jpa} & 1.0.2 & Framework que maneja datos relacionales en aplicaciones Java. & GPL\\
+ Selenium \cite{lic:sele} & 3.4.0 & Framework de automatización de pruebas en entorno web. & Apache v2.0\\
+ Guava \cite{lic:guava} & 22.0 & Conjunto de bibliotecas comunes para Java. & Apache v2.0\\
+ JUnit \cite{lic:junit} & 4.11 & Bibliotecas para realizar pruebas unitarias. & EPL\\
+ }
 
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-jCOLIBRI \cite{lic:jcol} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-2.3\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework de inteligencia artificail.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-LGPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-HSQLDB \cite{lic:hsql} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-2.3.4\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Sistema gestor de base de datos.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-BSD\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Antlr \cite{lic:antlr} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-2.7.7\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-\emph{Parser} para trabajar con texto en archivos binarios. \strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-BSD\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Commons Collections \cite{lic:col} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-3.2.1\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework que añade tipos de colecciones.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-Apache v2.0\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Commons Logging \cite{lic:colog} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-1.1\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Librería que permite generar logs de forma sencilla.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-Apache v2.0\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Dom4j \cite{lic:dom} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-1.6.1\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework XML flexible.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-BSD\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Hibernate \cite{lic:hiber} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-Múltiples\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Herramienta de mapeo Objeto-Relacional (ORM).\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-LGPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Javassist \cite{lic:javss} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-3.15.0\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Librería para manipular bytecode Java.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-LGPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-JBoss \cite{lic:jboss} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-Múltiples\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Servidor de aplicaciones Java EE.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-LGPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Log4j \cite{lic:log4j} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-1.2.16\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Biblioteca que permite escribir mensajes de registro.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-Apache v2.0\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-MySQL Connector \cite{lic:mysql} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-5.1.18\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Proporciona drivers para JDBC.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-LGPL \strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Javaee Web Api \cite{lic:jwa} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-7.0\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework que permite la creación de aplicaciones web Java.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-GPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Java Persistence API \cite{lic:jpa} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-1.0.2\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework que maneja datos relacionales en aplicaciones Java.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-GPL\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Selenium \cite{lic:sele} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-3.4.0\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Framework de automatización de pruebas en entorno web.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-Apache v2.0\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-Guava \cite{lic:guava} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-22.0\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Conjunto de bibliotecas comunes para Java.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-Apache v2.0\strut
-\end{minipage}\tabularnewline\tabularnewline
-
-
-\begin{minipage}[t]{0.18\columnwidth}\raggedright\strut
-JUnit \cite{lic:junit} \strut
-\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-4.11\strut
-\end{minipage} & \begin{minipage}[t]{0.49\columnwidth}\raggedright\strut
-Bibliotecas para realizar pruebas unitarias.\strut
-\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-CPL\strut
-\end{minipage}\tabularnewline
-
-
-\bottomrule
-\caption{Licencias del proyecto.}
-\end{longtable}
 
 Las licencias anteriormente citadas se caracterizan por \cite{lic:tipos}:
 
