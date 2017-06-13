@@ -288,7 +288,12 @@ THE SOFTWARE.*/
 
 					var base64data = "base64," + $.base64.encode(excelFile);
 					//window.open('data:application/vnd.ms-'+defaults.type+';filename=exportData.doc;' + base64data);
-					$('<a style="display:none" href="data:application/vnd.ms-'+defaults.type+';filename=exportData.doc;'+base64data+'" download="'+getName()+'.doc"><span></span></a>').appendTo(document.body).find('span').trigger("click").parent().remove();
+					if(defaults.type == 'excel'){
+						$('<a style="display:none" href="data:application/vnd.ms-'+defaults.type+';filename=exportData.xls;'+base64data+'" download="'+getName()+'.xls"><span></span></a>').appendTo(document.body).find('span').trigger("click").parent().remove();
+					}else if(defaults.type == 'doc'){
+						$('<a style="display:none" href="data:application/vnd.ms-'+defaults.type+';filename=exportData.doc;'+base64data+'" download="'+getName()+'.doc"><span></span></a>').appendTo(document.body).find('span').trigger("click").parent().remove();
+					}
+					
 					
 				}else if(defaults.type == 'png'){
 					html2canvas($(el), {
