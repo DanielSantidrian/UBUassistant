@@ -1,4 +1,4 @@
-
+<%@page contentType="text/html" errorPage="../error.jsp" %>
 <%@ page import="handler.UBUassistantHandler" %>
 <%@ page import="storage.Storage" %>
 <%@ page import="java.text.DateFormat" import="java.text.SimpleDateFormat" import="java.util.Date"%>

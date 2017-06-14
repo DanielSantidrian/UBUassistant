@@ -1,3 +1,4 @@
+<%@page contentType="text/html" errorPage="../error.jsp" %>
 <%@ page import="database.DatabaseAdministration" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>

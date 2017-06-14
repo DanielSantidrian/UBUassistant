@@ -109,7 +109,7 @@ public class AdminModifyCase {
     
     driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
     Thread.sleep(2000);
-    assertTrue(closeAlertAndGetItsText().matches("^Â¿Esta seguro de que desea borrar el caso[\\s\\S]$"));
+    assertTrue(closeAlertAndGetItsText().matches("^¿Está seguro de que desea borrar el caso[\\s\\S]$"));
     Thread.sleep(5000);
   }
 

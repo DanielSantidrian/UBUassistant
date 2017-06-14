@@ -1,3 +1,4 @@
+<%@page contentType="text/html" errorPage="../error.jsp" %>
 <%@page import="database.DatabaseConnection"%>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>

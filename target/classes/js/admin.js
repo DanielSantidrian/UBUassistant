@@ -29,12 +29,3 @@ function showErrorIfExists(param){
 	}
 }
 
-function confirmDelete(){
-			 
-	var r = confirm("¿Esta seguro de que desea borrar el caso?");
-    if (r == true) {
-        return true;
-    } else {
-        return false;
-    }
-}

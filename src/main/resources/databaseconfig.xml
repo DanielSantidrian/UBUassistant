@@ -1,3 +1,4 @@
+<!DOCTYPE xml>
 <DataBaseConfiguration>
 	<HibernateConfigFile>hibernate.cfg.xml</HibernateConfigFile>
 	<DescriptionMappingFile>caseDescription.hbm.xml</DescriptionMappingFile>

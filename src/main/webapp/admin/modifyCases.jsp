@@ -1,4 +1,4 @@
-
+<%@page contentType="text/html" errorPage="../error.jsp" %>
 <%@ page import="com.mysql.jdbc.jdbc2.optional.MysqlDataSource" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.PreparedStatement" %>
@@ -41,7 +41,15 @@
 			  document.getElementById('edit').className = 'active';
 			};
 			
-
+		function confirmDelete(){
+				 
+				var r = confirm("¿Está seguro de que desea borrar el caso?");
+			    if (r == true) {
+			        return true;
+			    } else {
+			        return false;
+			    }
+			}
 		
 		</script>
 		
