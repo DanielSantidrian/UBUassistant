@@ -20,7 +20,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * 
- * @author dansa
+ * @author Daniel Santidrian Alonso
  *
  */
 public class DatabaseConnectionTest {

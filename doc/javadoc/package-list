@@ -2,5 +2,6 @@ cbr
 database
 handler
 representation
+selenium
 storage
 util
