@@ -1,9 +1,5 @@
 function checkInput(){
 	var k1=document.getElementById('keyWord1');
-	var k2=document.getElementById('keyWord2');
-	var k3=document.getElementById('keyWord3');
-	var k4=document.getElementById('keyWord4');
-	var k5=document.getElementById('keyWord5');
 	var c =document.getElementById('categoria');
 	var r =document.getElementById('respuesta');
 	

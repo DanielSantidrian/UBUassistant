@@ -1058,7 +1058,7 @@ _html2canvas.Parse = function (images, options, cb) {
   function init() {
     var background = getCSS(document.documentElement, "backgroundColor"),
       transparentBackground = (Util.isTransparent(background) && element === document.body),
-      stack = renderElement(element, null, false, transparentBackground);
+      stack = renderElement(element, null, false);
 
     // create pseudo elements in a single pass to prevent synchronous layouts
     addPseudoElements(element);
@@ -1277,7 +1277,7 @@ _html2canvas.Parse = function (images, options, cb) {
 
     ctx.setVariable("fillStyle", color);
     ctx.setVariable("font", [getCSS(el, "fontStyle"), getCSS(el, "fontVariant"), bold, size, family].join(" "));
-    ctx.setVariable("textAlign", (align) ? "right" : "left");
+    ctx.setVariable("textAlign", "left");
 
     if (shadows.length) {
       // TODO: support multiple text shadows
@@ -1431,7 +1431,7 @@ _html2canvas.Parse = function (images, options, cb) {
         text = currentIndex;
         break;
       case "decimal-leading-zero":
-        text = (currentIndex.toString().length === 1) ? currentIndex = "0" + currentIndex.toString() : currentIndex.toString();
+        text = (currentIndex.toString().length === 1) ? "0" + currentIndex.toString() : currentIndex.toString();
         break;
       case "upper-roman":
         text = _html2canvas.Generate.ListRoman( currentIndex );

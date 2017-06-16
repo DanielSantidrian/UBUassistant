@@ -26,10 +26,10 @@ public class DatabaseConnection {
 	/**
 	 * Global variables
 	 */
-	private static Connection con = null;
-	private static List<String> sentenceList = new ArrayList<String>();
-	private static List<String> saluteList = new ArrayList<String>();
-	private static List<String> saluteResponseList = new ArrayList<String>();
+	private Connection con = null;
+	private List<String> sentenceList = new ArrayList<String>();
+	private List<String> saluteList = new ArrayList<String>();
+	private List<String> saluteResponseList = new ArrayList<String>();
 	private String userID;
 	
 	/**
@@ -66,27 +66,69 @@ public class DatabaseConnection {
 	 */
 	private void createLists(){
 		
+		Statement stmt = null;
+		ResultSet rs = null;
+		
 		//Creation of the list containing the sentences
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM frases");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM frases");
 			while (rs.next()) {
 				sentenceList.add(rs.getString("frase"));
 			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} finally{
+			
+			try {
+				if(stmt!=null){
+					stmt.close();
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs!=null){
+					rs.close();
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			
+		} 
 		
 		//Creation of the list containing the salutes
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM saludos");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM saludos");
 			while (rs.next()) {
 				saluteList.add(rs.getString("saludo"));
 				saluteResponseList.add(rs.getString("respuesta"));
 			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			try {
+				if(stmt!=null){
+					stmt.close();
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs!=null){
+					rs.close();
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -101,10 +143,14 @@ public class DatabaseConnection {
 		boolean flag = false;
 		String palabra2=" ";
 		
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement pst = null;
+		
 		try {
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM aprendizaje");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM aprendizaje");
 			while (rs.next()) {
 				if(p1.equals(rs.getString("palabra1"))){
 					flag=true;
@@ -114,7 +160,7 @@ public class DatabaseConnection {
 			
 			if(!flag || !palabra2.equals(p2)){
 				
-				PreparedStatement pst = con.prepareStatement(
+				pst = con.prepareStatement(
 						"INSERT INTO aprendizaje (userid, palabra1, palabra2) VALUES (?, ?, ?)");
 				pst.setString(1, userID);
 				pst.setString(2, p1);
@@ -125,6 +171,28 @@ public class DatabaseConnection {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			try {
+				if(stmt!=null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+
+				if(rs!=null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(pst!=null)
+					pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -135,6 +203,10 @@ public class DatabaseConnection {
 	 * @param respuesta response for that set of words
 	 */
 	public void aumentarNumBusquedas(LinkedHashSet<String> palabras, String respuesta){
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement pst = null;
 		
 		boolean flag=false;
 		int palabraId = 0;
@@ -149,8 +221,8 @@ public class DatabaseConnection {
 		
 		try{
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
 				List<String> databaseWords = new ArrayList<String>();
@@ -173,7 +245,7 @@ public class DatabaseConnection {
 			
 			if(flag){
 				
-				PreparedStatement pst = con.prepareStatement("UPDATE logger SET num_busquedas = ?, fecha=? WHERE id=?");
+				pst = con.prepareStatement("UPDATE logger SET num_busquedas = ?, fecha=? WHERE id=?");
 
 				pst.setInt(1, (num_busquedas+=1));
 				pst.setString(2, sdf.format(new Date()));
@@ -184,8 +256,7 @@ public class DatabaseConnection {
 				
 				categoria=getCategoria(respuesta);
 				
-				PreparedStatement pst = 
-						con.prepareStatement("INSERT INTO logger "
+				pst = con.prepareStatement("INSERT INTO logger "
 												+ "(keyWord1, keyWord2, keyWord3, keyWord4, keyWord5, categoria, num_busquedas, num_votos, valoracion_total,"
 												+ " fecha, respuesta, userid) "
 												+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -209,6 +280,27 @@ public class DatabaseConnection {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			try {
+				if(stmt!=null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs!=null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(pst!=null)
+					pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -218,6 +310,10 @@ public class DatabaseConnection {
 	 * @param vote the rating to the answer for the words
 	 */
 	public void saveVote(LinkedHashSet<String> palabras,int vote){
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement pst = null;
 		
 		int palabraId = 0;
 		int num_votos=0;
@@ -229,8 +325,8 @@ public class DatabaseConnection {
 		Collections.sort(temp);
 		
 		try {
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
 				List<String> databaseWords = new ArrayList<String>();
@@ -251,7 +347,7 @@ public class DatabaseConnection {
 				}
 			}
 			
-			PreparedStatement pst = con.prepareStatement("UPDATE logger SET num_votos=?, valoracion_total=? WHERE id=?");
+			pst = con.prepareStatement("UPDATE logger SET num_votos=?, valoracion_total=? WHERE id=?");
 			pst.setInt(1, (num_votos+=1));
 			pst.setInt(2, (valoracion_total+=vote));
 			pst.setInt(3, palabraId);
@@ -259,6 +355,27 @@ public class DatabaseConnection {
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			try {
+				if(stmt!=null)
+					stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs!=null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(pst!=null)
+					pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -272,17 +389,22 @@ public class DatabaseConnection {
 		int id = 0;
 		String categoria = null;
 		
+		PreparedStatement pst = null;
+		PreparedStatement pst1 = null;
+		ResultSet rs = null;
+		ResultSet rs1 = null;
+		
 		try{
-			PreparedStatement pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
+			pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
 			pst.setString(1, respuesta);
-			ResultSet rs = pst.executeQuery();
+			rs = pst.executeQuery();
 			while (rs.next()) {
 				id=rs.getInt("id");
 			}	
 			
-			PreparedStatement pst1 = con.prepareStatement("SELECT * FROM casedescription WHERE id=?");
+			pst1 = con.prepareStatement("SELECT * FROM casedescription WHERE id=?");
 			pst1.setInt(1, id);
-			ResultSet rs1 = pst1.executeQuery();
+			rs1 = pst1.executeQuery();
 			while (rs1.next()) {
 				categoria=rs1.getString("categoria");
 			}	
@@ -290,6 +412,34 @@ public class DatabaseConnection {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally{
+			try {
+				if(pst!=null)
+					pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(pst1!=null)
+					pst1.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs!=null)
+					rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(rs1!=null)
+					rs1.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return categoria;
