@@ -8,12 +8,22 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ * @author Daniel Santidrian Alonso
+ *
+ */
 public class DatabaseUtil {
 	
+	/**
+	 * Global variable
+	 */
 	private static final Logger logger = Logger.getLogger(DatabaseUtil.class);
 	
+
 	/**
 	 * Function that returns the category of a response.
+	 * @param con Connection to the database
 	 * @param respuesta response from which we want to know its category.
 	 * @return categoria category of the response.
 	 */

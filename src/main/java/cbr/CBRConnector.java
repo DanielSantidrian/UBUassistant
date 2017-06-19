@@ -26,7 +26,6 @@ public class CBRConnector{
 	/**
 	 * Method that always return the same instance (Singleton Pattern)
 	 * @return instance Instance of the class.
-	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the case base.
 	 */
 	public static CBRConnector getInstance(){
 		
@@ -35,7 +34,6 @@ public class CBRConnector{
 	
 	/**
 	 * Constructor of the class
-	 * @throws InitializingException Exception that is thrown when it is not possible to build the connector or the case base.
 	 */
 	private CBRConnector(){
 		try {
