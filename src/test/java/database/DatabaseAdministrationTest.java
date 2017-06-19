@@ -37,10 +37,6 @@ public class DatabaseAdministrationTest {
 		ds.setPassword("1234");
 		ds.setDatabaseName("ubuassistant");
 		ds.setURL("jdbc:mysql://localhost/ubuassistant");
-		
-		/*ds.setUrl("jdbc:mysql://sql11.freesqldatabase.com:3306/sql11162792");
-		ds.setUser("sql11162792");
-		ds.setPassword("5v53hZNDmT");*/
 
 		try {
 			con = ds.getConnection();
