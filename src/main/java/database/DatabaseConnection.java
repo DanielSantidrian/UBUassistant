@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 
@@ -27,10 +29,13 @@ public class DatabaseConnection {
 	 * Global variables
 	 */
 	private Connection con = null;
-	private List<String> sentenceList = new ArrayList<String>();
-	private List<String> saluteList = new ArrayList<String>();
-	private List<String> saluteResponseList = new ArrayList<String>();
+	private List<String> sentenceList = new ArrayList<>();
+	private List<String> saluteList = new ArrayList<>();
+	private List<String> saluteResponseList = new ArrayList<>();
 	private String userID;
+	private DatabaseUtil dbu = new DatabaseUtil();
+	
+	private static final Logger logger = Logger.getLogger(DatabaseConnection.class);
 	
 	/**
 	 * Constructor of the class that connects the database.
@@ -46,15 +51,11 @@ public class DatabaseConnection {
 		ds.setPassword("1234");
 		ds.setDatabaseName("ubuassistant");
 		ds.setURL("jdbc:mysql://localhost/ubuassistant");
-		
-		/*ds.setUrl("jdbc:mysql://sql11.freesqldatabase.com:3306/sql11162792");
-		ds.setUser("sql11162792");
-		ds.setPassword("5v53hZNDmT");*/
 
 		try {
 			con = ds.getConnection();
 		} catch (SQLException e) {
-			System.err.println("Error al conectar con la base de datos.");
+			logger.error("Error al conectar con la base de datos.");
 		}
 		
 		createLists();
@@ -77,28 +78,11 @@ public class DatabaseConnection {
 				sentenceList.add(rs.getString("frase"));
 			}	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
 			
-			try {
-				if(stmt!=null){
-					stmt.close();
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs!=null){
-					rs.close();
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			
+			dbu.close(stmt);
+			dbu.close(rs);
 		} 
 		
 		//Creation of the list containing the salutes
@@ -110,25 +94,11 @@ public class DatabaseConnection {
 				saluteResponseList.add(rs.getString("respuesta"));
 			}	
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(stmt!=null){
-					stmt.close();
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			
-			try {
-				if(rs!=null){
-					rs.close();
-				}
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(stmt);
+			dbu.close(rs);
 		}
 	}
 	
@@ -170,29 +140,11 @@ public class DatabaseConnection {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(stmt!=null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-
-				if(rs!=null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(stmt);
+			dbu.close(rs);
+			dbu.close(pst);
 		}
 	}
 	
@@ -210,11 +162,11 @@ public class DatabaseConnection {
 		
 		boolean flag=false;
 		int palabraId = 0;
-		int num_busquedas=0;
+		int numbusquedas=0;
 		String categoria=null;
 		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-		List<String> temp = new ArrayList<String>();
+		List<String> temp = new ArrayList<>();
 		
 		temp.addAll(palabras);
 		Collections.sort(temp);
@@ -225,29 +177,21 @@ public class DatabaseConnection {
 			rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
-				List<String> databaseWords = new ArrayList<String>();
-				databaseWords.add(rs.getString("keyWord1"));
-				databaseWords.add(rs.getString("keyWord2"));
-				databaseWords.add(rs.getString("keyWord3"));
-				databaseWords.add(rs.getString("keyWord4"));
-				databaseWords.add(rs.getString("keyWord5"));
-				
-				databaseWords.removeAll(Collections.singleton(null));
-				Collections.sort(databaseWords);
+				List<String> databaseWords = createDatabaseWords(rs);
 				
 				if(databaseWords.equals(temp) && userID.equals(rs.getString("userid"))){
 
 						flag=true;
 						palabraId=rs.getInt("id");
-						num_busquedas=rs.getInt("num_busquedas");
+						numbusquedas=rs.getInt("num_busquedas");
 				}
 			}	
 			
 			if(flag){
 				
 				pst = con.prepareStatement("UPDATE logger SET num_busquedas = ?, fecha=? WHERE id=?");
-
-				pst.setInt(1, (num_busquedas+=1));
+				numbusquedas+=1;
+				pst.setInt(1, numbusquedas);
 				pst.setString(2, sdf.format(new Date()));
 				pst.setInt(3, palabraId);
 				pst.executeUpdate();
@@ -279,29 +223,31 @@ public class DatabaseConnection {
 			}	
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(stmt!=null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs!=null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(stmt);
+			dbu.close(rs);
+			dbu.close(pst);
 		}
+	}
+
+	/**
+	 * Function that create a list with the keyWords in database and delete nulls.
+	 * @param rs Resultset.
+	 * @return databaseWords list of the database words.
+	 * @throws SQLException Exception that is thrown when the is a problem with SQL.
+	 */
+	private List<String> createDatabaseWords(ResultSet rs) throws SQLException {
+		List<String> databaseWords = new ArrayList<>();
+		databaseWords.add(rs.getString("keyWord1"));
+		databaseWords.add(rs.getString("keyWord2"));
+		databaseWords.add(rs.getString("keyWord3"));
+		databaseWords.add(rs.getString("keyWord4"));
+		databaseWords.add(rs.getString("keyWord5"));
+		
+		databaseWords.removeAll(Collections.singleton(null));
+		Collections.sort(databaseWords);
+		return databaseWords;
 	}
 	
 	/**
@@ -316,10 +262,10 @@ public class DatabaseConnection {
 		PreparedStatement pst = null;
 		
 		int palabraId = 0;
-		int num_votos=0;
-		int valoracion_total=0;
+		int numvotos=0;
+		int valoraciontotal=0;
 		
-		List<String> temp = new ArrayList<String>();
+		List<String> temp = new ArrayList<>();
 		
 		temp.addAll(palabras);
 		Collections.sort(temp);
@@ -329,53 +275,30 @@ public class DatabaseConnection {
 			rs = stmt.executeQuery("SELECT * FROM logger");
 			while (rs.next()) {
 				
-				List<String> databaseWords = new ArrayList<String>();
-				databaseWords.add(rs.getString("keyWord1"));
-				databaseWords.add(rs.getString("keyWord2"));
-				databaseWords.add(rs.getString("keyWord3"));
-				databaseWords.add(rs.getString("keyWord4"));
-				databaseWords.add(rs.getString("keyWord5"));
-				
-				databaseWords.removeAll(Collections.singleton(null));
-				Collections.sort(databaseWords);
+				List<String> databaseWords = createDatabaseWords(rs);
 				
 				if(databaseWords.equals(temp) && userID.equals(rs.getString("userid"))){
 
 					palabraId=rs.getInt("id");
-					num_votos=rs.getInt("num_votos");
-					valoracion_total=rs.getInt("valoracion_total");
+					numvotos=rs.getInt("num_votos");
+					valoraciontotal=rs.getInt("valoracion_total");
 				}
 			}
 			
 			pst = con.prepareStatement("UPDATE logger SET num_votos=?, valoracion_total=? WHERE id=?");
-			pst.setInt(1, (num_votos+=1));
-			pst.setInt(2, (valoracion_total+=vote));
+			numvotos+=1;
+			pst.setInt(1, numvotos);
+			valoraciontotal+=vote;
+			pst.setInt(2, valoraciontotal);
 			pst.setInt(3, palabraId);
 			pst.executeUpdate();
 					
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(stmt!=null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs!=null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(stmt);
+			dbu.close(rs);
+			dbu.close(pst);
 		}
 	}
 	
@@ -385,65 +308,8 @@ public class DatabaseConnection {
 	 * @return categoria category of the response.
 	 */
 	private String getCategoria(String respuesta){
-		
-		int id = 0;
-		String categoria = null;
-		
-		PreparedStatement pst = null;
-		PreparedStatement pst1 = null;
-		ResultSet rs = null;
-		ResultSet rs1 = null;
-		
-		try{
-			pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
-			pst.setString(1, respuesta);
-			rs = pst.executeQuery();
-			while (rs.next()) {
-				id=rs.getInt("id");
-			}	
-			
-			pst1 = con.prepareStatement("SELECT * FROM casedescription WHERE id=?");
-			pst1.setInt(1, id);
-			rs1 = pst1.executeQuery();
-			while (rs1.next()) {
-				categoria=rs1.getString("categoria");
-			}	
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst1!=null)
-					pst1.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs!=null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs1!=null)
-					rs1.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return categoria;
-		
+
+		return dbu.getCategoria(con, respuesta);
 	}
 
 	
@@ -470,5 +336,5 @@ public class DatabaseConnection {
 	public List<String> getSaluteResponseList(){
 		return saluteResponseList;
 	}
-
+	
 }

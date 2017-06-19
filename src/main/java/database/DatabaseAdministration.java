@@ -2,10 +2,11 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
@@ -21,6 +22,9 @@ public class DatabaseAdministration {
 	 * Global variables
 	 */
 	private Connection con = null;
+	private DatabaseUtil dbu = new DatabaseUtil();
+	
+	private static final Logger logger = Logger.getLogger(DatabaseAdministration.class);
 
 	
 	/**
@@ -34,15 +38,11 @@ public class DatabaseAdministration {
 		ds.setPassword("1234");
 		ds.setDatabaseName("ubuassistant");
 		ds.setURL("jdbc:mysql://localhost/ubuassistant");
-		
-		/*ds.setUrl("jdbc:mysql://sql11.freesqldatabase.com:3306/sql11162792");
-		ds.setUser("sql11162792");
-		ds.setPassword("5v53hZNDmT");*/
 
 		try {
 			con = ds.getConnection();
 		} catch (SQLException e) {
-			System.err.println("Error al conectar con la base de datos.");
+			logger.error("Error al conectar con la base de datos.");
 		}
 	}
 	
@@ -82,21 +82,10 @@ public class DatabaseAdministration {
 			
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst2!=null)
-					pst2.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(pst);
+			dbu.close(pst2);
 		}
 	}
 	
@@ -137,25 +126,11 @@ public class DatabaseAdministration {
 			pst2.executeUpdate();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst2!=null)
-					pst2.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(pst);
+			dbu.close(pst2);
 		}
-		
-		
 	}
 	
 	/**
@@ -179,21 +154,10 @@ public class DatabaseAdministration {
 			pst2.executeUpdate();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst2!=null)
-					pst2.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(pst);
+			dbu.close(pst2);
 		}
 	}
 	
@@ -234,30 +198,12 @@ public class DatabaseAdministration {
 			pst2.executeUpdate();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
 			
-			try {
-				if(pst0!=null)
-					pst0.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst2!=null)
-					pst2.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
+			dbu.close(pst0);
+			dbu.close(pst);
+			dbu.close(pst2);
 		}
 	}
 	
@@ -278,18 +224,11 @@ public class DatabaseAdministration {
 			pst.executeUpdate();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
 			
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
+			dbu.close(pst);
 		}
-		
 	}
 	
 	
@@ -304,17 +243,13 @@ public class DatabaseAdministration {
 			stmt = con.createStatement();
 			stmt.executeUpdate("DELETE FROM logger");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		} finally{
-			try {
-				if(stmt!=null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			dbu.close(stmt);
 		}
 		
 	}
+	
 	
 	
 	/**
@@ -324,63 +259,7 @@ public class DatabaseAdministration {
 	 */
 	private String getCategoria(String respuesta){
 		
-		int id = 0;
-		String categoria = null;
-		PreparedStatement pst = null;
-		PreparedStatement pst1 = null;
-		ResultSet rs = null;
-		ResultSet rs1 = null;
-		
-		try{
-			pst = con.prepareStatement("SELECT * FROM casesolution WHERE answer=?");
-			pst.setString(1, respuesta);
-			rs = pst.executeQuery();
-			while (rs.next()) {
-				id=rs.getInt("id");
-			}	
-			
-			pst1 = con.prepareStatement("SELECT * FROM casedescription WHERE id=?");
-			pst1.setInt(1, id);
-			rs1 = pst1.executeQuery();
-			while (rs1.next()) {
-				categoria=rs1.getString("categoria");
-			}	
-			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try {
-				if(pst!=null)
-					pst.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(pst1!=null)
-					pst1.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs!=null)
-					rs.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(rs1!=null)
-					rs1.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return categoria;
-		
+		return dbu.getCategoria(con, respuesta);
 	}
 	
 	/**
@@ -398,4 +277,5 @@ public class DatabaseAdministration {
 	    }
 	    return output;
 	}
+	
 }

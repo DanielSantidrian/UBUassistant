@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Generated;
 
+import org.apache.log4j.Logger;
 import jcolibri.cbraplications.StandardCBRApplication;
 import jcolibri.cbrcore.Attribute;
 import jcolibri.cbrcore.CBRCase;
@@ -51,14 +52,16 @@ public class CBR implements StandardCBRApplication {
 	private Map<CBRCase,Double> casesToReatinGood;
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
-    private HashMap<String, List<RetrievalResult>> badResuts = new HashMap<String,List<RetrievalResult>>();
+    private HashMap<String, List<RetrievalResult>> badResuts = new HashMap<>();
+
+    private static final Logger logger = Logger.getLogger(CBR.class);
+    
 	
 
 	/**
      * Constructor of the class
      */
     public CBR() {
-    	
     	configureCBR();	
 	}
     
@@ -88,10 +91,8 @@ public class CBR implements StandardCBRApplication {
 	@Generated(value = { "CS-PTConector" })	
 	private void configureConnector() throws InitializingException{
 				
-		connector = new jcolibri.connector.DataBaseConnector();
-		
-		connector.initFromXMLfile(jcolibri.util.FileIO
-				.findFile("databaseconfig.xml"));
+		CBRConnector CBRconnector=CBRConnector.getInstance();
+		connector=CBRconnector.getConnector();
 	}
 
 
@@ -215,12 +216,12 @@ public class CBR implements StandardCBRApplication {
 	public void buildEval(String[] words) {
 		
 		//Map with all the responses found in value and the word that generate them in key.
-		parcialResults=new HashMap<String, List<String>>();
+		parcialResults=new HashMap<>();
 		//Set that store all the cases with some similarity with the words input.
-		casesToReatin = new HashMap<CBRCase,Double>();
-		casesToReatinGood = new HashMap<CBRCase,Double>();
+		casesToReatin = new HashMap<>();
+		casesToReatinGood = new HashMap<>();
 		//Map that saves all the results in value with the word that generate them in key.
-		badResuts = new HashMap<String,List<RetrievalResult>>();
+		badResuts = new HashMap<>();
 		
 		//For each word in the input text
 		for (String word : words) {
@@ -237,16 +238,16 @@ public class CBR implements StandardCBRApplication {
 				try {
 					cycle(query);
 				} catch (ExecutionException e1) {
-					e1.printStackTrace();
+					logger.error(e1.toString());
 				}
 				
 				badResuts.put(word, new ArrayList<RetrievalResult>(eval));
 				//Remove the results with similarity worst than 0.35
 				eval.removeIf(e -> e.getEval()<0.35);
-				List<String> answer = new ArrayList<String>();
+				List<String> answer = new ArrayList<>();
 				for(RetrievalResult r : eval){
-					CBRCase _case = r.get_case();
-					casesToReatin.put(_case,r.getEval());
+					CBRCase c = r.get_case();
+					casesToReatin.put(c,r.getEval());
 					answer.add(((CaseSolution)r.get_case().getSolution()).getAnswer());
 				}
 				
@@ -262,50 +263,56 @@ public class CBR implements StandardCBRApplication {
 	public void buildFinalResults() {
 		
 		//Map with the response in value and all the words that generated them in key.
-		finalResults = new HashMap<LinkedHashSet<String>,List<String>>();
+		finalResults = new HashMap<>();
 		
 		//If there is an answer for the input text
 		if(!parcialResults.isEmpty()){
 			
 			//Getting the common answer (the best answer) of the different words input by the user
-			List<String> aux= new ArrayList<String>(parcialResults.get(parcialResults.keySet().iterator().next()));
+			List<String> aux= new ArrayList<>(parcialResults.get(parcialResults.keySet().iterator().next()));
 			
-			for(String key : parcialResults.keySet())
-				aux.retainAll(parcialResults.get(key));
-			
+			for (Map.Entry<String,List<String>> entry : parcialResults.entrySet()) {
+			    String key = entry.getKey();
+			    aux.retainAll(parcialResults.get(key));
+			}
+
 			if(aux.isEmpty()){
-				for(String key : parcialResults.keySet())
+				for (Map.Entry<String,List<String>> entry : parcialResults.entrySet()) {
+				    String key = entry.getKey();
 					aux.addAll(parcialResults.get(key));
+				}
 			}
 			
 			//Getting all the words that have generated the best answer and storing them in a map
-			LinkedHashSet<String> word = new LinkedHashSet<String>();
+			LinkedHashSet<String> word = new LinkedHashSet<>();
 			
 			for(String res : aux){	
 				
-				for (String o : parcialResults.keySet()) {
-				      if (parcialResults.get(o).contains(res)) {
+				for (Map.Entry<String,List<String>> entry : parcialResults.entrySet()) {
+				    String o = entry.getKey();
+				    if (parcialResults.get(o).contains(res)) {
 				        word.add(o);
 				      }
 				}
 				
 				if(finalResults.containsKey(word)){
-					List<String> temp = new ArrayList<String>(finalResults.get(word));
+					List<String> temp = new ArrayList<>(finalResults.get(word));
 					temp.add(res);
 					finalResults.put(word, temp);
 				}else{
-					List<String> lista = new ArrayList<String>();
+					List<String> lista = new ArrayList<>();
 					lista.add(res);
 					finalResults.put(word, lista);
 				}
 				
-				word = new LinkedHashSet<String>();
+				word = new LinkedHashSet<>();
 			}
 			
 			
 			for(List<String> list : finalResults.values()){
 				for(String answer : list){
-					for(CBRCase cs : casesToReatin.keySet()){
+					for (Map.Entry<CBRCase,Double> entry : casesToReatin.entrySet()) {
+					    CBRCase cs = entry.getKey();
 						if(((CaseSolution)cs.getSolution()).getAnswer().equals(answer)){
 							casesToReatinGood.put(cs,casesToReatin.get(cs));
 						}
@@ -343,7 +350,7 @@ public class CBR implements StandardCBRApplication {
 	 * Function that returns the badResuts
 	 * @return badResuts map that stores all the results in value with the word that generate them in key.
 	 */
-	public HashMap<String, List<RetrievalResult>> getBadResuts() {
+	public Map<String, List<RetrievalResult>> getBadResuts() {
 		return badResuts;
 	}
 

@@ -4,12 +4,13 @@ package handler;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.apache.log4j.Logger;
 
 import cbr.CBR;
 import database.DatabaseConnection;
@@ -52,13 +53,15 @@ public class UBUassistantHandler {
     private Map<CBRCase,Double> casesToReatin;
     private Map<String, List<String>> parcialResults;
     private Map<LinkedHashSet<String>,List<String>> finalResults;
-    private HashMap<String, List<RetrievalResult>> badResuts;
+    private Map<String, List<RetrievalResult>> badResuts;
     List<RetrievalResult> listOfValues;
     private LinkedHashSet<String> currentWords;
     
     private Storage storage;
     
     private CBR cbrApp;
+    
+    private static final Logger logger = Logger.getLogger(UBUassistantHandler.class);
     
     /**
      * Constructor of the class.
@@ -136,7 +139,7 @@ public class UBUassistantHandler {
     	
     	boolean flag=answerReservedWord(userTextLower);
     	
-    	if(flag==false){
+    	if(!flag){
     		
     		String[] words = userTextLower.split("\\s+");
     		
@@ -180,7 +183,8 @@ public class UBUassistantHandler {
 		try {
 			cbrApp.postCycle();
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+
 		}
 	}
 	
@@ -235,9 +239,9 @@ public class UBUassistantHandler {
 			
 			if(i<max){
 				
-				String temp=((CaseDescription)c.getDescription()).getKeyWord1().toString();
+				String temp=((CaseDescription)c.getDescription()).getKeyWord1();
 				String word=temp.substring(0, 1).toUpperCase() + temp.substring(1);
-				String answer=((CaseSolution)c.getSolution()).getAnswer().toString();
+				String answer=((CaseSolution)c.getSolution()).getAnswer();
 				
 				multipleButtons+="<form method=\"post\" id=\"multipleForm\" class=\"multipleForm\" action=\"multipleAnswer.jsp;jsessionid="+getSessionId()+"\">"+
 										"<input type=\"hidden\" id=\"keyWord\" name=\"usertText\" value=\""+word+"\">"+
@@ -267,7 +271,7 @@ public class UBUassistantHandler {
 			response="<p>Lo siento no tengo respuestas a tu pregunta :(<p>";
 			
 			Collection<List<RetrievalResult>> values = badResuts.values();
-			listOfValues = new ArrayList<RetrievalResult>();
+			listOfValues = new ArrayList<>();
 			for(List<RetrievalResult> list : values){
 				for(RetrievalResult r : list){
 					listOfValues.add(r);
@@ -285,7 +289,7 @@ public class UBUassistantHandler {
 				for(int i=0;i<3;i++){
 					
 					String word=((CaseDescription)listOfValues.get(i).get_case().getDescription()).getKeyWord1();
-					String answer=((CaseSolution)listOfValues.get(i).get_case().getSolution()).getAnswer().toString();
+					String answer=((CaseSolution)listOfValues.get(i).get_case().getSolution()).getAnswer();
 
 					suggestButtons+="<form method=\"post\" action=\"noAnswer.jsp;jsessionid="+getSessionId()+"\" style=\"display: inline-block;\">"+
 						"<input type=\"hidden\" id=\"num\" name=\"num\" value=\""+i+"\">"+
@@ -313,8 +317,7 @@ public class UBUassistantHandler {
 					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
-					        "</div>"+
-					   "</form>";
+					        "</div></form>";
 	}
     
 	/**
@@ -332,8 +335,7 @@ public class UBUassistantHandler {
 					        "<input type=\"radio\" id=\"star3\" name=\"rate\" value=\"3\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star3\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star2\" name=\"rate\" value=\"2\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star2\" title=\"text\"></label>"+
 					        "<input type=\"radio\" id=\"star1\" name=\"rate\" value=\"1\" onclick=\"getVoteAndSubmit(this)\"/><label for=\"star1\" title=\"text\"></label>"+
-					        "</div>"+
-					   "</form>";
+					        "</div></form>";
 	}
 	
 	
@@ -438,7 +440,7 @@ public class UBUassistantHandler {
 	 * Method that returns the badResuts.
 	 * @return badResuts map that stores all the results in value with the word that generate them in key.
 	 */
-	public HashMap<String, List<RetrievalResult>> getBadResuts() {
+	public Map<String, List<RetrievalResult>> getBadResuts() {
 		return badResuts;
 	}
 

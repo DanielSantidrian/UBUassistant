@@ -136,7 +136,6 @@
 			<ul id='saveButtons' class="copyright" style="display: none;">
 			
 			    <li><a onclick="$('#tabla').tableExport({type:'json',escape:'false'});">JSON</a></li>
-			    <li><a onclick="$('#tabla').tableExport({type:'xml',escape:'false'});">XML</a></li>
 			    <li><a onclick="$('#tabla').tableExport({type:'sql'});">SQL</a></li>
 			    <li><a onclick="$('#tabla').tableExport({type:'csv',escape:'false'});">CSV</a></li>
 			    <li><a onclick="$('#tabla').tableExport({type:'txt',escape:'false'});">TXT</a></li>
@@ -149,7 +148,6 @@
 			    <span class="caret"></span></button>
 			    <ul class="color dropdown-menu">
 			      <li><a onclick="$('#tabla').tableExport({type:'json',escape:'false'});">JSON</a></li>
-				    <li><a onclick="$('#tabla').tableExport({type:'xml',escape:'false'});">XML</a></li>
 				    <li><a onclick="$('#tabla').tableExport({type:'sql'});">SQL</a></li>
 				    <li><a onclick="$('#tabla').tableExport({type:'csv',escape:'false'});">CSV</a></li>
 				    <li><a onclick="$('#tabla').tableExport({type:'txt',escape:'false'});">TXT</a></li>

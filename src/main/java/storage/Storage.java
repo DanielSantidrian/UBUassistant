@@ -16,7 +16,7 @@ public class Storage {
 	 * Constructor of the class.
 	 */
 	public Storage() {
-		chatOutput=new ArrayList<String>();
+		chatOutput=new ArrayList<>();
 	}
 
 	/**
@@ -25,12 +25,12 @@ public class Storage {
 	 */
 	public String getChatOutput() {
 		
-		String text="";
+		StringBuilder text = new StringBuilder();
 		
 		for(String s : chatOutput)
-			text+=s;
+			text.append(s);
 		
-		return text;
+		return text.toString();
 	}
 
 	/**
@@ -40,20 +40,20 @@ public class Storage {
 	 */
 	public void setChatOutput(String typeMessage, String text) {
 		
-		text="<div class=\""+typeMessage+"\">"+"<div class=\"message\">"+text+"</div></div>\n";
+		String chatText="<div class=\""+typeMessage+"\">"+"<div class=\"message\">"+text+"</div></div>\n";
 
 		for(int i=0; i<chatOutput.size();i++){
-			if(chatOutput.get(i).concat(text).length()<Integer.MAX_VALUE){
-				String newText=chatOutput.get(i).concat(text);
+			if(chatOutput.get(i).concat(chatText).length()<Integer.MAX_VALUE){
+				String newText=chatOutput.get(i).concat(chatText);
 				chatOutput.remove(i);
 				chatOutput.add(newText);
 			}else{
-				chatOutput.add(text);
+				chatOutput.add(chatText);
 			}
 		}
 		
-		if(chatOutput.size()==0)
-			chatOutput.add(text);
+		if(chatOutput.isEmpty())
+			chatOutput.add(chatText);
 		
 	}
 

@@ -36,19 +36,19 @@ public class AdminLog {
   public void testAdminLog() throws Exception {
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.cssSelector("input.adminLink")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("user")).clear();
     driver.findElement(By.id("user")).sendKeys("admin1@ubu.es");
     driver.findElement(By.id("password")).clear();
     driver.findElement(By.id("password")).sendKeys("admin1");
     driver.findElement(By.cssSelector("button")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Log de uso de la apicación con las busquedas y su valoración por usuario.", driver.findElement(By.id("subtitle")).getText());
     driver.findElement(By.cssSelector("button.saveas")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("CSV")));
     driver.findElement(By.cssSelector("input.clean")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(closeAlertAndGetItsText().matches("^¿Está seguro de que desea borrar la tabla de logs[\\s\\S]$"));
     assertFalse(isElementPresent(By.xpath("//table[@id='tabla']/tbody/tr/td[9]")));
   }

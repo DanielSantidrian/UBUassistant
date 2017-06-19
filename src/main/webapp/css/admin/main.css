@@ -158,6 +158,9 @@ input[type=text]:focus {
 
 .resp{
 	font-size: 14px;
+	word-wrap: break-word;
+    word-break: break-all;
+    white-space: normal;
 }
 
 

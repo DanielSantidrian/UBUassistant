@@ -131,7 +131,7 @@
 			%>
 			  <tr><td><%=rs.getString("userid")  %></td><td><%=rs.getString("fecha") %></td><td><%=rs.getString("keyWord1") %></td>
 			  <td><%=rs.getString("keyWord2") %></td><td><%=rs.getString("keyWord3") %></td><td><%=rs.getString("keyWord4") %></td>
-			  <td><%=rs.getString("keyWord5") %></td><td><%=rs.getString("categoria") %></td><td><%=rs.getString("respuesta") %></td>
+			  <td><%=rs.getString("keyWord5") %></td><td><%=rs.getString("categoria") %></td><td class="resp"><%=rs.getString("respuesta") %></td>
 			  <td><%=rs.getString("num_busquedas") %></td><td><%=rs.getString("num_votos") %></td><td><%=rs.getString("valoracion_total") %></td></tr>
 			<%
 			}

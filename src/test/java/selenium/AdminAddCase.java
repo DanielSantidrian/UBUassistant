@@ -1,6 +1,7 @@
 package selenium;
 
 import java.util.concurrent.TimeUnit;
+
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
@@ -25,27 +26,27 @@ public class AdminAddCase {
   public void testAdminAddCase() throws Exception {
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.cssSelector("input.adminLink")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("user")).clear();
     driver.findElement(By.id("user")).sendKeys("admin1@ubu.es");
     driver.findElement(By.id("password")).clear();
     driver.findElement(By.id("password")).sendKeys("admin1");
     driver.findElement(By.cssSelector("button")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("add")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Formulario para añadir un caso a la base de datos.", driver.findElement(By.id("subtitle")).getText());
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.id("keyWord2")).clear();
     driver.findElement(By.id("keyWord2")).sendKeys("CasoPrueba");
     driver.findElement(By.id("categoria")).clear();
     driver.findElement(By.id("categoria")).sendKeys("CategoriaPrueba");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("RespuestaPrueba");
@@ -57,34 +58,35 @@ public class AdminAddCase {
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("RespuestaPrueba");
     driver.findElement(By.id("categoria")).clear();
     driver.findElement(By.id("categoria")).sendKeys("");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.id("categoria")).clear();
     driver.findElement(By.id("categoria")).sendKeys("CategoriaPrueba");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("edit")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
     assertEquals("CasoPrueba", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
     
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     JavascriptExecutor jse = (JavascriptExecutor)driver;
     jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.switchTo().alert().accept();
-    Thread.sleep(5000);
+    TimeUnit.MILLISECONDS.sleep(5000);
+    
   }
 
   @After

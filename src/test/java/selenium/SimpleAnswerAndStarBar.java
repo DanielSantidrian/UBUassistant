@@ -26,7 +26,7 @@ public class SimpleAnswerAndStarBar {
 	  
 	driver.get(baseUrl + "/UBUassistant/");
     driver.findElement(By.id("pinguino")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     /***/
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
@@ -35,38 +35,38 @@ public class SimpleAnswerAndStarBar {
     driver.findElement(By.id("user-input")).clear();
     driver.findElement(By.id("user-input")).sendKeys("esqui");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/deportes")));
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[5]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Voto guardado con éxito. Su voto ha sido 1", driver.findElement(By.id("buttonPanel")).getText());
     driver.findElement(By.id("user-input")).clear();
     driver.findElement(By.id("user-input")).sendKeys("esqui");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[4]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Voto guardado con éxito. Su voto ha sido 2", driver.findElement(By.id("buttonPanel")).getText());
     driver.findElement(By.id("user-input")).clear();
     driver.findElement(By.id("user-input")).sendKeys("esqui");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[3]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Voto guardado con éxito. Su voto ha sido 3", driver.findElement(By.id("buttonPanel")).getText());
     driver.findElement(By.id("user-input")).clear();
     driver.findElement(By.id("user-input")).sendKeys("esqui");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[2]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Voto guardado con éxito. Su voto ha sido 4", driver.findElement(By.id("buttonPanel")).getText());
     driver.findElement(By.id("user-input")).clear();
     driver.findElement(By.id("user-input")).sendKeys("esqui");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.cssSelector("label[title=\"text\"]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Voto guardado con éxito. Su voto ha sido 5", driver.findElement(By.id("buttonPanel")).getText());
   }
 

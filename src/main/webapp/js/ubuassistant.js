@@ -5,7 +5,7 @@ function hideAndSubmit(param){
 	
 	var num = document.getElementsByName("buttonDiv").length;
 	var x = document.getElementsByName("buttonDiv")
-	for (i=0; i < num; i++) {
+	for (var i=0; i < num; i++) {
 		x[i].value=buttonDiv;
 	}
 	

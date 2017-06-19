@@ -26,15 +26,15 @@ public class AdminModifyCase {
   public void testAdminModifyCase() throws Exception {
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.cssSelector("input.adminLink")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("user")).clear();
     driver.findElement(By.id("user")).sendKeys("admin1@ubu.es");
     driver.findElement(By.id("password")).clear();
     driver.findElement(By.id("password")).sendKeys("admin1");
     driver.findElement(By.cssSelector("button")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("add")).click();
     driver.findElement(By.id("keyWord1")).clear();
     driver.findElement(By.id("keyWord1")).sendKeys("CasoPrueba");
@@ -43,16 +43,16 @@ public class AdminModifyCase {
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("RespuestaPrueba");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
     driver.findElement(By.id("edit")).click();
     
     int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
     
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     JavascriptExecutor jse = (JavascriptExecutor)driver;
     jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     driver.findElement(By.xpath("(//input[@id='button'])["+((rowCount*2)-1)+"]")).click();
     driver.findElement(By.id("keyWord1")).clear();
@@ -66,51 +66,51 @@ public class AdminModifyCase {
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("RespuestaEditada");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("CasoPruebaEdit", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
     assertEquals("Caso2Edit", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[3]")).getText());
     assertEquals("Caso5Edit", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[6]")).getText());
     assertEquals("CategoriaEditada", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[7]")).getText());
     assertEquals("RespuestaEditada", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[8]")).getText());
     
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     driver.findElement(By.xpath("(//input[@id='button'])["+((rowCount*2)-1)+"]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("keyWord1")).clear();
     driver.findElement(By.id("keyWord1")).sendKeys("");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.id("keyWord1")).clear();
     driver.findElement(By.id("keyWord1")).sendKeys("CasoPruebaEdit");
     driver.findElement(By.id("categoria")).clear();
     driver.findElement(By.id("categoria")).sendKeys("");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.id("categoria")).clear();
     driver.findElement(By.id("categoria")).sendKeys("CategoriaEditada");
     driver.findElement(By.id("respuesta")).clear();
     driver.findElement(By.id("respuesta")).sendKeys("");
     driver.findElement(By.cssSelector("input.aceptButton")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(driver.findElement(By.id("error")).getText().equals("*Debe rellenar al menos la palabra clave 1, la categoría y la respuesta."));
     driver.findElement(By.linkText("Editor de Casos")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("edit")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     jse.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(closeAlertAndGetItsText().matches("^¿Está seguro de que desea borrar el caso[\\s\\S]$"));
-    Thread.sleep(5000);
+    TimeUnit.MILLISECONDS.sleep(5000);
   }
 
   @After

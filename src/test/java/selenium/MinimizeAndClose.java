@@ -26,12 +26,12 @@ public class MinimizeAndClose {
 	  
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.id("pinguino")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.id("divchat-window")));
     driver.findElement(By.id("btn-minimize")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("btn-minimize")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
 
     /***/
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
@@ -39,16 +39,16 @@ public class MinimizeAndClose {
     
     driver.findElement(By.id("user-input")).sendKeys("becas internacionales");
     driver.findElement(By.id("enviar")).click();
-    Thread.sleep(3000);
+    TimeUnit.MILLISECONDS.sleep(3000);
     
     /***/
     driver.switchTo().defaultContent();
     /***/
     
     driver.findElement(By.id("btn-minimize")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("btn-minimize")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     /***/
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
@@ -62,10 +62,10 @@ public class MinimizeAndClose {
     /***/
     
     driver.findElement(By.cssSelector("input.btn-close")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.id("pinguino")));
     driver.findElement(By.id("pinguino")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     
     /***/
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
@@ -78,7 +78,7 @@ public class MinimizeAndClose {
     /***/
     
     driver.findElement(By.cssSelector("input.btn-close")).click();
-    Thread.sleep(2000);
+    TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.cssSelector("input.btn-close-pinguino")).click();
 
   }

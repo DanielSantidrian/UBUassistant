@@ -1,7 +1,7 @@
 <%@page contentType="text/html" errorPage="../error.jsp" %>
 <%@page import="handler.UBUassistantHandler"%>
 <%@page import="java.util.LinkedHashSet"%>
-<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
 <%@page import="jcolibri.method.retrieve.RetrievalResult"%>
 <%@page import="representation.CaseSolution"%>
@@ -53,7 +53,7 @@
 			ubuassistant.getDb().aumentarNumBusquedas(words, answer);
 			
 		    LinkedHashSet<String> suggestWord = new LinkedHashSet<String>();
-			HashMap<String, List<RetrievalResult>> badResuts=ubuassistant.getBadResuts();
+			Map<String, List<RetrievalResult>> badResuts=ubuassistant.getBadResuts();
 			List<RetrievalResult> listOfValues = ubuassistant.getListOfValues();
 			
 			for (String o : badResuts.keySet()) {
