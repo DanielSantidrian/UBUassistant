@@ -207,7 +207,7 @@ Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOL
 Otro de los problemas encontrados fue el uso de las variables de sesión el la aplicación. El WebDriver de Selenium al ejecutar las pruebas inicia una versión del navegador elegido que no es completa, esto ocasionaba que la sesión cambiase al realizar cualquier acción sobre la web, dejando al usuario sin identificar. Además de con la herramienta de Selenium, este problema afectaba también al navegador Microsoft Edge que, aún teniendo las \emph{cookies} activadas, no almacenaba la sesión correctamente. Este problema fue solucionado añadiendo la identificación de sesión a la URL mediante el método de \emph{encodeURL} + \emph{HTTPSession} en lugar de únicamente con \emph{HTTPSession}. De esta forma el identificador de usuario es pasado en la URL impidiendo su variación.
 
 
-\section{Testing - Actualizar}
+\section{Testing}
 
 La aplicación se ha testeado mediante test unitarios así como con test de interfaz.
 
@@ -229,21 +229,21 @@ Los datos han sido obtenidos de las mediciones realizadas por RefactorIt y Eclip
 \tablaSmallSinColores{Estadísticas del proyecto.}
 {l l}{Estadisticas del proyecto}
 {\textbf{Entidad} & \textbf{Valor}\\}
-{Número de clases Java              & 8                  \\
-Número de archivos XML             & 10                 \\
-Número de archivos JSP             & 15                 \\
+{Número de clases Java              & 10                  \\
+Número de archivos XML             & 8                 \\
+Número de archivos JSP             & 16                 \\
 Número de archivos HTML            & 6                  \\
-Número de archivos CSS             & 9                  \\
-Número de archivos JS              & 14                 \\
+Número de archivos CSS             & 10                  \\
+Número de archivos JS              & 9                \\
 \midrule
-Total de líneas Java               & 1750              	\\
-Líneas de código                   & 54.6\%            	\\
-Comentarios                        & 25.7\%             \\
-Líneas en blanco                   & 19.7\%    		    \\
+Total de líneas Java               & 1940              	\\
+Líneas de código                   & 54.7\%            	\\
+Comentarios                        & 25.5\%             \\
+Líneas en blanco                   & 19.8\%    		    \\
 \midrule
-Número de test unitarios           & 14					\\
-Cobertura total test unitarios     & 31,2\%             \\
-Cobertura test unitarios clases deseadas & 97.8\%       \\
+Número de test unitarios           & 15					\\
+Cobertura total test unitarios     & 36,6\%             \\
+Cobertura test unitarios clases deseadas & 92.4\%       \\
 Número de test de interfaz         & 10					\\ 
 }
 
