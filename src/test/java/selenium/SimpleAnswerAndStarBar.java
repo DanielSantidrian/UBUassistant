@@ -4,25 +4,22 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class SimpleAnswerAndStarBar {
-  private WebDriver driver;
-  private String baseUrl;
-  private StringBuffer verificationErrors = new StringBuffer();
+public class SimpleAnswerAndStarBar extends AbstractClassTest{
+
+  private static final String INPUT = "user-input";
+  private static final String ENVIAR = "enviar";
+  private static final String ESQUI = "esqui";
+  private static final String BUTPANEL = "buttonPanel";
 
   @Before
-  public void setUp() throws Exception {
-
-    System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
-	driver = new ChromeDriver();
-    baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    driver.manage().window().maximize();
+  @Override
+  public void setUp() {
+    super.setUp();
   }
 
   @Test
-  public void testSimpleAnswerAndStarBar() throws Exception {
+  public void testSimpleAnswerAndStarBar() throws InterruptedException{
 	  
 	driver.get(baseUrl + "/UBUassistant/");
     driver.findElement(By.id("pinguino")).click();
@@ -32,59 +29,47 @@ public class SimpleAnswerAndStarBar {
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
     /***/
     
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("esqui");
-    driver.findElement(By.id("enviar")).click();
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys(ESQUI);
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/deportes")));
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[5]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertEquals("Voto guardado con éxito. Su voto ha sido 1", driver.findElement(By.id("buttonPanel")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("esqui");
-    driver.findElement(By.id("enviar")).click();
+    assertEquals("Voto guardado con éxito. Su voto ha sido 1", driver.findElement(By.id(BUTPANEL)).getText());
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys(ESQUI);
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[4]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertEquals("Voto guardado con éxito. Su voto ha sido 2", driver.findElement(By.id("buttonPanel")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("esqui");
-    driver.findElement(By.id("enviar")).click();
+    assertEquals("Voto guardado con éxito. Su voto ha sido 2", driver.findElement(By.id(BUTPANEL)).getText());
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys(ESQUI);
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[3]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertEquals("Voto guardado con éxito. Su voto ha sido 3", driver.findElement(By.id("buttonPanel")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("esqui");
-    driver.findElement(By.id("enviar")).click();
+    assertEquals("Voto guardado con éxito. Su voto ha sido 3", driver.findElement(By.id(BUTPANEL)).getText());
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys(ESQUI);
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.xpath("//form[@id='starForm']/div/label[2]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertEquals("Voto guardado con éxito. Su voto ha sido 4", driver.findElement(By.id("buttonPanel")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("esqui");
-    driver.findElement(By.id("enviar")).click();
+    assertEquals("Voto guardado con éxito. Su voto ha sido 4", driver.findElement(By.id(BUTPANEL)).getText());
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys(ESQUI);
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.cssSelector("label[title=\"text\"]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertEquals("Voto guardado con éxito. Su voto ha sido 5", driver.findElement(By.id("buttonPanel")).getText());
+    assertEquals("Voto guardado con éxito. Su voto ha sido 5", driver.findElement(By.id(BUTPANEL)).getText());
   }
 
   @After
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-  }
-
-  private boolean isElementPresent(By by) {
-    try {
-      driver.findElement(by);
-      return true;
-    } catch (NoSuchElementException e) {
-      return false;
-    }
+  @Override
+  public void tearDown() {
+    super.tearDown();
   }
 }

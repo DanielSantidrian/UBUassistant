@@ -17,7 +17,7 @@ import jcolibri.method.retrieve.RetrievalResult;
 public class UtilTest {
 
 	@Test
-	public void ResultsComparatorTest() {
+	public void resultsComparatorTest() {
 		
 		CBRCase c1 = new CBRCase();
 		
@@ -30,7 +30,7 @@ public class UtilTest {
 		RetrievalResult r6 = new RetrievalResult(c1, 0.567);
 		
 		
-		List<RetrievalResult> list = new ArrayList<RetrievalResult>();
+		List<RetrievalResult> list = new ArrayList<>();
 		
 		list.add(r1);
 		list.add(r2);

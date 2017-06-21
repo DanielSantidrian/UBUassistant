@@ -4,25 +4,20 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class ReservedAndSimpleAnswer {
-  private WebDriver driver;
-  private String baseUrl;
-  private StringBuffer verificationErrors = new StringBuffer();
+public class ReservedAndSimpleAnswer extends AbstractClassTest{
+
+  private static final String INPUT = "user-input";
+  private static final String ENVIAR = "enviar";
 
   @Before
-  public void setUp() throws Exception {
-
-    System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
-	driver = new ChromeDriver();
-    baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    driver.manage().window().maximize();
+  @Override
+  public void setUp() {
+    super.setUp();
   }
 
   @Test
-  public void testReservedAndSimpleAnswer() throws Exception {
+  public void testReservedAndSimpleAnswer() throws InterruptedException{
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.id("pinguino")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
@@ -31,38 +26,26 @@ public class ReservedAndSimpleAnswer {
     driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
     /***/
     
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("Hola");
-    driver.findElement(By.id("enviar")).click();
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys("Hola");
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Hola, estoy preparada para responder, adelánte", driver.findElement(By.xpath("//div[@id='chat-output']/div[3]/div")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("Callate");
-    driver.findElement(By.id("enviar")).click();
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys("Callate");
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Lo siento, solo intentaba ayudar", driver.findElement(By.xpath("//div[@id='chat-output']/div[5]/div")).getText());
-    driver.findElement(By.id("user-input")).clear();
-    driver.findElement(By.id("user-input")).sendKeys("deporte");
-    driver.findElement(By.id("enviar")).click();
+    driver.findElement(By.id(INPUT)).clear();
+    driver.findElement(By.id(INPUT)).sendKeys("deporte");
+    driver.findElement(By.id(ENVIAR)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/deportes")));
   }
 
   @After
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
+  @Override
+  public void tearDown() {
+    super.tearDown();
   }
-  
-  private boolean isElementPresent(By by) {
-	    try {
-	      driver.findElement(by);
-	      return true;
-	    } catch (NoSuchElementException e) {
-	      return false;
-	    }
-	  }
 }

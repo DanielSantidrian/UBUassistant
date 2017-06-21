@@ -5,28 +5,25 @@ import org.junit.*;
 import org.junit.runner.JUnitCore;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class AdminLearn {
-  private WebDriver driver;
-  private String baseUrl;
-  private StringBuffer verificationErrors = new StringBuffer();
-
+public class AdminLearn extends AbstractClassTest{
+  
+  private static final String TABLA1 = "//table[@id='tabla']/tbody/tr";
+  private static final String TABLA2 = "//table[@id='tabla']/tbody/tr[";
+  private static final String TABLA3 = "]/td[2]";
+  private static final String BUTTON = "(//input[@id='button'])[";
+  
   @Before
-  public void setUp() throws Exception {
-
-    System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
-	driver = new ChromeDriver();
-    baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    driver.manage().window().maximize();
-   	
+  @Override
+  public void setUp() {
+    super.setUp();
     JUnitCore junit = new JUnitCore();
     junit.run(NoAnswer.class);
   }
 
+
   @Test
-  public void testAdminLearn() throws Exception {
+  public void testAdminLearn() throws InterruptedException {
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.cssSelector("input.adminLink")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
@@ -42,25 +39,25 @@ public class AdminLearn {
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("XLS")));
     
-    int rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    int rowCount=driver.findElements(By.xpath(TABLA1)).size();
     
-    assertEquals("ccc", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
-    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2)+"]")).click();
+    assertEquals("ccc", driver.findElement(By.xpath(TABLA2+rowCount+TABLA3)).getText());
+    driver.findElement(By.xpath(BUTTON+(rowCount*2)+"]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     
-    rowCount=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    rowCount=driver.findElements(By.xpath(TABLA1)).size();
     
-    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount+"]/td[2]")).getText());
-    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount*2-1)+"]")).click();
+    assertEquals("verve", driver.findElement(By.xpath(TABLA2+rowCount+TABLA3)).getText());
+    driver.findElement(By.xpath(BUTTON+(rowCount*2-1)+"]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.linkText("Editor de Casos")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.findElement(By.id("edit")).click();
     
-    int rowCount2=driver.findElements(By.xpath("//table[@id='tabla']/tbody/tr")).size();
+    int rowCount2=driver.findElements(By.xpath(TABLA1)).size();
 
-    assertEquals("verve", driver.findElement(By.xpath("//table[@id='tabla']/tbody/tr["+rowCount2+"]/td[2]")).getText());
-    driver.findElement(By.xpath("(//input[@id='button'])["+(rowCount2*2)+"]")).click();
+    assertEquals("verve", driver.findElement(By.xpath(TABLA2+rowCount2+TABLA3)).getText());
+    driver.findElement(By.xpath(BUTTON+(rowCount2*2)+"]")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     driver.switchTo().alert().accept();
     TimeUnit.MILLISECONDS.sleep(5000);
@@ -69,20 +66,8 @@ public class AdminLearn {
   }
 
   @After
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-  }
-
-  private boolean isElementPresent(By by) {
-    try {
-      driver.findElement(by);
-      return true;
-    } catch (NoSuchElementException e) {
-      return false;
-    }
+  @Override
+  public void tearDown() {
+    super.tearDown();
   }
 }

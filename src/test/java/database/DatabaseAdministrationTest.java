@@ -2,7 +2,6 @@ package database;
 
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,41 +9,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * 
  * @author Daniel Santidrian Alonso
  *
  */
-public class DatabaseAdministrationTest {
+public class DatabaseAdministrationTest extends AbstractTestCase{
 	
 	DatabaseAdministration db;
-	Connection con;
-	String userID;
+
+	private static final Logger logger = Logger.getLogger(DatabaseAdministrationTest.class);
+	
+	private DatabaseUtil dbu = new DatabaseUtil();
+	
+	private static final String KEYWORD1 = "keyWord1";
+	private static final String TOTAL = "total";
+	private static final String USERID = "01111111";
+	private static final String PALABRA1 = "palabra1";
+	private static final String PALABRA2 = "palabra2";
 	
 	@Before
-	public void before(){
-		
-		db = new DatabaseAdministration();
-		
-		MysqlDataSource ds = new MysqlDataSource();
-
-		ds.setUser("root");
-		ds.setPassword("1234");
-		ds.setDatabaseName("ubuassistant");
-		ds.setURL("jdbc:mysql://localhost/ubuassistant");
-
-		try {
-			con = ds.getConnection();
-		} catch (SQLException e) {
-			System.err.println("Error al conectar con la base de datos.");
-		}
-		
-	}
+    @Override
+    public void setUp() {
+        super.setUp();
+        db = new DatabaseAdministration();
+    }
 
 	
 	@Test
@@ -52,31 +45,37 @@ public class DatabaseAdministrationTest {
 		
 		String cat="";
 		
-		List<String> lista = new ArrayList<String>();
+		List<String> lista = new ArrayList<>();
 		
-		lista.add("CasoInventado");
+		lista.add("CasoInventado1");
 		
-		db.addCase(lista, "categoriaInventada", "respInventada");
+		db.addCase(lista, "categoriaInventada1", "respInventada1");
+		
+		Statement stmt = null;
+		ResultSet rs = null;
 		
 		try{
 			
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM casedescription WHERE keyWord1='CasoInventado'");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM casedescription WHERE keyWord1='CasoInventado1'");
 			
 			while (rs.next()) {
-				if(rs.getString("keyWord1").equals("CasoInventado")){
+				if(rs.getString(KEYWORD1).equals("CasoInventado1")){
 					cat=rs.getString("categoria");
 				}
 			}	
 			
-			assertEquals(cat, "categoriaInventada");
+			assertEquals(cat, "categoriaInventada1");
 			
-			stmt.executeUpdate("DELETE FROM casedescription WHERE keyWord1='CasoInventado'");
-			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='respInventada'");
+			stmt.executeUpdate("DELETE FROM casedescription WHERE keyWord1='CasoInventado1'");
+			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='respInventada1'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
 		}
 	}
 	
@@ -84,19 +83,24 @@ public class DatabaseAdministrationTest {
 	@Test
 	public void editCaseTest() {
 		
-		List<String> lista = new ArrayList<String>();
+		List<String> lista = new ArrayList<>();
 		
-		lista.add("CasoInventado");
+		lista.add("CasoInventado2");
 		
-		db.addCase(lista, "categoriaInventada", "respInventada");
+		db.addCase(lista, "categoriaInventada2", "respInventada2");
 		
-		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Statement stmt2 = null;
+		ResultSet rs2 = null;
+		Statement stmt3 = null;
+		ResultSet rs3 = null;
 		
 		try{
 			
-			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery("SELECT id FROM casedescription where categoria='categoriaInventada'");
+			rs = stmt.executeQuery("SELECT id FROM casedescription where categoria='categoriaInventada2'");
 			
 			rs.next();
 			int id=rs.getInt("id");
@@ -106,11 +110,11 @@ public class DatabaseAdministrationTest {
 			
 			db.editCase(String.valueOf(id), lista2, "editCat", "editAnswer");
 			
-			Statement stmt2 = con.createStatement();
-			ResultSet rs2 = stmt2.executeQuery("SELECT * FROM casedescription WHERE id="+id);
+			stmt2 = con.createStatement();
+			rs2 = stmt2.executeQuery("SELECT * FROM casedescription WHERE id="+id);
 			
-			Statement stmt3 = con.createStatement();
-			ResultSet rs3 = stmt3.executeQuery("SELECT * FROM casesolution WHERE id="+id);
+			stmt3 = con.createStatement();
+			rs3 = stmt3.executeQuery("SELECT * FROM casesolution WHERE id="+id);
 			
 			String resp="";
 			String cat="";
@@ -128,26 +132,36 @@ public class DatabaseAdministrationTest {
 			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='editAnswer'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
+			dbu.close(rs2);
+			dbu.close(stmt2);
+			dbu.close(rs3);
+			dbu.close(stmt3);
 		}
 	}
 	
 	@Test
 	public void removeCaseTest() {
 		
-		List<String> lista = new ArrayList<String>();
+		List<String> lista = new ArrayList<>();
 		
-		lista.add("CasoInventado");
+		lista.add("CasoInventado3");
 		
-		db.addCase(lista, "categoriaInventada", "respInventada");
+		db.addCase(lista, "categoriaInventada3", "respInventada3");
 		
-		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Statement stmt3 = null;
+		ResultSet rs3 = null;
 		
 		try{
 			
-			Statement stmt = con.createStatement();
+			stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery("SELECT id FROM casedescription where categoria='categoriaInventada'");
+			rs = stmt.executeQuery("SELECT id FROM casedescription where categoria='categoriaInventada3'");
 			
 			rs.next();
 			int id=rs.getInt("id");
@@ -157,20 +171,25 @@ public class DatabaseAdministrationTest {
 			
 			db.removeCase(String.valueOf(id));
 			
-			Statement stmt3 = con.createStatement();
-			ResultSet rs3 = stmt3.executeQuery("SELECT COUNT(*) AS total FROM casedescription WHERE categoria='categoriaInventada'");
+			stmt3 = con.createStatement();
+			rs3 = stmt3.executeQuery("SELECT COUNT(*) AS total FROM casedescription WHERE categoria='categoriaInventada3'");
 			
 			rs3.next();
-			int num=rs3.getInt("total");
+			int num=rs3.getInt(TOTAL);
 			
 			
 			assertTrue(num==0);
 			
-			stmt.executeUpdate("DELETE FROM casedescription WHERE categoria='categoriaInventada'");
-			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='respInventada'");
+			stmt.executeUpdate("DELETE FROM casedescription WHERE categoria='categoriaInventada3'");
+			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='respInventada3'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
+			dbu.close(rs3);
+			dbu.close(stmt3);
 		}
 	}
 	
@@ -178,39 +197,47 @@ public class DatabaseAdministrationTest {
 	@Test
 	public void executeLearnTest() {
 		
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement pst = null;
+
+		
 		try{
 			
-			PreparedStatement pst = 
-				con.prepareStatement("INSERT INTO aprendizaje "
+			pst = con.prepareStatement("INSERT INTO aprendizaje "
 										+ "(userid,palabra1,palabra2) VALUES (?,?,?)");
 		
-			pst.setString(1, "01111111");
-			pst.setString(2, "palabra1");
-			pst.setString(3, "palabra2");
+			pst.setString(1, USERID);
+			pst.setString(2, PALABRA1);
+			pst.setString(3, PALABRA2);
 			
 			pst.executeUpdate();
 			
-			db.executeLearn("palabra1", "palabra2");
+			db.executeLearn(PALABRA1, PALABRA2);
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM casedescription");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM casedescription");
 			
 			String p="";
 			
 			while(rs.next()){
-				if(rs.getString("keyWord1").equals("palabra1")){
-					p = rs.getString("keyWord1");
+				if(rs.getString(KEYWORD1).equals(PALABRA1)){
+					p = rs.getString(KEYWORD1);
 				}
 			}
 			
-			assertEquals(p, "palabra1");
+			assertEquals(p, PALABRA1);
 			
 			stmt.executeUpdate("DELETE FROM casedescription WHERE keyWord1='palabra1'");
 			stmt.executeUpdate("DELETE FROM casesolution WHERE answer='palabra2'");
 			
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
+			dbu.close(pst);
 		}
 	}
 	
@@ -218,31 +245,38 @@ public class DatabaseAdministrationTest {
 	@Test
 	public void ignoreLearnTest() {
 		
+		Statement stmt = null;
+		ResultSet rs = null;
+		PreparedStatement pst = null;
+		
 		try{
 			
-			PreparedStatement pst = 
-				con.prepareStatement("INSERT INTO aprendizaje "
+			pst = con.prepareStatement("INSERT INTO aprendizaje "
 										+ "(userid,palabra1,palabra2) VALUES (?,?,?)");
 		
-			pst.setString(1, "01111111");
-			pst.setString(2, "palabra1");
-			pst.setString(3, "palabra2");
+			pst.setString(1, USERID);
+			pst.setString(2, PALABRA1);
+			pst.setString(3, PALABRA2);
 			
 			pst.executeUpdate();
 			
-			db.ignoreLearn("palabra1", "palabra2");
+			db.ignoreLearn(PALABRA1, PALABRA2);
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM aprendizaje WHERE palabra1='palabra1'");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM aprendizaje WHERE palabra1='palabra1'");
 			
 			rs.next();
-			int count=rs.getInt("total");
+			int count=rs.getInt(TOTAL);
 			
 			assertTrue(count==0);
 			
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
+			dbu.close(pst);
 		}
 	}
 	
@@ -250,17 +284,22 @@ public class DatabaseAdministrationTest {
 	@Test
 	public void clearLogTest() {
 		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Statement stmt2 = null;
+		ResultSet rs2 = null;
+		PreparedStatement pst = null;
+		
 		try{
 			
-			PreparedStatement pst = 
-				con.prepareStatement("INSERT INTO logger "
-										+ "(userid,fecha,keyWord1,keyWord2,keyWord3,keyWord4,keyWord5,categoria,respuesta,"+
+			pst = con.prepareStatement("INSERT INTO logger "
+						+ "(userid,fecha,keyWord1,keyWord2,keyWord3,keyWord4,keyWord5,categoria,respuesta,"+
 						"num_busquedas,num_votos,valoracion_total) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
 		
-			pst.setString(1, "01111111");
+			pst.setString(1, USERID);
 			pst.setString(2, "2017-06-14 11:41:55");
-			pst.setString(3, "palabra1");
-			pst.setString(4, "palabra2");
+			pst.setString(3, PALABRA1);
+			pst.setString(4, PALABRA2);
 			pst.setString(5, "palabra3");
 			pst.setString(6, "palabra4");
 			pst.setString(7, "palabra5");
@@ -272,17 +311,17 @@ public class DatabaseAdministrationTest {
 			
 			pst.executeUpdate();
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM logger");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM logger");
 			
 			rs.next();
-			int count1=rs.getInt("total");
+			int count1=rs.getInt(TOTAL);
 			assertTrue(count1!=0);
 			
 			db.clearLog();
 			
-			Statement stmt2 = con.createStatement();
-			ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(*) AS total1 FROM logger");
+			stmt2 = con.createStatement();
+			rs2 = stmt2.executeQuery("SELECT COUNT(*) AS total1 FROM logger");
 			
 			rs2.next();
 			int count2=rs2.getInt("total1");
@@ -290,7 +329,13 @@ public class DatabaseAdministrationTest {
 			
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
+			dbu.close(rs2);
+			dbu.close(stmt2);
+			dbu.close(pst);
 		}
 	}
 

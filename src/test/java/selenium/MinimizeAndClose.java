@@ -4,37 +4,33 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class MinimizeAndClose {
-  private WebDriver driver;
-  private String baseUrl;
-  private StringBuffer verificationErrors = new StringBuffer();
+public class MinimizeAndClose extends AbstractClassTest{
+  
+  private static final String ICON = "pinguino";
+  private static final String MIN = "btn-minimize";
+  private static final String FRAME = "ubuassistantFrame";
 
   @Before
-  public void setUp() throws Exception {
-
-    System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
-	driver = new ChromeDriver();
-    baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    driver.manage().window().maximize();
+  @Override
+  public void setUp() {
+    super.setUp();
   }
 
   @Test
-  public void testMinimizeAndClose() throws Exception {
+  public void testMinimizeAndClose() throws InterruptedException{
 	  
     driver.get(baseUrl + "/UBUassistant/index.jsp");
-    driver.findElement(By.id("pinguino")).click();
+    driver.findElement(By.id(ICON)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.id("divchat-window")));
-    driver.findElement(By.id("btn-minimize")).click();
+    driver.findElement(By.id(MIN)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    driver.findElement(By.id("btn-minimize")).click();
+    driver.findElement(By.id(MIN)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
 
     /***/
-    driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
+    driver.switchTo().frame(driver.findElement(By.id(FRAME)));
     /***/
     
     driver.findElement(By.id("user-input")).sendKeys("becas internacionales");
@@ -45,13 +41,13 @@ public class MinimizeAndClose {
     driver.switchTo().defaultContent();
     /***/
     
-    driver.findElement(By.id("btn-minimize")).click();
+    driver.findElement(By.id(MIN)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    driver.findElement(By.id("btn-minimize")).click();
+    driver.findElement(By.id(MIN)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     
     /***/
-    driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
+    driver.switchTo().frame(driver.findElement(By.id(FRAME)));
     /***/
     
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/becas-de-cooperacion")));
@@ -63,12 +59,12 @@ public class MinimizeAndClose {
     
     driver.findElement(By.cssSelector("input.btn-close")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
-    assertTrue(isElementPresent(By.id("pinguino")));
-    driver.findElement(By.id("pinguino")).click();
+    assertTrue(isElementPresent(By.id(ICON)));
+    driver.findElement(By.id(ICON)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     
     /***/
-    driver.switchTo().frame(driver.findElement(By.id("ubuassistantFrame")));
+    driver.switchTo().frame(driver.findElement(By.id(FRAME)));
     /***/
     
     assertFalse(isElementPresent(By.xpath("//div[@id='chat-output']/div[3]/div")));
@@ -84,20 +80,8 @@ public class MinimizeAndClose {
   }
 
   @After
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-  }
-
-  private boolean isElementPresent(By by) {
-    try {
-      driver.findElement(by);
-      return true;
-    } catch (NoSuchElementException e) {
-      return false;
-    }
+  @Override
+  public void tearDown() {
+    super.tearDown();
   }
 }

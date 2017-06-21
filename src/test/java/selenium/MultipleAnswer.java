@@ -4,25 +4,19 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import static org.junit.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-public class MultipleAnswer {
-  private WebDriver driver;
-  private String baseUrl;
-  private StringBuffer verificationErrors = new StringBuffer();
+public class MultipleAnswer extends AbstractClassTest{
+
+  private static final String BUTTON = "(//input[@id='but'])[2]";
 
   @Before
-  public void setUp() throws Exception {
-
-    System.setProperty("webdriver.chrome.driver", ".\\rsc\\chromedriver.exe");
-	driver = new ChromeDriver();
-    baseUrl = "http://localhost:8080/";
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    driver.manage().window().maximize();
+  @Override
+  public void setUp() {
+    super.setUp();
   }
 
   @Test
-  public void testMultipleAnswer() throws Exception {
+  public void testMultipleAnswer() throws InterruptedException{
     driver.get(baseUrl + "/UBUassistant/index.jsp");
     driver.findElement(By.id("pinguino")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
@@ -37,8 +31,8 @@ public class MultipleAnswer {
     TimeUnit.MILLISECONDS.sleep(2000);
     assertEquals("Vaya, parece que tengo demasiadas respuestas.\nIntenta ser más concreto o selecciona alguna sugerencia.", driver.findElement(By.xpath("//div[@id='chat-output']/div[3]/div")).getText());
     assertEquals("Becas", driver.findElement(By.id("but")).getAttribute("value"));
-    assertEquals("Becas internacionales", driver.findElement(By.xpath("(//input[@id='but'])[2]")).getAttribute("value"));
-    driver.findElement(By.xpath("(//input[@id='but'])[2]")).click();
+    assertEquals("Becas internacionales", driver.findElement(By.xpath(BUTTON)).getAttribute("value"));
+    driver.findElement(By.xpath(BUTTON)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/becas-de-cooperacion")));
     driver.findElement(By.id("but")).click();
@@ -49,25 +43,13 @@ public class MultipleAnswer {
     driver.findElement(By.id("but")).click();
     TimeUnit.MILLISECONDS.sleep(2000);
     assertTrue(isElementPresent(By.linkText("http://www.ubu.es/ayudas-y-becas")));
-    driver.findElement(By.xpath("(//input[@id='but'])[2]")).click();
+    driver.findElement(By.xpath(BUTTON)).click();
     TimeUnit.MILLISECONDS.sleep(2000);
   }
 
   @After
-  public void tearDown() throws Exception {
-    driver.quit();
-    String verificationErrorString = verificationErrors.toString();
-    if (!"".equals(verificationErrorString)) {
-      fail(verificationErrorString);
-    }
-  }
-
-  private boolean isElementPresent(By by) {
-    try {
-      driver.findElement(by);
-      return true;
-    } catch (NoSuchElementException e) {
-      return false;
-    }
+  @Override
+  public void tearDown() {
+    super.tearDown();
   }
 }

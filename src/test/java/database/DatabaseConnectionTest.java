@@ -2,7 +2,6 @@ package database;
 
 import static org.junit.Assert.*;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,49 +12,45 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 /**
  * 
  * @author Daniel Santidrian Alonso
  *
  */
-public class DatabaseConnectionTest {
+public class DatabaseConnectionTest extends AbstractTestCase{
 	
 	DatabaseConnection db;
-	Connection con;
 	String userID;
 	
+	private static final Logger logger = Logger.getLogger(DatabaseConnectionTest.class);
+	
+	private static final String INVENTADA="inventada";
+	private static final String RESPUESTAINVENTADA="respuesta inventada";
+	private static final String INVENTADA1="inventada1";
+	private static final String INVENTADA2="inventada2";
+	
+	private DatabaseUtil dbu = new DatabaseUtil();
+	
 	@Before
-	public void before(){
-		
-		DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
-		userID=formatForId.format(new Date()); 
-		
-		db = new DatabaseConnection(userID);
-		
-		MysqlDataSource ds = new MysqlDataSource();
-
-		ds.setUser("root");
-		ds.setPassword("1234");
-		ds.setDatabaseName("ubuassistant");
-		ds.setURL("jdbc:mysql://localhost/ubuassistant");
-
-		try {
-			con = ds.getConnection();
-		} catch (SQLException e) {
-			System.err.println("Error al conectar con la base de datos.");
-		}
-		
-	}
+    @Override
+    public void setUp() {
+        super.setUp();
+        DateFormat formatForId = new SimpleDateFormat("yyMMddHHmmssSSS");
+    	userID=formatForId.format(new Date()); 
+    	
+    	db = new DatabaseConnection(userID);
+    }
+	
+	
 
 	@Test
 	public void getListsTest() {
 		
-		List<String> salutes = new ArrayList<String>();
+		List<String> salutes = new ArrayList<>();
 		
 		salutes.add("Hola");
 		salutes.add("Buenos dias");
@@ -68,7 +63,7 @@ public class DatabaseConnectionTest {
 		salutes.add("Eres una pesada");
 		salutes.add("Callate");
 	
-		List<String> responses = new ArrayList<String>();
+		List<String> responses = new ArrayList<>();
 
 		responses.add("Hola, estoy preparada para responder, adelánte");
 		responses.add("Buenos días, ponme a prueba con tus preguntas");
@@ -84,7 +79,7 @@ public class DatabaseConnectionTest {
 		assertTrue(db.getSaluteList().containsAll(salutes));
 		assertTrue(db.getSaluteResponseList().containsAll(responses));
 		
-		List<String> sentences = new ArrayList<String>();
+		List<String> sentences = new ArrayList<>();
 		
 		sentences.add("Hola soy UBUassistant, ¿en qué puedo ayudarte?");
 		sentences.add("Muy buenas, me llamo UBUassistant y estoy lista para ayudarte ¡adelante!");
@@ -104,48 +99,57 @@ public class DatabaseConnectionTest {
 	@Test
 	public void learnTest() {
 		
-		db.learnCases("inventada","respuesta inventada");
+		db.learnCases(INVENTADA,RESPUESTAINVENTADA);
+		
+		Statement stmt = null;
+		ResultSet rs = null;
 		
 		try{
 			String palabra2="";
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM aprendizaje");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM aprendizaje");
 			
 			while (rs.next()) {
-				if(rs.getString("palabra1").equals("inventada")){
+				if(rs.getString("palabra1").equals(INVENTADA)){
 					palabra2=rs.getString("palabra2");
 				}
 			}	
 			
-			assertEquals(palabra2, "respuesta inventada");
+			assertEquals(palabra2, RESPUESTAINVENTADA);
 			
 			stmt.executeUpdate("DELETE FROM aprendizaje WHERE palabra1='inventada'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
 		}
 	}
 	
 	@Test
 	public void learnMultipleTest() {
 		
-		db.learnCases("inventada","respuesta inventada1");
-		db.learnCases("inventada","respuesta inventada2");
+		db.learnCases(INVENTADA,"respuesta inventada1");
+		db.learnCases(INVENTADA,"respuesta inventada2");
+		
+		Statement stmt = null;
+		ResultSet rs = null;
 		
 		try{
-			List<String> palabra2= new ArrayList<String>();
+			List<String> palabra2= new ArrayList<>();
 			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM aprendizaje");
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM aprendizaje");
 			
 			while (rs.next()) {
-				if(rs.getString("palabra1").equals("inventada")){
+				if(rs.getString("palabra1").equals(INVENTADA)){
 					palabra2.add(rs.getString("palabra2"));
 				}
 			}	
 			
-			List<String> temp = new ArrayList<String>();
+			List<String> temp = new ArrayList<>();
 			temp.add("respuesta inventada1");
 			temp.add("respuesta inventada2");
 			
@@ -154,7 +158,10 @@ public class DatabaseConnectionTest {
 			stmt.executeUpdate("DELETE FROM aprendizaje WHERE palabra1='inventada'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
 		}
 	}
 	
@@ -162,27 +169,22 @@ public class DatabaseConnectionTest {
 	@Test
 	public void aumentarNumBusquedaTest() {
 		
-		LinkedHashSet<String> temp = new LinkedHashSet<String>();
-		temp.add("inventada1");
-		temp.add("inventada2");
-		temp.add("inventada3");
+		Statement stmt = null;
+		ResultSet rs = null;
 		
-		LinkedHashSet<String> temp2 = new LinkedHashSet<String>();
-		temp2.add("inventada1");
-		temp2.add("inventada2");
+		LinkedHashSet<String> temp = new LinkedHashSet<>();
+		LinkedHashSet<String> temp2 = new LinkedHashSet<>();
 		
-		db.aumentarNumBusquedas(temp, "respuesta inventada");
-		db.aumentarNumBusquedas(temp2, "respuesta inventada");
-		db.aumentarNumBusquedas(temp2, "respuesta inventada");
+		increaseSearchNum(temp, temp2);
 		
 		try{
 			
-			List<Integer> num = new ArrayList<Integer>();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
+			List<Integer> num = new ArrayList<>();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM logger");
 			
 			while (rs.next()) {
-				if(rs.getString("keyWord1").equals("inventada1")){
+				if(rs.getString("keyWord1").equals(INVENTADA1)){
 					num.add(rs.getInt("num_busquedas"));
 				}
 			}	
@@ -194,7 +196,10 @@ public class DatabaseConnectionTest {
 			stmt.executeUpdate("DELETE FROM logger WHERE keyWord1='inventada1'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
 		}
 	}
 	
@@ -202,18 +207,12 @@ public class DatabaseConnectionTest {
 	@Test
 	public void saveVoteTest() {
 		
-		LinkedHashSet<String> temp = new LinkedHashSet<String>();
-		temp.add("inventada1");
-		temp.add("inventada2");
-		temp.add("inventada3");
+		Statement stmt = null;
+		ResultSet rs = null;
 		
-		LinkedHashSet<String> temp2 = new LinkedHashSet<String>();
-		temp2.add("inventada1");
-		temp2.add("inventada2");
-		
-		db.aumentarNumBusquedas(temp, "respuesta inventada");
-		db.aumentarNumBusquedas(temp2, "respuesta inventada");
-		db.aumentarNumBusquedas(temp2, "respuesta inventada");
+		LinkedHashSet<String> temp = new LinkedHashSet<>();
+		LinkedHashSet<String> temp2 = new LinkedHashSet<>();
+		increaseSearchNum(temp, temp2);
 		
 		db.saveVote(temp, 5);
 		db.saveVote(temp2, 4);
@@ -221,13 +220,13 @@ public class DatabaseConnectionTest {
 		
 		try{
 			
-			List<Integer> num = new ArrayList<Integer>();
-			List<Integer> vot = new ArrayList<Integer>();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM logger");
+			List<Integer> num = new ArrayList<>();
+			List<Integer> vot = new ArrayList<>();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM logger");
 			
 			while (rs.next()) {
-				if(rs.getString("keyWord1").equals("inventada1")){
+				if(rs.getString("keyWord1").equals(INVENTADA1)){
 					num.add(rs.getInt("num_votos"));
 					vot.add(rs.getInt("valoracion_total"));
 				}
@@ -240,8 +239,25 @@ public class DatabaseConnectionTest {
 			stmt.executeUpdate("DELETE FROM logger WHERE keyWord1='inventada1'");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
+		} finally{
+			dbu.close(rs);
+			dbu.close(stmt);
 		}
+	}
+
+
+
+	private void increaseSearchNum(LinkedHashSet<String> temp, LinkedHashSet<String> temp2) {
+		temp.add(INVENTADA1);
+		temp.add(INVENTADA2);
+		temp.add("inventada3");
+		temp2.add(INVENTADA1);
+		temp2.add(INVENTADA2);
+		
+		db.aumentarNumBusquedas(temp, RESPUESTAINVENTADA);
+		db.aumentarNumBusquedas(temp2, RESPUESTAINVENTADA);
+		db.aumentarNumBusquedas(temp2, RESPUESTAINVENTADA);
 	}
 
 }

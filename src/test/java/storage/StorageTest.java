@@ -1,39 +1,34 @@
 package storage;
 
-
-
 import static org.junit.Assert.assertEquals;
-
-
-
 import org.junit.Test;
 
-
-
 public class StorageTest {
+	
+	private static final String USRMSG = "user-message";
 
 	@Test
-	public void StorageSingleTextTest() {
+	public void storageSingleTextTest() {
 		
 		
 		String expectedOutput="<div class=\"user-message\">"+"<div class=\"message\">becas internacionales</div></div>\n";
 
 		Storage storage = new Storage();
 		
-		storage.setChatOutput("user-message", "becas internacionales");
+		storage.setChatOutput(USRMSG, "becas internacionales");
 		
 		assertEquals(expectedOutput,storage.getChatOutput());
 
 	}
 	
 	@Test
-	public void StorageMultipleTextTest() {
+	public void storageMultipleTextTest() {
 		
 		String[] messageType = new String[5];
-		messageType[0]="user-message";
+		messageType[0]=USRMSG;
 		messageType[1]="bot-message";
 		messageType[2]="invented-message";
-		messageType[3]="user-message";
+		messageType[3]=USRMSG;
 		messageType[4]="bot-message";
 		
 		String[] messageText = new String[5];
@@ -43,15 +38,15 @@ public class StorageTest {
 		messageText[3]="becas";
 		messageText[4]="informatica";
 		
-		String expectedOutput="";
+		StringBuilder expectedOutput = new StringBuilder();
 		Storage storage = new Storage();
 		
 		for(int i=0;i<messageText.length;i++){
-			expectedOutput+="<div class=\""+messageType[i]+"\">"+"<div class=\"message\">"+messageText[i]+"</div></div>\n";
+			expectedOutput.append("<div class=\""+messageType[i]+"\">"+"<div class=\"message\">"+messageText[i]+"</div></div>\n");
 			storage.setChatOutput(messageType[i], messageText[i]);
 		}
 		
-		assertEquals(expectedOutput,storage.getChatOutput());
+		assertEquals(expectedOutput.toString(),storage.getChatOutput());
 	}
 	
 

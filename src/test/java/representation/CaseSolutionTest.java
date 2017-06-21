@@ -12,16 +12,18 @@ import jcolibri.cbrcore.Attribute;
  */
 public class CaseSolutionTest {
 	
+	private static final String RESP = "http://www.ubu.es/grado-en-ingenieria-informatica";
+	
 
 	@Test
 	public void fieldTest() {
 		
 		CaseSolution caseSolution = new CaseSolution();
 		caseSolution.setId(1);
-		caseSolution.setAnswer("http://www.ubu.es/grado-en-ingenieria-informatica");
+		caseSolution.setAnswer(RESP);
 		
 		assertSame(caseSolution.getId(),1);
-		assertEquals("No coincide la respuesta",caseSolution.getAnswer(),"http://www.ubu.es/grado-en-ingenieria-informatica");
+		assertEquals("No coincide la respuesta",caseSolution.getAnswer(),RESP);
 		
 	}
 	
@@ -30,7 +32,7 @@ public class CaseSolutionTest {
 		
 		CaseSolution caseSolution = new CaseSolution();
 		caseSolution.setId(1);
-		caseSolution.setAnswer("http://www.ubu.es/grado-en-ingenieria-informatica");
+		caseSolution.setAnswer(RESP);
 		
 		String expectedOutput="[1 , http://www.ubu.es/grado-en-ingenieria-informatica]";
 		assertEquals(caseSolution.toString(), expectedOutput);

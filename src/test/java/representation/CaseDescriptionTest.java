@@ -13,23 +13,28 @@ import jcolibri.cbrcore.Attribute;
  */
 public class CaseDescriptionTest {
 	
+	private static final String GRADO= "grado";
+	private static final String INGENIERIA= "ingenieria";
+	private static final String INFORMATICA= "informatica";
+	private static final String ONLINE= "online";
+	
 
 	@Test
 	public void fieldTest() {
 		
 		CaseDescription caseDescription = new CaseDescription();
 		caseDescription.setId(1);
-		caseDescription.setKeyWord1("grado");
-		caseDescription.setKeyWord2("ingenieria");
-		caseDescription.setKeyWord3("informatica");
-		caseDescription.setKeyWord4("online");
+		caseDescription.setKeyWord1(GRADO);
+		caseDescription.setKeyWord2(INGENIERIA);
+		caseDescription.setKeyWord3(INFORMATICA);
+		caseDescription.setKeyWord4(ONLINE);
 		caseDescription.setKeyWord5(null);
 		
 		assertSame(caseDescription.getId(),1);
-		assertEquals("No coincide la palabra clave 1",caseDescription.getKeyWord1(),"grado");
-		assertEquals("No coincide la palabra clave 2",caseDescription.getKeyWord2(),"ingenieria");
-		assertEquals("No coincide la palabra clave 3",caseDescription.getKeyWord3(),"informatica");
-		assertEquals("No coincide la palabra clave 4",caseDescription.getKeyWord4(),"online");
+		assertEquals("No coincide la palabra clave 1",caseDescription.getKeyWord1(),GRADO);
+		assertEquals("No coincide la palabra clave 2",caseDescription.getKeyWord2(),INGENIERIA);
+		assertEquals("No coincide la palabra clave 3",caseDescription.getKeyWord3(),INFORMATICA);
+		assertEquals("No coincide la palabra clave 4",caseDescription.getKeyWord4(),ONLINE);
 		assertNull("La palabra clave 5 debe ser null",caseDescription.getKeyWord5());
 
 	}
@@ -39,10 +44,10 @@ public class CaseDescriptionTest {
 		
 		CaseDescription caseDescription = new CaseDescription();
 		caseDescription.setId(1);
-		caseDescription.setKeyWord1("grado");
-		caseDescription.setKeyWord2("ingenieria");
-		caseDescription.setKeyWord3("informatica");
-		caseDescription.setKeyWord4("online");
+		caseDescription.setKeyWord1(GRADO);
+		caseDescription.setKeyWord2(INGENIERIA);
+		caseDescription.setKeyWord3(INFORMATICA);
+		caseDescription.setKeyWord4(ONLINE);
 		caseDescription.setKeyWord5(null);
 		
 		String expectedOutput="[1 , grado , ingenieria , informatica , online , null]";
