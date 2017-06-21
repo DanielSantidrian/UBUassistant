@@ -20,7 +20,7 @@
 				
 				<input type="image" class="btn-close-pinguino" src="img/close.png" />
 				
-				<input type="image" id="pinguino" class="pinguino" src="img/pinguino3.png" />
+				<input type="image" id="pinguino" class="pinguino" src="img/Icono29.png" />
 			</div>
 			
 			
