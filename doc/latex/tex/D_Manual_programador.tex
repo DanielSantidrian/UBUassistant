@@ -20,7 +20,7 @@ El proyecto consta de los siguientes directorios:
 \item \textbf{/rsc:} recursos del proyecto, como el fichero de creación de base de datos y los distintos ejecutables para realizar las pruebas con \emph{Selenium}.
 \item \textbf{/src:} código fuente de la aplicación web.
 \item \textbf{/src/main:} clases, recursos y páginas HTML/JSP del proyecto.
-\item \textbf{/src/main/java:} clases Java del proyecto.
+\item \textbf{/src/main/java:} clases Java del proyecto y fichero \emph{log4j.properties} que configura el logger.
 \item \textbf{/src/main/resources:} recursos de configuración.
 \item \textbf{/src/main/webapp:} ficheros para la página web (HTML, JSP, CSS, JS, Imágenes, XML)
 \item \textbf{/src/test/java: } test unitarios, de integración y de interfaz.
@@ -148,7 +148,7 @@ AL finalizar este paso, se procede a iniciar el servidor mediante el comando \em
 
 En el proceso de arranque, el servidor se encarga de construir la aplicación, quedando accesible desde la dirección local del servidor Tomcat.
 
-\subsection{SonarQube - ACTUALIZAR}
+\subsection{SonarQube}
 
 SonarQube sirve para analizar la calidad del proyecto y ha sido utilizado en su versión local.
 
@@ -172,7 +172,9 @@ Cuando termina el análisis tenemos disponible en la página local de SonarQube 
 
 \imagen{SonarQubeAnalisys.png}{Resumen análisis SonarQube.}
 
-\section{Pruebas del sistema - ACTUALIZAR}
+El resumen completo puede verse en \href{https://sonarcloud.io/dashboard?id=UBUassistant}{Resumen SonarQube.}
+
+\section{Pruebas del sistema}
 
 Se han realizado dos tipos de pruebas para comprobar el correcto funcionamiento del sistema, pruebas unitarias de cada módulo y pruebas de integración e interfaz.
 
@@ -180,7 +182,7 @@ Se han realizado dos tipos de pruebas para comprobar el correcto funcionamiento 
 
 Los test unitarios han sido realizados con JUnit 4, comprobando que cada módulo independiente del sistema tiene un funcionamiento correcto.
 
-Se han realizado 15 test unitarios que realizan comprobaciones de los módulos de 7 clases que no necesitan un entorno web para funcionar. 
+Se han realizado 21 test unitarios que realizan comprobaciones de los módulos de 7 clases que no necesitan un entorno web para funcionar. 
 
 \imagen{TestUnitarios.png}{Test unitarios.}
 

@@ -184,6 +184,8 @@ Concretamente, realiza la lectura de las tablas que contienen las frases de salu
 
 \section{Problemas}\label{problemas}
 
+\subsection{Tecnología de desarrollo}
+
 El propósito inicial del proyecto fue realizar una aplicación Java, con una interfaz gráfica que permitiera su ejecución embebida en una página web HTML.
 
 A medida que avanzaba el desarrollo del proyecto nos dimos cuenta de la complicación de embeber una aplicación Java en una página web HTML. Principalmente, el detonante principal del cambio de concepto fue el poco soporte que los navegadores web ofrecen hoy en día a Java, siendo en algún caso inexistente como ocurre con Google Chrome.
@@ -200,11 +202,23 @@ Fue necesaria una ampliación muy grande de los pocos conocimientos que se tení
 
 La aplicación de los conceptos de redirección para realizar llamadas al servidor y su mezcla con la programación en el cliente mediante \emph{JavaScript} fue una de las tareas más complicadas.
 
+\subsection{Selenium}
+
 En cuanto al desarrollo de pruebas con Selenium, se encontraron varios problemas.
 
-Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOLIBRI2 utiliza una más versión antigua de la que necesitaba el WebDriver de Selenium para funcionar correctamente. Este problema fue más complicado de detectar y resolver de lo que puede parecer a primera vista ya que los errores que devolvía Selenium no eran muy descriptivos.
+Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOLIBRI utiliza una más versión antigua de la que necesitaba el WebDriver de Selenium para funcionar correctamente. Este problema fue más complicado de detectar y resolver de lo que puede parecer a primera vista ya que los errores que devolvía Selenium no eran muy descriptivos.
 
 Otro de los problemas encontrados fue el uso de las variables de sesión el la aplicación. El WebDriver de Selenium al ejecutar las pruebas inicia una versión del navegador elegido que no es completa, esto ocasionaba que la sesión cambiase al realizar cualquier acción sobre la web, dejando al usuario sin identificar. Además de con la herramienta de Selenium, este problema afectaba también al navegador Microsoft Edge que, aún teniendo las \emph{cookies} activadas, no almacenaba la sesión correctamente. Este problema fue solucionado añadiendo la identificación de sesión a la URL mediante el método de \emph{encodeURL} + \emph{HTTPSession} en lugar de únicamente con \emph{HTTPSession}. De esta forma el identificador de usuario es pasado en la URL impidiendo su variación.
+
+\subsection{Hibernate}
+
+Durante la configuración del conector con la base de datos mediante Hibernate se encontró un problema con la cantidad de conexiones permitidas.
+
+La configuración del conector es realizada por métodos ofrecidos por el framework de inteligencia artificial jCOLIBRI. Esta configuración pretendía, en un primer momento, realizarse por cada conexión a la aplicación. Sin embargo, al llegar a un número determinado de conexiones no se permitía realizar más, obligando a volver a lanzar el servidor con la aplicación.
+
+\emph{Data source rejected establishment of connection, message from server: “Too many connections”.}
+
+La solución a este problema consistió en la abstracción de la conexión de Hibernate con la base de datos en una clase independiente aplicando el patrón \emph{singleton} para realizar solamente una vez la configuración del conector de la base de datos. De esta forma cada usuario que se conecte a la aplicación obtendrá una copia propia del mismo conector con la que poder trabajar.
 
 
 \section{Testing}
@@ -218,7 +232,7 @@ Por otra parte, se han realizado test de interfaz con Selenium. Se ha llevado a 
 La realización de pruebas con la herramienta Selenium ha ocasionado varios problemas, ralentizando el desarrollo de los test de interfaz y por ente de la aplicación. Los problemas detallados pueden encontrase en la sección \ref{problemas}.
 
 
-\section{Estadísticas - Actualizar}
+\section{Estadísticas}
 
 A continuación se detallan algunas de las características más interesantes del proyecto. Para recoger las estadísticas no se han tenido en consideración los ficheros JSP en cuanto a estadísticas de código Java.
 
@@ -241,7 +255,7 @@ Líneas de código                   & 54.7\%            	\\
 Comentarios                        & 25.5\%             \\
 Líneas en blanco                   & 19.8\%    		    \\
 \midrule
-Número de test unitarios           & 15					\\
+Número de test unitarios           & 21					\\
 Cobertura total test unitarios     & 36,6\%             \\
 Cobertura test unitarios clases deseadas & 92.4\%       \\
 Número de test de interfaz         & 10					\\ 
@@ -254,6 +268,24 @@ Desde un primer momento se tuvo claro que a la hora de realizar la documentació
 
 El editor de LaTeX seleccionado fue TexMaker, las razones fueron su extendido uso y su facilidad de uso, pudiendo trabajar con varios formatos como por ejemplo BibTex, extensión para definir la bibliografía.
 
-\section{Publicación - Por hacer}
+\section{Publicación}
 
-¿Hablar del servidor y la fase de producción?
+La aplicación web desarrollada aún no ha sido publicada.
+
+Actualmente la aplicación se está ejecutando sobre un servidor Tomcat local junto a una instancia de MySQL también ejecutada en modo local.
+
+El sistema desarrollado puede ser alojado en cualquier servidor que cuente con unos requisitos mínimos.
+
+\begin{itemize}
+\tightlist
+\item \textbf{Tomcat:} Tanto el asistente virtual como la parte de administración utilizan tecnología JSP con lo que es necesaria una máquina virtual de Java para funcionar correctamente. Tomcat en su versión 7 o posteriores nos ofrece esta funcionalidad y compatibilidad con la aplicación desarrollada.
+\item \textbf{MySQL:} La aplicación se comunica con una base de datos MySQL, con que es necesaria su presencia.
+\end{itemize}
+
+El asistente virtual puede ser integrado en cualquier página web de manera sencilla haciendo referencia a la lógica de la aplicación siempre que se encuentre en un servidor bajo los requisitos anteriormente mencionados.
+
+Durante el desarrollo del proyecto se mantuvieron conversaciones con el Servicio de Informática de la Universidad de Burgos para poder alojar la aplicación en un servidor de su propiedad, adquiriendo el compromiso de orientar la aplicación a dar asistencia a los usuarios del CAU funcionando en modo de pre-producción.
+
+Finalmente, y por falta de tiempo, no se llevó a cabo quedando como una posible implementación en un futuro a corto plazo.
+
+De efectuar la anterior propuesta y, concluido el tiempo de pre-producción, cabría la posibilidad de ofrecer la aplicación como herramienta de información al estudiante en el "Servicio de Información y Orientación en Salud Joven Universitaria".

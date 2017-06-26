@@ -15,7 +15,7 @@ La estructura considerada para los casos de la aplicación son cinco palabras cl
 
 Como ejemplo de caso descriptivo podemos tener la siguiente conjunción de palabras clave: [informática, ingeniería, presencial, grado, estudios]. Este caso descriptivo estará asociado con un caso solución que como ejemplo puede tomar el valor [http://www.ubu.es/grado-en-ingenieria-informatica]. De esta manera conseguimos asociar un conjunto de palabras una solución concreta.
 
-El framework utilizado para construir un sistema CBR ha sido jCOLIBRI2 \cite{colibri:gen}.
+El framework utilizado para construir un sistema CBR ha sido jCOLIBRI \cite{colibri:gen}.
 
 \section{Funcionamiento}\label{funcionamiento}
 
@@ -27,7 +27,7 @@ Anteriormente a este ciclo hay que realizar un paso previo, llamado preciclo (\e
 
 El preciclo realiza la carga de los casos desde sistema de persistencia.
 
-En el caso del framework jCOLIBRI2 \cite{colibri:tut} disponemos de un método llamado preCycle() que carga nuestros casos desde nuestro sistema de persistencia MySQL.
+En el caso del framework jCOLIBRI \cite{colibri:tut} disponemos de un método llamado preCycle() que carga nuestros casos desde nuestro sistema de persistencia MySQL.
 
 Para poder llevar a cabo esta tarea es necesario definir el modo de acceso a los casos. Éstos pueden estar en diversos sistemas de persistencia, en nuestro caso debemos crear un conector de base de datos (\emph{DataBaseConnector}).
 
@@ -41,7 +41,7 @@ Hibernate es una herramienta para Java que permite realizar un mapeo objeto/rela
 
 Con esta herramienta se consigue conectar los atributos de una clase orientada a objetos con los atributos de una base de datos relacional \cite{hibe:info}.
 
-Hay dos formas de conseguir este mapeo, bien utilizando ficheros XML, bien usando las anotaciones de Hibernate en las clases Java. El modo de realizarlo por parte de jCOLIBRI2 es mediante ficheros XML.
+Hay dos formas de conseguir este mapeo, bien utilizando ficheros XML, bien usando las anotaciones de Hibernate en las clases Java. El modo de realizarlo por parte de jCOLIBRI es mediante ficheros XML.
 
 Para ello debemos indicar al DataBaseConnector donde se encuentra el archivo XML que configura nuestra base de datos. En este fichero llamado \emph{databaseconfig.xml} se indican los nombres del resto de archivos que se encargarán de conectar con la base de datos y de establecer la estructura de los atributos de las clases que van a ser mapeadas.
 
@@ -59,7 +59,7 @@ El proceso de recordar (\emph{retrieval}) consiste en recordar los casos similar
 
 El sistema experto, a la hora de enfrentarse a un nuevo problema, deberá seleccionar, de entre los casos disponibles, aquellos que sean más similares al del nuevo problema. De esta manera el sistema lleva a cabo un proceso similar al de una persona humana, que ante un nuevo problema que tiene que resolver rescata de su memoria acontecimientos similares que le ayuden en esa tarea.
 
-jCOLIBRI2 proporciona una serie de métodos para configurar y realizar el proceso de recordar. 
+jCOLIBRI proporciona una serie de métodos para configurar y realizar el proceso de recordar. 
 En un primer paso se define la forma de evaluar la similitud. Se configuran los siguientes apartados.
 
 \begin{itemize}
@@ -109,7 +109,7 @@ El proceso de reutilizar nos otorga una solución, sin embargo, es necesario una
 
 Esta etapa consiste en determinar si una respuesta puede considerarse como válida en términos de solucionar el problema planteado.
 
-De nuevo, como en ocasiones anteriores nos encontramos con una fase muy dependiente de la aplicación desarrollada, por lo que jCOLIBRI2 nos anima a utilizar nuestro propio sistema de revisión en aras de obtener mejores resultados.
+De nuevo, como en ocasiones anteriores nos encontramos con una fase muy dependiente de la aplicación desarrollada, por lo que jCOLIBRI nos anima a utilizar nuestro propio sistema de revisión en aras de obtener mejores resultados.
 
 El sistema de revisión propuesto no es automático sino que depende del usuario de la aplicación. Será el usuario el que decida si una respuesta otorgada se ajusta a sus pretensiones. Para facilitar el sistema de valoración de respuestas se ha decido otorgar al usuario un sistema basado en estrellas, siendo una estrella la valoración más baja y cinco estrellas el valor más alto.
 
