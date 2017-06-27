@@ -19,7 +19,7 @@ No se siguieron las indicaciones de la metodología Scrum de manera estricta al 
 \item
 Desarrollo iterativo e incremental del producto mediante sprints.
 \item
-Duración en la mayoría de los sprints de una semana, exceptuando alguna excepción por días festivos.
+Duración en la mayoría de los sprints de una semana, exceptuando alguna más extensa por la coincidencia de días festivos.
 \item
 Reuniones al final de cada sprint para evaluar el producto obtenido y planificar la siguiente iteración.
 \item
@@ -95,9 +95,9 @@ Solventado el problema, se necesitaron varios incrementos de la aplicación para
 \item
 \textbf{Recordar:} en este punto del algoritmo se utiliza la función de similitud sobre cada palabra introducida por el usuario, generando una colección con el valor final obtenido.
 \item
-\textbf{Reutilizar:} fase que permite utilizar la colección anterior para extraer la respuesta. Este fue uno de los puntos más conflictivos, ya que el usuario puede escribir tantas palabras como quiera si relación alguna entre ellas, pertenecientes a distintos casos y en orden distintos al guardado en la base de datos.
+\textbf{Reutilizar:} fase que permite utilizar la colección anterior para extraer la respuesta. Este fue uno de los puntos más conflictivos, ya que el usuario puede escribir tantas palabras como quiera sin relación alguna entre ellas, pertenecientes a distintos casos y en orden distintos al guardado en la base de datos.
 
-Por ello en el paso de recordar se analiza cada palabra del usuario de manera independiente y en este paso se fusionas los mejores resultados obtenidos que comparten caso, obteniendo así las respuestas deseadas.
+Por ello en el paso de recordar se analiza cada palabra del usuario de manera independiente y se fusionan los mejores resultados obtenidos que comparten caso, obteniendo así las respuestas deseadas.
 \item
 \textbf{Revisar:} consiste en realizar una valoración de la respuesta. Esta tarea es desempeñada por el usuario, que será el que decida si valora una respuesta o no. Por lo tanto esta fase puede no ser ejecutada siempre y es independiente del ciclo.
 
@@ -112,7 +112,7 @@ En este caso, este proceso es transparente pero también dependiente del usuario
 
 \section{Arquitectura web}
 
-Como se ha comentado anteriormente, el proyecto cambió de requisitos durante el desarrollo del mismo. Esto fue debido a su intención inicial y los problemas que surgirían de continuar la anterior idea. Para ver más detalles ver la sección \ref{problemas}.
+Como se ha comentado anteriormente, el proyecto cambió de requisitos durante el desarrollo del mismo. Esto fue debido a su intención inicial y los problemas que surgirían de continuar la anterior idea. Para conocer más detalles ver la sección \ref{problemas}.
 
 La arquitectura elegida para el desarrollo de la aplicación web fue JSP. Su elección se basó principalmente en poder reutilizar el algoritmo de la aplicación realizado bajo los anteriores requisitos.
 
@@ -172,14 +172,17 @@ Los ficheros que forman la configuración de Hibernate son:
 \tightlist
 \item
 \textbf{databaseconfig.xml:} contiene las referencias a los archivos de configuración de la base de datos (hibernate.cfg.xml) además de los nombres de las clases junto con los archivos que los mapean.
+\item
 \textbf{hibernate.cfg.xml:} archivo que posee la configuración de la base de datos (\emph{username, password, driver, URL...})
+\item
 \textbf{caseDescription.hbm.xml:} contiene la configuración para realizar el mapeo de cada atributo de la clase Java con la tabla almacenada referente a los casos descriptivos.
+\item
 \textbf{caseSolution.hbm.xml:} incluye la configuración necesaria para realizar el mapeo de cada atributo de la clase Java con la tabla almacenada referente a los casos solución.
 \end{itemize}
 
-El driver \emph{JDBC} es utilizado por la clase Java \emph{DatabaseConnection}. Esta engloba todo el acceso a la base de datos, y se encarga de la lectura y escritura en la base de datos de las tablas que no pertenecen a los casos.
+El driver \emph{JDBC} es utilizado por la clases Java \emph{DatabaseConnection} y \emph{DatabaseAdminstration}. Estas clases engloban todo el acceso a la base de datos, y se encargan de la lectura y escritura en la base de datos de las tablas que no pertenecen a los casos.
 
-Concretamente, realiza la lectura de las tablas que contienen las frases de saludo y las palabras comunes, y se encarga de la escritura del log y del aprendizaje.
+Concretamente, \emph{DatabaseConnection} realiza la lectura de las tablas que contienen las frases de saludo y las palabras comunes, y se encarga de la escritura del log y del aprendizaje. \emph{DatabaseAdminstration} se encarga de realizar la operaciones de administración como añadir, editar o eliminar un caso, aceptar o ignorar una recomendación de aprendizaje o borrar la tabla de log.
 
 
 \section{Problemas}\label{problemas}
@@ -190,7 +193,7 @@ El propósito inicial del proyecto fue realizar una aplicación Java, con una in
 
 A medida que avanzaba el desarrollo del proyecto nos dimos cuenta de la complicación de embeber una aplicación Java en una página web HTML. Principalmente, el detonante principal del cambio de concepto fue el poco soporte que los navegadores web ofrecen hoy en día a Java, siendo en algún caso inexistente como ocurre con Google Chrome.
 
-Como problema añadido está la alta necesidad de Java para ejecutar un archivo \emph{.jar}. Es necesario que la aplicación esté firmada,y aún así, sigue habiendo ciertos problemas para su ejecución por parte de un usuario inexperto.
+Como problema añadido está la alta seguridad que necesita Java para ejecutar un archivo \emph{.jar}. Es necesario que la aplicación esté firmada, y aún así, sigue habiendo ciertos problemas para su ejecución por parte de un usuario inexperto.
 
 Todo ello derivó en el cambio de requisito, de una aplicación Java a una aplicación web.
 
@@ -206,9 +209,9 @@ La aplicación de los conceptos de redirección para realizar llamadas al servid
 
 En cuanto al desarrollo de pruebas con Selenium, se encontraron varios problemas.
 
-Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOLIBRI utiliza una más versión antigua de la que necesitaba el WebDriver de Selenium para funcionar correctamente. Este problema fue más complicado de detectar y resolver de lo que puede parecer a primera vista ya que los errores que devolvía Selenium no eran muy descriptivos.
+Uno de los problemas encontrados fue con la dependencia Guava. El framework jCOLIBRI utiliza una más versión antigua de la que necesitaba el WebDriver de Selenium para funcionar correctamente. Debido a esto Selenium no funcionaba correctamente devolviendo errores poco descriptivos que hicieron que detectar el causante del problema fuera muy complicado. Se solucionó utilizando la versión más reciente de la dependencia Guava.
 
-Otro de los problemas encontrados fue el uso de las variables de sesión el la aplicación. El WebDriver de Selenium al ejecutar las pruebas inicia una versión del navegador elegido que no es completa, esto ocasionaba que la sesión cambiase al realizar cualquier acción sobre la web, dejando al usuario sin identificar. Además de con la herramienta de Selenium, este problema afectaba también al navegador Microsoft Edge que, aún teniendo las \emph{cookies} activadas, no almacenaba la sesión correctamente. Este problema fue solucionado añadiendo la identificación de sesión a la URL mediante el método de \emph{encodeURL} + \emph{HTTPSession} en lugar de únicamente con \emph{HTTPSession}. De esta forma el identificador de usuario es pasado en la URL impidiendo su variación.
+Otro de los problemas encontrados fue el uso de las variables de sesión en la aplicación. El WebDriver de Selenium al ejecutar las pruebas inicia una versión del navegador elegido que no es completa, esto ocasionaba que la sesión cambiase al realizar cualquier acción sobre la web, dejando al usuario sin identificar. Además de con la herramienta de Selenium, este problema afectaba también al navegador Microsoft Edge que, aún teniendo las \emph{cookies} activadas, no almacenaba la sesión correctamente. Este problema fue solucionado añadiendo la identificación de sesión a la URL mediante el método de \emph{encodeURL} + \emph{HTTPSession} en lugar de únicamente con \emph{HTTPSession}. De esta forma el identificador de usuario es pasado en la URL impidiendo su variación.
 
 \subsection{Hibernate}
 
@@ -218,7 +221,7 @@ La configuración del conector es realizada por métodos ofrecidos por el framew
 
 \emph{Data source rejected establishment of connection, message from server: “Too many connections”.}
 
-La solución a este problema consistió en la abstracción de la conexión de Hibernate con la base de datos en una clase independiente aplicando el patrón \emph{singleton} para realizar solamente una vez la configuración del conector de la base de datos. De esta forma cada usuario que se conecte a la aplicación obtendrá una copia propia del mismo conector con la que poder trabajar.
+La solución a este problema consistió en la abstracción de la conexión de Hibernate con la base de datos en una clase independiente aplicando el patrón \emph{singleton} para realizar solamente una vez la configuración del conector de la base de datos. De esta forma cada usuario que se conecte a la aplicación obtendrá su propio conector sin necesidad de configurarlo cada vez.
 
 
 \section{Testing}
@@ -227,7 +230,7 @@ La aplicación se ha testeado mediante test unitarios así como con test de inte
 
 Los test unitarios han sido los encargados de probar cada módulo de la aplicación por separado. Dentro de los test unitarios se han probado los métodos de las clases Java exceptuando el algoritmo de búsqueda de respuesta para lo que es necesario arrancar el servidor.
 
-Por otra parte, se han realizado test de interfaz con Selenium. Se ha llevado a cabo un test de interfaz por cada requisito planteado, además de comprobar la funcionalidad básica de la web. Los test de interfaz se ejecutan sobre la página web y simulan el comportamiento de un usuario comprobando si el resultado obtenido de realizar una acción es la correcta. En este punto se comprueba también la integración de cada módulo del sistema, así como el correcto funcionamiento del algoritmo de búsqueda de respuesta. No es posible testear el algoritmo sin el servidor arrancado porque son necesarias dependencias que son cargadas dinámicamente desde el fichero \emph{pom.xml} mediante Maven.
+Por otra parte, se han realizado test de interfaz con Selenium. Se ha llevado a cabo un test de interfaz por cada requisito planteado, además de comprobar la funcionalidad básica de la web. Los test de interfaz se ejecutan sobre la página web y simulan el comportamiento de un usuario comprobando si el resultado obtenido de realizar una acción es la correcta. En este punto se comprueba también la integración de cada módulo del sistema, así como el correcto funcionamiento del algoritmo de búsqueda de respuesta. No es posible testear el algoritmo sin el servidor arrancado porque son necesarias dependencias que son cargadas dinámicamente desde el fichero \emph{pom.xml} mediante Maven para su correcto funcionamiento.
 
 La realización de pruebas con la herramienta Selenium ha ocasionado varios problemas, ralentizando el desarrollo de los test de interfaz y por ente de la aplicación. Los problemas detallados pueden encontrase en la sección \ref{problemas}.
 
@@ -266,7 +269,7 @@ Número de test de interfaz         & 10					\\
 
 Desde un primer momento se tuvo claro que a la hora de realizar la documentación la herramienta seleccionada sería LaTeX. Su elección se basó en la características que posee, como la alta calidad de texto formateado además de tener una plantilla disponible con todos los comandos especificados.
 
-El editor de LaTeX seleccionado fue TexMaker, las razones fueron su extendido uso y su facilidad de uso, pudiendo trabajar con varios formatos como por ejemplo BibTex, extensión para definir la bibliografía.
+El editor de LaTeX seleccionado fue TexMaker, las razones fueron su extendido uso y su facilidad, pudiendo trabajar con varios formatos como por ejemplo BibTex, extensión para definir la bibliografía.
 
 \section{Publicación}
 
@@ -278,8 +281,8 @@ El sistema desarrollado puede ser alojado en cualquier servidor que cuente con u
 
 \begin{itemize}
 \tightlist
-\item \textbf{Tomcat:} Tanto el asistente virtual como la parte de administración utilizan tecnología JSP con lo que es necesaria una máquina virtual de Java para funcionar correctamente. Tomcat en su versión 7 o posteriores nos ofrece esta funcionalidad y compatibilidad con la aplicación desarrollada.
-\item \textbf{MySQL:} La aplicación se comunica con una base de datos MySQL, con que es necesaria su presencia.
+\item \textbf{Tomcat:} tanto el asistente virtual como la parte de administración utilizan tecnología JSP con lo que es necesaria una máquina virtual de Java para funcionar correctamente. Tomcat en su versión 7 o posteriores nos ofrece esta funcionalidad y compatibilidad con la aplicación desarrollada.
+\item \textbf{MySQL:} la aplicación se comunica con una base de datos MySQL, con que es necesaria su presencia.
 \end{itemize}
 
 El asistente virtual puede ser integrado en cualquier página web de manera sencilla haciendo referencia a la lógica de la aplicación siempre que se encuentre en un servidor bajo los requisitos anteriormente mencionados.

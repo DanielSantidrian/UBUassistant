@@ -72,7 +72,7 @@ En un primer paso se define la forma de evaluar la similitud. Se configuran los 
   \textbf{Peso de cada atributo:} puede existir la situación donde no se desea que la evaluación de la similitud de los atributos de un caso tengan el mimo peso en el resultado final. Por ello, el framework nos permite configurar el peso de cada atributo, en nuestro caso las cinco palabras deberán tener el mismo peso. Se ha optado por un peso de 0.75 en todos los atributos al obtener resultados satisfactorios.
 \end{itemize}
 
-Una vez configurado el modo de obtener la similitud es posible utilizar el método \emph{evaluateSimilarity} al que le pasaremos los casos, el caso obtenido del texto del usuario, y el objeto que almacena la configuración de similitud. Este método obtiene una colección, aplicando también el método de vecinos más cercanos, donde quedan almacenados los casos junto con el resultado de la comparación con el caso generado por el texto del usuario. La solución adoptada por la aplicación desarrollada no utiliza el método de vecinos más cercanos, en su lugar se eliminan todos los resultados cuya similitud sea inferior de 0.35, de esta manera se consiguen resultados más positivos.
+Una vez configurado el modo de obtener la similitud es posible utilizar el método \emph{evaluateSimilarity} al que le pasaremos los casos, el caso obtenido del texto del usuario, y el objeto que almacena la configuración de similitud. Este método obtiene una colección donde quedan almacenados los casos junto con el resultado de la comparación con el caso generado por el texto del usuario. La solución adoptada por la aplicación desarrollada no utiliza el método de vecinos más cercanos, en su lugar se eliminan todos los resultados cuya similitud sea inferior de 0.35, de esta manera se consiguen resultados más positivos.
 
 Por cada palabra que introduce el usuario de crea una colección con los resultados de comparar esa palabra con las palabras existentes en los casos.
 
@@ -111,7 +111,7 @@ Esta etapa consiste en determinar si una respuesta puede considerarse como váli
 
 De nuevo, como en ocasiones anteriores nos encontramos con una fase muy dependiente de la aplicación desarrollada, por lo que jCOLIBRI nos anima a utilizar nuestro propio sistema de revisión en aras de obtener mejores resultados.
 
-El sistema de revisión propuesto no es automático sino que depende del usuario de la aplicación. Será el usuario el que decida si una respuesta otorgada se ajusta a sus pretensiones. Para facilitar el sistema de valoración de respuestas se ha decido otorgar al usuario un sistema basado en estrellas, siendo una estrella la valoración más baja y cinco estrellas el valor más alto.
+El sistema de revisión propuesto no es automático sino que depende del usuario de la aplicación. Será el usuario el que decida si una respuesta otorgada se ajusta a sus pretensiones. Para facilitar el sistema de valoración de respuestas se ha decidido otorgar al usuario un sistema basado en estrellas, siendo una estrella la valoración más baja y cinco estrellas el valor más alto.
 
 Las valoraciones de los usuarios quedan almacenadas en una tabla de log de uso que puede ser visionada por el administrador de la aplicación desde la página destinada a la administración de la aplicación. Quedará a juicio del administrador cambiar la respuesta de un determinado caso que haya obtenido de manera continuada valoraciones negativas.
 
